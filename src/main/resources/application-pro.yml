@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/myblog?characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+    username: root
+    password: 123456
+
+  jpa:
+    hibernate:
+      ddl-auto: none #实体类确定了，布置到生产环境后，改成none
+    show-sql: true #输出sql语句
+
+logging:
+  level:
+    root: warn #高于此级别的日志才会打印
+    com.ven.myblog: info
+  file:
+    name: log/blog-pro.log
+server:
+  port: 8081

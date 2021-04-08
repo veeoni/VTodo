@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">博客详情</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
+    <link rel='stylesheet prefetch' href='../static/css/typo.css' th:href="@{/css/typo.css}">
+    <link rel="stylesheet" href="../static/css/animate.min.css" th:href="@{/css/animate.min.css}"/>
+    <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}"/>
+    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}"/>
+    <link rel="stylesheet  prefetch" href="../static/css/me.css" th:href="@{/css/me.css}"/>
+
+</head>
+<body>
+
+<!--导航-->
+<nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <!--stackable 屏幕小时可堆叠-->
+        <div class="ui inverted stackable secondary menu">
+            <h2 class="ui teal header item">VTodo</h2>
+            <a class="m-item item m-mobile-hide" th:classappend="${n==6} ? 'active' " href="#" th:href="@{/todo}"><i class="tasks icon"></i>Todo</a>
+            <a class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active' " href="#" th:href="@{/}"><i class="home icon"></i>首页</a>
+            <a class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active' " href="#" th:href="@{/types/-1}"><i class="idea icon"></i>分类</a>
+            <a class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active' " href="#" th:href="@{/tags/-1}"><i class="tags icon"></i>标签</a>
+            <a class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active' " href="#" th:href="@{/archives}"><i class="clone icon"></i>归档</a>
+            <a class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active' " href="#" th:href="@{/about}"><i class="info icon"></i>关于我</a>
+            <div class="right m-item item m-mobile-hide">
+                <form action="#" name="search" method="post" th:action="@{/search}" target="_blank">
+                    <div class="ui icon inverted transparent input">
+                        <!--此处是input,所以用th:value，不用th:text-->
+                        <input placeholder="Search..." name="query" type="text" th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <a class="ui menu toggle icon black button m-right-top m-mobile-show" href="#">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+
+<!--底部footer-->
+<th:block th:fragment="footer">
+<footer class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui divided inverted stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img alt="" class=" ui rounded image" th:src="@{/images/wechat.jpg}" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新博客</h4>
+                <div id="newblog-container">
+                    <div class="ui inverted link list" th:fragment="newblogList">
+                        <a class="item" href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}" th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
+                        <!--/*-->
+                        <a class="item" href="#">用户故事（User Story）</a>
+                        <a class="item" href="#">用户故事（User Story）</a>
+                        <!--*/-->
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">联系我</h4>
+                <div class="ui inverted link list">
+                    <a class="item" href="#" th:text="|Email: #{index.email}|">Email:514754220@qq.com</a>
+                    <a class="item" href="#" th:text="|QQ: #{index.qq}|">QQ:514754220</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">博客介绍</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini" th:text="#{index.introduction}">宁的家~</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny" th:text="|#{index.copyright}${#dates.year(#dates.createToday())}|">Copyright@......</p>
+    </div>
+</footer>
+<!--一定要先jquery，再Semantic！！！！！-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
+</script>
+</th:block>
+</body>
+</html>
