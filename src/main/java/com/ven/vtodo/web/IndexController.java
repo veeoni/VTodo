@@ -28,7 +28,7 @@ public class IndexController {
     private TagService tagService;
 
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public String index(
             @PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
             Model model){

@@ -39,244 +39,241 @@
     <div class="ui container">
         <!-- container有响应式效果，根据屏幕不同的尺寸达到适应的效果-->
         <div class="ui stackable grid">
-            <!--左边博客列表-->
+            <!--左边待办列表-->
             <div class="eleven wide column">
                 <!--header 用attached将两块segment连接，像是拼图，两个segment都得有-->
-                <div class="ui top attached segment">
+                <div class="ui segment">
+                    <div class="ui middle aligned three column grid">
+                        <div class="column">
+                            <a class="ui mini teal basic button" href="#" th:href="@{/(page=${page.number}-1)}"
+                               th:unless="${page.first}">前一日</a>
+                        </div>
+                        <div class="center aligned column">
+                            <h3>2021年04月09日</h3>
+                        </div>
+                        <div class="right aligned column">
+                            <a class="ui mini teal basic button" href="#" th:href="@{/(page=${page.number}+1)}"
+                               th:unless="${page.last}">前一日</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="ui red top attached segment">
                     <div class="ui middle aligned two column grid">
                         <div class="column">
-                            <h3 class="ui teal header">博客</h3>
+                            <h3 class="ui orange header">今日未完成</h3>
                         </div>
                         <div class="right aligned column">
                             <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
-                            共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}"> 14 </h2> 篇
+                            共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}">
+                            14 </h2> 个
                         </div>
                     </div>
                 </div>
                 <!--content-->
                 <div class="ui attached segment">
-                    <!--遍历，拿到blog对象进行渲染-->
-                    <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.content}">
-                        <div class="ui middle aligned mobile reversed stackable grid">
-                            <div class="ui eleven wide column">
-                                <h3 class="ui header"><a href="#" class="m-black" th:text="${blog.title}" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}">保佑我初试380</a></h3>
-                               <!--|...|用于连接字符串-->
-                                <p class="m-text" th:text="|${blog.description}...|">给老师打工三年都没事，只要给我上岸！！！</p>
-                                <div class="ui grid">
-                                    <div class="eleven wide column">
-                                        <div class="ui horizontal link list">
-                                            <div class="item">
-                                                <img alt="" class="ui avatar image"
-                                                     src="https://picsum.photos/100/100?image=1005" th:src="@{${blog.user.avatar}}">
-                                                <div class="content"><a class="header" href="#" th:href="@{/about}" th:text="${blog.user.nickname}">王友宁</a></div>
-                                            </div>
-                                            <div class="item">
-                                                <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}">2017-10-01</span>
-                                            </div>
-                                            <div class="item">
-                                                <i class="eye icon" th:text="${blog.views}">232</i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="right aligned five wide column">
-                                        <a class="ui teal basic label m-padded-mini m-text-thin" href="#"
-                                           target="_blank" th:href="@{/types/{id}(id=${blog.type.id})}" th:text="${blog.type.name}">认知升级</a>
+                    <div class="ui raised attached segment">
+                        <div class="ui ribbon label">遗留的复习</div><!-- th:classappend="red/pik/olive/pink"-->
+                        <strong>待复习的主题</strong>
+                        <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                            待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                        <div class="ui mobile stackable grid">
+                            <div class="row">
+                                <div class="eight wide column">
+                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                </div>
+                                <div class="right aligned eight wide column">
+                                    <div class="ui buttons">
+                                        <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                        <button href="#" class="ui basic positive m-padded-tb-small button">完成</button>
+                                        <button href="#" class="ui basic negative m-padded-tb-small button">删除</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ui five wide column">
-                                <a href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}">
-                                    <img alt="" class="ui rounded image" src="https://picsum.photos/800/450?image=1005" th:src="@{${blog.firstPicture}}">
-                                </a>
                             </div>
                         </div>
                     </div>
                     <!--/*-->
-                    <div class="ui padded vertical segment m-padded-tb-big">
-                        <div class="ui mobile reversed stackable grid">
-                            <div class="ui eleven wide column">
-                                <h3 class="ui header">保佑我初试380</h3>
-                                <p class="m-text">给老师打工三年都没事，只要给我上岸！！！</p>
-                                <div class="ui grid">
-                                    <div class="eleven wide column">
-                                        <div class="ui horizontal link list">
-                                            <div class="item">
-                                                <img alt="" class="ui avatar image"
-                                                     src="https://picsum.photos/100/100?image=1005">
-                                                <div class="content"><a class="header" href="#">王友宁</a></div>
-                                            </div>
-                                            <div class="item">
-                                                <i class="calendar icon"></i>2017-10-01
-                                            </div>
-                                            <div class="item">
-                                                <i class="eye icon">232</i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="right aligned five wide column">
-                                        <a class="ui teal basic label m-padded-mini m-text-thin" href="#"
-                                           target="_blank">认知升级</a>
+                    <div class="ui raised attached segment">
+                        <div class="ui red ribbon label">遗留的复习</div>
+                        <strong>待复习的主题</strong>
+                        <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                            待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                        <div class="ui mobile stackable grid">
+                            <div class="row">
+                                <div class="eight wide column">
+                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                </div>
+                                <div class="right aligned eight wide column">
+                                    <div class="ui buttons">
+                                        <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                        <button href="#" class="ui basic positive m-padded-tb-small button">完成</button>
+                                        <button href="#" class="ui basic negative m-padded-tb-small button">删除</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ui five wide column">
-                                <a href="#" target="_blank">
-                                    <img alt="" class="ui rounded image" src="https://picsum.photos/800/450?image=1005">
-                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="ui padded vertical segment m-padded-tb-big">
-                        <div class="ui mobile reversed stackable grid">
-                            <div class="ui eleven wide column">
-                                <h3 class="ui header">保佑我初试380</h3>
-                                <p class="m-text">给老师打工三年都没事，只要给我上岸！！！</p>
-                                <div class="ui grid">
-                                    <div class="eleven wide column">
-                                        <div class="ui horizontal link list">
-                                            <div class="item">
-                                                <img alt="" class="ui avatar image"
-                                                     src="https://picsum.photos/100/100?image=1005">
-                                                <div class="content"><a class="header" href="#">王友宁</a></div>
-                                            </div>
-                                            <div class="item">
-                                                <i class="calendar icon"></i>2017-10-01
-                                            </div>
-                                            <div class="item">
-                                                <i class="eye icon">232</i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="right aligned five wide column">
-                                        <a class="ui teal basic label m-padded-mini m-text-thin" href="#"
-                                           target="_blank">认知升级</a>
+                    <div class="ui raised attached segment">
+                        <div class="ui pink ribbon label">遗留的待办</div>
+                        <strong>待办的主题</strong>
+                        <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                            待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                        <div class="ui mobile stackable grid">
+                            <div class="row">
+                                <div class="eight wide column">
+                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                </div>
+                                <div class="right aligned eight wide column">
+                                    <div class="ui buttons">
+                                        <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                        <button href="#" class="ui basic positive m-padded-tb-small button">完成</button>
+                                        <button href="#" class="ui basic negative m-padded-tb-small button">删除</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ui five wide column">
-                                <a href="#" target="_blank">
-                                    <img alt="" class="ui rounded image" src="https://picsum.photos/800/450?image=1005">
-                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="ui padded vertical segment m-padded-tb-big">
-                        <div class="ui mobile reversed stackable grid">
-                            <div class="ui eleven wide column">
-                                <h3 class="ui header">保佑我初试380</h3>
-                                <p class="m-text">给老师打工三年都没事，只要给我上岸！！！</p>
-                                <div class="ui grid">
-                                    <div class="eleven wide column">
-                                        <div class="ui horizontal link list">
-                                            <div class="item">
-                                                <img alt="" class="ui avatar image"
-                                                     src="https://picsum.photos/100/100?image=1005">
-                                                <div class="content"><a class="header" href="#">王友宁</a></div>
-                                            </div>
-                                            <div class="item">
-                                                <i class="calendar icon"></i>2017-10-01
-                                            </div>
-                                            <div class="item">
-                                                <i class="eye icon">232</i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="right aligned five wide column">
-                                        <a class="ui teal basic label m-padded-mini m-text-thin" href="#"
-                                           target="_blank">认知升级</a>
+                    <div class="ui raised attached segment">
+                        <div class="ui olive ribbon label">复习</div>
+                        <strong>待复习的主题</strong>
+                        <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                            待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                        <div class="ui mobile stackable grid">
+                            <div class="row">
+                                <div class="eight wide column">
+                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                </div>
+                                <div class="right aligned eight wide column">
+                                    <div class="ui buttons">
+                                        <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                        <button href="#" class="ui basic positive m-padded-tb-small button">完成</button>
+                                        <button href="#" class="ui basic negative m-padded-tb-small button">删除</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ui five wide column">
-                                <a href="#" target="_blank">
-                                    <img alt="" class="ui rounded image" src="https://picsum.photos/800/450?image=1005">
-                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="ui padded vertical segment m-padded-tb-big">
-                        <div class="ui mobile reversed stackable grid">
-                            <div class="ui eleven wide column">
-                                <h3 class="ui header">保佑我初试380</h3>
-                                <p class="m-text">给老师打工三年都没事，只要给我上岸！！！</p>
-                                <div class="ui grid">
-                                    <div class="eleven wide column">
-                                        <div class="ui horizontal link list">
-                                            <div class="item">
-                                                <img alt="" class="ui avatar image"
-                                                     src="https://picsum.photos/100/100?image=1005">
-                                                <div class="content"><a class="header" href="#">王友宁</a></div>
-                                            </div>
-                                            <div class="item">
-                                                <i class="calendar icon"></i>2017-10-01
-                                            </div>
-                                            <div class="item">
-                                                <i class="eye icon">232</i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="right aligned five wide column">
-                                        <a class="ui teal basic label m-padded-mini m-text-thin" href="#"
-                                           target="_blank">认知升级</a>
+                    <div class="ui raised attached segment">
+                        <div class="ui teal ribbon label">待办</div>
+                        <strong>待办的主题</strong>
+                        <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                            待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                        <div class="ui mobile stackable grid">
+                            <div class="row">
+                                <div class="eight wide column">
+                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                </div>
+                                <div class="right aligned eight wide column">
+                                    <div class="ui buttons">
+                                        <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                        <button href="#" class="ui basic positive m-padded-tb-small button">完成</button>
+                                        <button href="#" class="ui basic negative m-padded-tb-small button">删除</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ui five wide column">
-                                <a href="#" target="_blank">
-                                    <img alt="" class="ui rounded image" src="https://picsum.photos/800/450?image=1005">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui padded vertical segment m-padded-tb-big">
-                        <div class="ui mobile reversed stackable grid">
-                            <div class="ui eleven wide column">
-                                <h3 class="ui header">保佑我初试380</h3>
-                                <p class="m-text">给老师打工三年都没事，只要给我上岸！！！</p>
-                                <div class="ui grid">
-                                    <div class="eleven wide column">
-                                        <div class="ui horizontal link list">
-                                            <div class="item">
-                                                <img alt="" class="ui avatar image"
-                                                     src="https://picsum.photos/100/100?image=1005">
-                                                <div class="content"><a class="header" href="#">王友宁</a></div>
-                                            </div>
-                                            <div class="item">
-                                                <i class="calendar icon"></i>2017-10-01
-                                            </div>
-                                            <div class="item">
-                                                <i class="eye icon">232</i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="right aligned five wide column">
-                                        <a class="ui teal basic label m-padded-mini m-text-thin" href="#"
-                                           target="_blank">认知升级</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ui five wide column">
-                                <a href="#" target="_blank">
-                                    <img alt="" class="ui rounded image" src="https://picsum.photos/800/450?image=1005">
-                                </a>
                             </div>
                         </div>
                     </div>
                     <!--*/-->
                 </div>
-                <!--footer-->
-                <div class="ui bottom attached segment"  th:if="${page.totalPages}>1">
-                    <div class="ui middle aligned two column grid">
 
+                <!--header 用attached将两块segment连接，像是拼图，两个segment都得有-->
+                <div class="ui green top attached m-margin-top-large segment">
+                    <div class="ui middle aligned two column grid">
                         <div class="column">
-                            <a class="ui mini teal basic button" href="#" th:href="@{/(page=${page.number}-1)}" th:unless="${page.first}">上一页</a>
+                            <h3 class="ui green header">今日已完成</h3>
                         </div>
                         <div class="right aligned column">
-                            <a class="ui mini teal basic button" href="#" th:href="@{/(page=${page.number}+1)}" th:unless="${page.last}">下一页</a>
+                            <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
+                            共 <h2 class="ui green header m-inline-block m-text-thin" th:text="${page.totalElements}">
+                            14 </h2> 个
                         </div>
                     </div>
                 </div>
+                <!--content-->
+                <div class="ui attached segment">
+                    <div class="ui raised attached segment">
+                        <div class="ui green ribbon label">复习</div><!--复习or待办-->
+                        <strong>待复习的主题</strong>
+                        <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                            待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                        <div class="ui mobile stackable grid">
+                            <div class="row">
+                                <div class="eight wide column">
+                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                </div>
+                                <div class="right aligned eight wide column">
+                                    <div class="ui buttons">
+                                        <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                        <button href="#" class="ui basic disabled m-padded-tb-small button">已完成</button>
+                                        <button href="#" class="ui basic negative m-padded-tb-small button">删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/*-->
+                    <div class="ui raised attached segment">
+                        <div class="ui green ribbon label">复习</div>
+                        <strong>待复习的主题</strong>
+                        <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                            待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                        <div class="ui mobile stackable grid">
+                            <div class="row">
+                                <div class="eight wide column">
+                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                </div>
+                                <div class="right aligned eight wide column">
+                                    <div class="ui buttons">
+                                        <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                        <button href="#" class="ui basic disabled positive m-padded-tb-small button">完成</button>
+                                        <button href="#" class="ui basic negative m-padded-tb-small button">删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui raised attached segment">
+                        <div class="ui green ribbon label">待办</div>
+                        <strong>待办的主题</strong>
+                        <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                            待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                        <div class="ui mobile stackable grid">
+                            <div class="row">
+                                <div class="eight wide column">
+                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                </div>
+                                <div class="right aligned eight wide column">
+                                    <div class="ui buttons">
+                                        <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                        <button href="#" class="ui basic disabled positive m-padded-tb-small button">完成</button>
+                                        <button href="#" class="ui basic negative m-padded-tb-small button">删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--*/-->
+                </div>
             </div>
+
+
             <!--右边的TOP-->
             <div class="five wide column">
                 <!-- 分类 -->
@@ -287,17 +284,21 @@
                                 <i class="idea icon"></i>分类
                             </div>
                             <div class="right aligned column">
-                                <a href="#" target="_blank" th:href="@{/types/-1}">more <i class=" icon angle double right"></i></a>
+                                <a href="#" target="_blank" th:href="@{/types/-1}">more <i
+                                        class=" icon angle double right"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment">
                         <!--未填充满，加fluid-->
                         <div class="ui fluid vertical menu">
-                            <a class="item" target="_blank" href="#" th:href="@{/types/{id}(id=${type.id})}" th:each="type : ${types}">
+                            <a class="item" target="_blank" href="#" th:href="@{/types/{id}(id=${type.id})}"
+                               th:each="type : ${types}">
                                 <span th:text="${type.name}">学习日志</span>
                                 <!--#arrays.length集合长度-->
-                                <div class="ui teal basic left pointing label" th:text="${#arrays.length(type.blogs)}">13</div>
+                                <div class="ui teal basic left pointing label" th:text="${#arrays.length(type.blogs)}">
+                                    13
+                                </div>
                             </a>
                             <!--/*-->
                             <a class="item" href="#">
@@ -332,12 +333,14 @@
                                 <i class="tags icon"></i>标签
                             </div>
                             <div class="right aligned column">
-                                <a href="#" target="_blank" th:href="@{/tags/-1}">more <i class=" icon angle double right"></i></a>
+                                <a href="#" target="_blank" th:href="@{/tags/-1}">more <i
+                                        class=" icon angle double right"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment">
-                        <a class="ui teal basic left pointing label m-margin-tb-tiny" href="#" target="_blank" th:href="@{/tags/{id}(id=${tag.id})}"  th:each="tag : ${tags}">
+                        <a class="ui teal basic left pointing label m-margin-tb-tiny" href="#" target="_blank"
+                           th:href="@{/tags/{id}(id=${tag.id})}" th:each="tag : ${tags}">
                             <span th:text="${tag.name}">方法论</span>
                             <!--挖坑，老师用的是#arrays.length()，我试试能不能直接size-->
                             <div class="detail" th:text="${tag.blogs.size}">13</div>
@@ -420,7 +423,7 @@
                 <!--二维码-->
                 <div class="ui horizontal divider header m-margin-top-large">扫码关注我</div>
                 <div class="ui centered card" style="width: 11em">
-                    <img alt="" class="ui rounded image" th:src="@{/images/wechat.jpg}" >
+                    <img alt="" src="../static/images/wechat.jpg" class="ui rounded image" th:src="@{/images/wechat.jpg}">
                 </div>
             </div>
         </div>
@@ -429,44 +432,46 @@
 <br>
 <br>
 <!--底部footer 为了保证有一个原型，所以index未替换footer-->
-    <footer class="ui inverted vertical segment m-padded-tb-massive">
-        <div class="ui center aligned container">
-            <div class="ui divided inverted stackable grid">
-                <div class="three wide column">
-                    <div class="ui inverted link list">
-                        <div class="item">
-                            <img alt="" class=" ui rounded image" th:src="@{/images/wechat.jpg}" style="width: 110px">
-                        </div>
+<footer class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui divided inverted stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img alt="" class=" ui rounded image" th:src="@{/images/wechat.jpg}" style="width: 110px">
                     </div>
-                </div>
-                <div class="three wide column">
-                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新博客</h4>
-                    <div id="newblog-container">
-                        <div class="ui inverted link list" th:fragment="newblogList">
-                            <a class="item" href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}" th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
-                            <!--/*-->
-                            <a class="item" href="#">用户故事（User Story）</a>
-                            <a class="item" href="#">用户故事（User Story）</a>
-                            <!--*/-->
-                        </div>
-                    </div>
-                </div>
-                <div class="three wide column">
-                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">联系我</h4>
-                    <div class="ui inverted link list">
-                        <a class="item" href="#" th:text="|Email: #{index.email}|">Email:514754220@qq.com</a>
-                        <a class="item" href="#" th:text="|QQ: #{index.qq}|">QQ:514754220</a>
-                    </div>
-                </div>
-                <div class="seven wide column">
-                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">博客介绍</h4>
-                    <p class="m-text-thin m-text-spaced m-opacity-mini" th:text="#{index.introduction}">宁的家~</p>
                 </div>
             </div>
-            <div class="ui inverted section divider"></div>
-            <p class="m-text-thin m-text-spaced m-opacity-tiny" th:text="|#{index.copyright}${#dates.year(#dates.createToday())}|">Copyright@......</p>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新博客</h4>
+                <div id="newblog-container">
+                    <div class="ui inverted link list" th:fragment="newblogList">
+                        <a class="item" href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}"
+                           th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
+                        <!--/*-->
+                        <a class="item" href="#">用户故事（User Story）</a>
+                        <a class="item" href="#">用户故事（User Story）</a>
+                        <!--*/-->
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">联系我</h4>
+                <div class="ui inverted link list">
+                    <a class="item" href="#" th:text="|Email: #{index.email}|">Email:514754220@qq.com</a>
+                    <a class="item" href="#" th:text="|QQ: #{index.qq}|">QQ:514754220</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">博客介绍</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini" th:text="#{index.introduction}">宁的家~</p>
+            </div>
         </div>
-    </footer>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny"
+           th:text="|#{index.copyright}${#dates.year(#dates.createToday())}|">Copyright@......</p>
+    </div>
+</footer>
 <!--一定要先jquery，再Semantic！！！！！-->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>

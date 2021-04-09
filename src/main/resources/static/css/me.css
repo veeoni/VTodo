@@ -72,6 +72,11 @@ body {
     font-weight: 300 !important;
 }
 
+.m-text-todo {
+    line-height: 1.1 !important;
+    font-weight: 300 !important;
+}
+
 .m-text-thin {
     font-weight: 300 !important;
 }
