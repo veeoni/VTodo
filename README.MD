@@ -19,3 +19,70 @@
 有个取巧的方法，提前把所有/blog成/{blog}(blog=#{配置在messages.properties的blog/blogs})
 用这种方法的话，可以写3个原型页面，第一个commonmark 第二个editor自定义TOC容器 第三个editor取消自定义容器。
 3. 更改所有图片、头像为自己选的，放到图床上。
+
+###关于todo页面的需求分析
+1. 用户可以查看当日待办（根据当天的日期查询）
+2. 用户可以查看任一天的待办（日期选择器）
+3. 用户可以查看前一天和后一天的待办（两个按钮）
+4. 在任一项待办列表为空时，显示“恭喜！今日待办全部完成”“今天还没有完成任何待办哦~“
+5. 待办的分类为 待复习 待办
+
+
+某日已完成的待复习
+
+| stateName | value |
+| ------- | ------ |
+| finishedTime | `ThatDay()` |
+| status | finished |
+| type | review |
+
+某日已完成的待办
+
+| stateName | value |
+| ------- | ------ |
+| finishedTime | `ThatDay()` |
+| status | finished |
+| type | todo |
+
+某日未完成的待复习
+
+| stateName | value |
+| ------- | ------ |
+| finishedTime |  |
+| status | doing |
+| type | review |
+| startTime | \<`ThatDay()` |
+| endTime | \>`ThatDay()` |
+| taskTime | ==`ThatDay()` |
+
+某日遗留的未完成的待复习
+
+| stateName | value |
+| ------- | ------ |
+| finishedTime |  |
+| finished | false |
+| type | review |
+| startTime | \<`ThatDay()` |
+| endTime | \<`ThatDay()` |
+| taskTime | \<`ThatDay()` |
+
+某日未完成的待办
+
+| stateName | value |
+| ------- | ------ |
+| finishedTime |  |
+| finished | false |
+| type | todo |
+| startTime | \<`ThatDay()` |
+| endTime | \>`ThatDay()` |
+
+某日遗留的未完成的待办
+
+| stateName | value |
+| ------- | ------ |
+| finishedTime |  |
+| finished | false |
+| type | todo |
+| startTime | \<`ThatDay()` |
+| endTime | \<`ThatDay()` |
+| taskTime | \<`ThatDay()` |

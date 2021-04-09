@@ -45,15 +45,13 @@
                 <div class="ui segment">
                     <div class="ui middle aligned three column grid">
                         <div class="column">
-                            <a class="ui mini teal basic button" href="#" th:href="@{/(page=${page.number}-1)}"
-                               th:unless="${page.first}">前一日</a>
+                            <a class="ui mini teal basic button" href="#">前一日</a>
                         </div>
                         <div class="center aligned column">
                             <h3>2021年04月09日</h3>
                         </div>
                         <div class="right aligned column">
-                            <a class="ui mini teal basic button" href="#" th:href="@{/(page=${page.number}+1)}"
-                               th:unless="${page.last}">前一日</a>
+                            <a class="ui mini teal basic button" href="#">前一日</a>
                         </div>
                     </div>
                 </div>
@@ -66,24 +64,26 @@
                         </div>
                         <div class="right aligned column">
                             <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
-                            共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}">
+                            共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${todos.size}">
                             14 </h2> 个
                         </div>
                     </div>
                 </div>
                 <!--content-->
                 <div class="ui attached segment">
-                    <div class="ui raised attached segment">
+                    <div class="ui raised attached segment" th:each="todo : ${todos}">
                         <div class="ui ribbon label">遗留的复习</div><!-- th:classappend="red/pik/olive/pink"-->
-                        <strong>待复习的主题</strong>
-                        <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                        <strong th:text="${todo.title}">待复习的主题</strong>
+                        <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
                             待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
                         <div class="ui mobile stackable grid">
                             <div class="row">
                                 <div class="eight wide column">
-                                    <label href="#" class="ui m-padded-tb-small label">类型</label>
-                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签1</label>
-                                    <label href="#" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                    <label class="ui m-padded-tb-small label" th:text="${todo.type.name}">类型</label>
+                                    <label class="ui m-padded-tb-small left pointing label" th:each="tag : ${todo.tags}" th:text="${tag.name}">标签1</label>
+                                    <!--/*-->
+                                    <label class="ui m-padded-tb-small left pointing label">标签2</label>
+                                    <!--*/-->
                                 </div>
                                 <div class="right aligned eight wide column">
                                     <div class="ui buttons">

@@ -17,6 +17,16 @@ public class Tag {
 
     @ManyToMany(mappedBy = "tags")
     private List<Blog> blogs = new ArrayList<>();
+    @ManyToMany(mappedBy = "tags")
+    private List<Todo> todos = new ArrayList<>();
+
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<Todo> todos) {
+        this.todos = todos;
+    }
 
     public List<Blog> getBlogs() {
         return blogs;
@@ -46,9 +56,11 @@ public class Tag {
 
     @Override
     public String toString() {
-        return "Type{" +
+        return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", blogs=" + blogs +
+                ", todos=" + todos +
                 '}';
     }
 }

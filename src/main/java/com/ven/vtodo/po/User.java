@@ -24,6 +24,16 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Blog> blogs = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Todo> todos = new ArrayList<>();
+
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<Todo> todos) {
+        this.todos = todos;
+    }
 
     public List<Blog> getBlogs() {
         return blogs;
@@ -120,6 +130,8 @@ public class User {
                 ", type=" + type +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", blogs=" + blogs +
+                ", todos=" + todos +
                 '}';
     }
 }

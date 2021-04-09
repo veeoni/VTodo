@@ -18,6 +18,16 @@ public class Type {
 
     @OneToMany(mappedBy = "type")
     private List<Blog> blogs = new ArrayList<>();
+    @OneToMany(mappedBy = "type")
+    private List<Todo> todos = new ArrayList<>();
+
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<Todo> todos) {
+        this.todos = todos;
+    }
 
     public List<Blog> getBlogs() {
         return blogs;
@@ -51,6 +61,8 @@ public class Type {
         return "Type{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", blogs=" + blogs +
+                ", todos=" + todos +
                 '}';
     }
 }
