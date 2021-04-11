@@ -1,0 +1,28 @@
+Todo{
+id=null,
+flag='待办',
+title='单次待办',
+content='单次待办',
+createTime=null,
+updateTime=null,
+finishedDate=null,
+taskDate=Sun Apr 11 00:00:00 CST 2021,
+interval=1, totalTimes=5,
+remainTimes=null,
+easinessFactor=null,
+tagIds='2,4,5',
+repeat=true,
+user=1,
+type=1,
+tags=null}
+
+Todo{
+id=null, flag='待办', title='单次待办', content='1111', createTime=null, updateTime=null,
+ finishedDate=null, taskDate=Sun Apr 11 00:00:00 CST 2021, interval=1, totalTimes=5,
+ remainTimes=null, easinessFactor=null, tagIds='6,104,5', repeat=true, user=1, type=2, tags=5}
+
+ 登录了test后的单次待办
+ Todo{
+ id=null, flag='待办', title='单次待办', content='单次待办', createTime=null, updateTime=null,
+  finishedDate=null, taskDate=Sun Apr 11 00:00:00 CST 2021, interval=1, totalTimes=5,
+   remainTimes=null, easinessFactor=null, tagIds='6,104', repeat=true, user=2, type=103, tags=6}
