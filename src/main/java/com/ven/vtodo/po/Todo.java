@@ -1,6 +1,8 @@
 package com.ven.vtodo.po;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +21,10 @@ public class Todo {
     private Date createTime;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date finishedTime;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date taskTime;
     @Column(name = "m_interval")
@@ -28,6 +32,10 @@ public class Todo {
     private Integer totalTimes;
     private Integer remainTimes;
 
+    @Transient//不保存至数据库
+    private String tagIds;
+    @Transient//不保存至数据库
+    private Boolean repeat;
     @ManyToOne
     private User user;
     @ManyToOne
@@ -142,13 +150,48 @@ public class Todo {
         this.remainTimes = remainTimes;
     }
 
+    public Boolean getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(Boolean repeat) {
+        this.repeat = repeat;
+    }
+
+    public String getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(String tagIds) {
+        this.tagIds = tagIds;
+    }
+
+    public void init() {
+        this.tagIds = tagsToIds(this.getTags());
+    }
+
+    private String tagsToIds(List<Tag> tags) {
+        if (!tags.isEmpty()) {
+            StringBuffer ids = new StringBuffer();
+            boolean flag = false;
+            for (Tag tag : tags) {
+                if (flag) {
+                    ids.append(",");
+                } else {
+                    flag = true;
+                }
+                ids.append(tag.getId());
+            }
+            return ids.toString();
+        } else {
+            return tagIds;
+        }
+    }
+
     @Override
     public String toString() {
         return "Todo{" +
                 "id=" + id +
-                ", user=" + user +
-                ", type=" + type +
-                ", tags=" + tags +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", createTime=" + createTime +
@@ -158,6 +201,11 @@ public class Todo {
                 ", interval=" + interval +
                 ", totalTimes=" + totalTimes +
                 ", remainTimes=" + remainTimes +
+                ", tagIds='" + tagIds + '\'' +
+                ", repeat=" + repeat +
+                ", user=" + (user!=null?user.getId():"null") +
+                ", type=" + (type!=null?type.getId():"null") +
+//                ", tags=" + tags +
                 '}';
     }
 }
