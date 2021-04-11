@@ -86,14 +86,16 @@ public class CommentServiceImpl implements CommentService {
      * @param comment 被迭代的对象
      * @return
      */
+    // FIXED: 2021/4/11 评论树超过三层时，子树根节点会被重复添加。
     private void recursively(Comment comment) {
         tempReplys.add(comment);//顶节点添加到临时存放集合
         if (comment.getReplyComments().size() > 0) {
             List<Comment> replys = comment.getReplyComments();
             for (Comment reply : replys) {
-                tempReplys.add(reply);
                 if (reply.getReplyComments().size() > 0) {
                     recursively(reply);
+                } else {
+                    tempReplys.add(reply);
                 }
             }
         }
