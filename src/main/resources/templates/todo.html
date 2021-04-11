@@ -40,11 +40,185 @@
         <!-- container有响应式效果，根据屏幕不同的尺寸达到适应的效果-->
         <div class="ui stackable grid">
             <!--左边待办列表-->
-            <div class="eleven wide column">
+            <div id="todo_container" class="eleven wide column">
                 <!--todo_container加载，fragment获取返回的值-->
 
-                <!--顶部日期选择-->
-                <div class="ui segment">
+                <div name="todo_container" th:fragment="todoList">
+                    <!--一定要先jquery，再Semantic！！！！！
+    放这儿是因为，这部分的页面要动态加载，但是，动态加载过后，在js里绑定的事件就用不了了，索性直接塞里面
+-->
+                    <script src="../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+                    <script src="../static/js/semantic.js" th:src="@{/js/semantic.js}"></script>
+                    <script src="../static/js/jquery.scrollTo.min.js" th:src="@{/js/jquery.scrollTo.min.js}"></script>
+                    <script th:inline="javascript">
+                        //ajax发送请求
+                        function postData() {
+                            //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
+                            $('#todo_container').load(/*[[@{/todos}]]*/+"", {
+                                'id': $("[name='id']").val(),
+                                'flag': $("[name='flag']").val(),
+                                'title': $("[name='title']").val(),
+                                'content': $("[name='content']").val(),
+                                'type.id': $("[name='type.id']").val(),
+                                'tagIds': $("[name='tagIds']").val(),
+                                'taskDate': $("[name='taskDate']").val(),
+                                'repeat': $("[name='repeat']").checked,
+                                'interval': $("[name='m_interval']").val(),
+                                'totalTimes': $("[name='total_times']").val()
+                            }, function (responseTxt, statusTxt, xhr) {
+                                //callback 回调方法
+                                //判断是否成功，刷新，滚动到comment头
+                                $(window).scrollTo($('#todo_container'), 500);
+                                clearContent();
+                            });
+                        }
+
+                        //表单验证
+                        $('#todo-form').form({
+                            fields: {
+                                title: {
+                                    identifier: 'title',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '标题：请输入待办标题'
+                                    }]
+                                },
+                                content: {
+                                    identifier: 'content',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '内容：请输入待办内容'
+                                    }]
+                                },
+                                typeId: {
+                                    identifier: 'type.id',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '分类：请选择分类'
+                                    }]
+                                },
+                                m_interval: {
+                                    identifier: 'm_interval',
+                                    rules: [{
+                                        type: 'integer[1..65535]',
+                                        prompt: '间隔：只能输入1~65535间的数字哦'
+                                    }]
+                                },
+                                total_times: {
+                                    identifier: 'total_times',
+                                    rules: [{
+                                        type: 'integer[-1..65535]',
+                                        prompt: '间隔只能输入-1~65535间的数字哦'
+                                    }]
+                                }
+                            }
+                        });
+
+                        //获取当前日期
+                        function getdate() {
+                            var time = new Date();
+                            var day = ("0" + time.getDate()).slice(-2);
+                            var month = ("0" + (time.getMonth() + 1)).slice(-2);
+                            var today = time.getFullYear() + "-" + (month) + "-" + (day);
+                            return today;
+                        }
+
+                        //根据日期查待办选择的日期
+                        $('#query_date').val(getdate()).change(function () {
+                            console.log($('#query_date').val());
+                        });
+
+
+                        //当选中的为复习时
+                        $("#review_item").on("click", function () {
+                            $('#repeat').prop("checked", false).prop("disabled", true);
+                            repeatChange();
+                        });
+                        //当选中的为待办时
+                        $("#todo_item").on("click", function () {
+                            $('#repeat').prop("disabled", false);
+                            repeatChange();
+                        });
+                        //点击新建待办按钮之后的事件
+                        $('#create_todo_btn').on("click", function () {
+                            var status = document.getElementById("create_todo_form").style.display;
+                            console.log($("#todo_or_review_input").val());
+                            if (status == "none") {
+                                document.getElementById("create_todo_btn").innerText = "放弃新增";
+                                document.getElementById("create_todo_form").style.display = "";
+                                $('#taskDate').val(getdate());
+                            } else {
+                                document.getElementById("create_todo_btn").innerText = "新增待办";
+                                document.getElementById("create_todo_form").style.display = "none";
+                            }
+                        });
+                        //多选框“重复”被选中后 TODO 改成switch样式会好看点
+                        $('#repeat').change(function () {
+                            repeatChange();
+                        });
+
+                        //勾选重复之后的操作
+                        function repeatChange() {
+                            if ($('#repeat').prop('checked')) {
+                                document.getElementById("repeat_input").style.display = "";
+                                document.getElementById('total_times_div').classList.add("required");
+                                document.getElementById('m_interval_div').classList.add("required");
+                            } else {
+                                document.getElementById("repeat_input").style.display = "none";
+                                document.getElementById('total_times_div').classList.remove("required");
+                                document.getElementById('m_interval_div').classList.remove("required");
+                            }
+                        }
+
+                        //Semantic UI的下拉框生效
+                        $('.ui.dropdown').dropdown();
+                        // TODO 添加校验域
+                        // $('.add.example .ui.positive.button')
+                        //     .on('click', function() {
+                        //         $('.add.example .ui.form')
+                        //         // adding longform
+                        //             .form('add rule', 'gender', {
+                        //                 rules: [
+                        //                     {
+                        //                         type   : 'empty',
+                        //                         prompt : 'Entering your gender is necessary'
+                        //                     }
+                        //                 ]
+                        //             })
+                        //             // adding shorthand
+                        //             .form('add rule', 'password', ['empty', 'minLength[5]'])
+                        //         ;
+                        //     })
+                        // ;
+                        // TODO 删除校验域
+                        // $('.add.example .ui.negative.button')
+                        //     .on('click', function() {
+                        //         $('.add.example .ui.form')
+                        //         // removing multiple at once
+                        //             .form('remove fields', ['gender', 'password'])
+                        //         ;
+                        //     })
+                        // ;
+
+                        //点击提交添加后，进行表单校验后，传送数据
+                        $('#add-btn').click(function () {
+                            var boo = $('.ui.form').form('validate form');
+                            // var boo = $('.ui.form').form('validate field(todo_container)');
+                            if (boo) {
+                                console.log("校验成功");
+                                postData();
+                            } else {
+                                console.log("校验失败");
+                            }
+                        });
+
+                        //表单恢复默认值
+                        function clearContent() {
+
+                        }
+                    </script>
+                    <!--顶部日期选择-->
+                    <div class="ui segment">
                         <div class="ui middle aligned three column grid">
                             <div class="column">
                                 <a class="ui mini teal basic button" href="#">前一日</a>
@@ -58,7 +232,6 @@
                         </div>
                     </div>
 
-                <div id="todo_container" name="todo_container" th:fragment="todoList">
                     <!--今日未完成标题-->
                     <div class="ui red top attached segment">
                         <div class="ui middle aligned two column grid">
@@ -67,7 +240,8 @@
                             </div>
                             <div class="right aligned column">
                                 <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
-                                共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${todos}!=null ? ${todos.size}:0">
+                                共 <h2 class="ui orange header m-inline-block m-text-thin"
+                                      th:text="${todos}!=null ? ${todos.size}:0">
                                 14 </h2> 个
                             </div>
                         </div>
@@ -202,7 +376,7 @@
                         <!--*/-->
                     </div>
                     <!--新增待办按钮-->
-                </div>
+
                     <div class="ui attached segment">
                         <button id="create_todo_btn" class="ui basic blue fluid button">新增待办</button>
                     </div>
@@ -232,32 +406,36 @@
                                         <textarea name="content" placeholder="请输入待办内容"></textarea>
                                     </div>
                                 </div>
-                                    <div class="required field">
-                                        <div class="ui left labeled input">
-                                            <label class="ui compact teal basic label">分类</label>
-                                            <div class="ui fluid selection dropdown">
-                                                <input type="hidden" name="type.id">
-                                                <i class="dropdown icon"></i>
-                                                <div class="default text">分类</div>
-                                                <div class="menu">
-                                                    <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}">错误日志</div>
+                                <div class="required field">
+                                    <div class="ui left labeled input">
+                                        <label class="ui compact teal basic label">分类</label>
+                                        <div class="ui fluid selection dropdown">
+                                            <input type="hidden" name="type.id">
+                                            <i class="dropdown icon"></i>
+                                            <div class="default text">分类</div>
+                                            <div class="menu">
+                                                <div th:each="type : ${types}" class="item" data-value="1"
+                                                     th:data-value="${type.id}" th:text="${type.name}">错误日志
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="field">
-                                        <div class="ui left labeled input">
-                                            <label class="ui compact teal basic label">标签</label>
-                                            <div class="ui fluid selection multiple search dropdown">
-                                                <input type="hidden" name="tagIds">
-                                                <i class="dropdown icon"></i>
-                                                <div class="default text">标签</div>
-                                                <div class="menu">
-                                                    <div th:each="tag : ${tags}" class="item" data-value="1" th:data-value="${tag.id}" th:text="${tag.name}" >Java</div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui left labeled input">
+                                        <label class="ui compact teal basic label">标签</label>
+                                        <div class="ui fluid selection multiple search dropdown">
+                                            <input type="hidden" name="tagIds">
+                                            <i class="dropdown icon"></i>
+                                            <div class="default text">标签</div>
+                                            <div class="menu">
+                                                <div th:each="tag : ${tags}" class="item" data-value="1"
+                                                     th:data-value="${tag.id}" th:text="${tag.name}">Java
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 <div class="two fields">
                                     <div class="required field">
                                         <input id="taskDate" type="date" name="taskDate" value=""/>
@@ -391,6 +569,8 @@
                         </div>
                         <!--*/-->
                     </div>
+
+                </div>
             </div>
 
 
@@ -593,174 +773,7 @@
            th:text="|#{index.copyright}${#dates.year(#dates.createToday())}|">Copyright@......</p>
     </div>
 </footer>
-<!--一定要先jquery，再Semantic！！！！！
-    放这儿是因为，这部分的页面要动态加载，但是，动态加载过后，在js里绑定的事件就用不了了，索性直接塞里面
--->
-<script src="../static/js/jquery.js"  th:src="@{/js/jquery.js}"></script>
-<script src="../static/js/semantic.js"  th:src="@{/js/semantic.js}"></script>
-<script src="../static/js/jquery.scrollTo.min.js"  th:src="@{/js/jquery.scrollTo.min.js}"></script>
-<script th:inline="javascript">
-    //ajax发送请求
-    function postData() {
-        //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
-        $('#todo_container').load(/*[[@{/todos}]]*/+"",{
-            'id': $("[name='id']").val(),
-            'flag': $("[name='flag']").val(),
-            'title': $("[name='title']").val(),
-            'content': $("[name='content']").val(),
-            'type.id': $("[name='type.id']").val(),
-            'tagIds': $("[name='tagIds']").val(),
-            'taskDate': $("[name='taskDate']").val(),
-            'repeat': $("[name='repeat']").checked,
-            'interval': $("[name='m_interval']").val(),
-            'totalTimes': $("[name='total_times']").val()
-        }, function (responseTxt, statusTxt, xhr) {
-            //callback 回调方法
-            //判断是否成功，刷新，滚动到comment头
-            $(window).scrollTo($('#todo_container'),500);
-            clearContent();
-        });
-    }
-    //表单验证
-    $('#todo-form').form({
-        fields: {
-            title: {
-                identifier: 'title',
-                rules: [{
-                    type: 'empty',
-                    prompt: '标题：请输入待办标题'
-                }]
-            },
-            content: {
-                identifier: 'content',
-                rules: [{
-                    type: 'empty',
-                    prompt: '内容：请输入待办内容'
-                }]
-            },
-            typeId: {
-                identifier: 'type.id',
-                rules: [{
-                    type: 'empty',
-                    prompt: '分类：请选择分类'
-                }]
-            },
-            m_interval: {
-                identifier: 'm_interval',
-                rules: [{
-                    type: 'integer[1..65535]',
-                    prompt: '间隔：只能输入1~65535间的数字哦'
-                }]
-            },
-            total_times: {
-                identifier: 'total_times',
-                rules: [{
-                    type: 'integer[-1..65535]',
-                    prompt: '间隔只能输入-1~65535间的数字哦'
-                }]
-            }
-        }
-    });
-    //获取当前日期
-    function getdate() {
-        var time = new Date();
-        var day = ("0" + time.getDate()).slice(-2);
-        var month = ("0" + (time.getMonth() + 1)).slice(-2);
-        var today = time.getFullYear() + "-" + (month) + "-" + (day);
-        return today;
-    }
-    //根据日期查待办选择的日期
-    $('#query_date').val(getdate()).change(function () {
-        console.log($('#query_date').val());
-    });
 
-
-    //当选中的为复习时
-    $("#review_item").on("click", function () {
-        $('#repeat').prop("checked", false).prop("disabled", true);
-        repeatChange();
-    });
-    //当选中的为待办时
-    $("#todo_item").on("click", function () {
-        $('#repeat').prop("disabled", false);
-        repeatChange();
-    });
-    //点击新建待办按钮之后的事件
-    $('#create_todo_btn').on("click", function () {
-        var status = document.getElementById("create_todo_form").style.display;
-        console.log($("#todo_or_review_input").val());
-        if (status == "none") {
-            document.getElementById("create_todo_btn").innerText = "放弃新增";
-            document.getElementById("create_todo_form").style.display = "";
-            $('#taskDate').val(getdate());
-        } else {
-            document.getElementById("create_todo_btn").innerText = "新增待办";
-            document.getElementById("create_todo_form").style.display = "none";
-        }
-    });
-    //多选框“重复”被选中后 TODO 改成switch样式会好看点
-    $('#repeat').change(function () {
-        repeatChange();
-    });
-    //勾选重复之后的操作
-    function repeatChange() {
-        if ($('#repeat').prop('checked')) {
-            document.getElementById("repeat_input").style.display = "";
-            document.getElementById('total_times_div').classList.add("required");
-            document.getElementById('m_interval_div').classList.add("required");
-        } else {
-            document.getElementById("repeat_input").style.display = "none";
-            document.getElementById('total_times_div').classList.remove("required");
-            document.getElementById('m_interval_div').classList.remove("required");
-        }
-    }
-    //Semantic UI的下拉框生效
-    $('.ui.dropdown').dropdown();
-    // TODO 添加校验域
-    // $('.add.example .ui.positive.button')
-    //     .on('click', function() {
-    //         $('.add.example .ui.form')
-    //         // adding longform
-    //             .form('add rule', 'gender', {
-    //                 rules: [
-    //                     {
-    //                         type   : 'empty',
-    //                         prompt : 'Entering your gender is necessary'
-    //                     }
-    //                 ]
-    //             })
-    //             // adding shorthand
-    //             .form('add rule', 'password', ['empty', 'minLength[5]'])
-    //         ;
-    //     })
-    // ;
-    // TODO 删除校验域
-    // $('.add.example .ui.negative.button')
-    //     .on('click', function() {
-    //         $('.add.example .ui.form')
-    //         // removing multiple at once
-    //             .form('remove fields', ['gender', 'password'])
-    //         ;
-    //     })
-    // ;
-
-    //点击提交添加后，进行表单校验后，传送数据
-    $('#add-btn').click(function () {
-        var boo = $('.ui.form').form('validate form');
-        // var boo = $('.ui.form').form('validate field(todo_container)');
-        if (boo) {
-            console.log("校验成功");
-            postData();
-        } else {
-            console.log("校验失败");
-        }
-    });
-
-    //表单恢复默认值
-    function clearContent(){
-
-    }
-</script>
 <script>
     $('#todo_container').load("/todos");
     //加载底部的新博客推荐
