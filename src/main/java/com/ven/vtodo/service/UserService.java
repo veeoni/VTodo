@@ -5,4 +5,6 @@ import com.ven.vtodo.po.User;
 public interface UserService {
 
     User checkUser(String username, String password);
+
+    User getUserById(Long id);
 }

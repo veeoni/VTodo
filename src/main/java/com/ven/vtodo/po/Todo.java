@@ -14,6 +14,7 @@ public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String flag;//复习 or 待办
     private String title;
     private String content;
 
@@ -23,14 +24,15 @@ public class Todo {
     private Date updateTime;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date finishedTime;
+    private Date finishedDate;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date taskTime;
+    private Date taskDate;
     @Column(name = "m_interval")
     private Integer interval;
     private Integer totalTimes;
     private Integer remainTimes;
+    private Double easinessFactor;
 
     @Transient//不保存至数据库
     private String tagIds;
@@ -44,6 +46,22 @@ public class Todo {
     private List<Tag> tags;
 
     public Todo() {
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public Double getEasinessFactor() {
+        return easinessFactor;
+    }
+
+    public void setEasinessFactor(Double easinessFactor) {
+        this.easinessFactor = easinessFactor;
     }
 
     public Long getId() {
@@ -110,20 +128,20 @@ public class Todo {
         this.updateTime = updateTime;
     }
 
-    public Date getFinishedTime() {
-        return finishedTime;
+    public Date getFinishedDate() {
+        return finishedDate;
     }
 
-    public void setFinishedTime(Date finishedTime) {
-        this.finishedTime = finishedTime;
+    public void setFinishedDate(Date finishedDate) {
+        this.finishedDate = finishedDate;
     }
 
-    public Date getTaskTime() {
-        return taskTime;
+    public Date getTaskDate() {
+        return taskDate;
     }
 
-    public void setTaskTime(Date taskTime) {
-        this.taskTime = taskTime;
+    public void setTaskDate(Date taskDate) {
+        this.taskDate = taskDate;
     }
 
     public Integer getInterval() {
@@ -192,20 +210,23 @@ public class Todo {
     public String toString() {
         return "Todo{" +
                 "id=" + id +
+                ", flag='" + flag + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", finishedTime=" + finishedTime +
-                ", taskTime=" + taskTime +
+                ", finishedDate=" + finishedDate +
+                ", taskDate=" + taskDate +
                 ", interval=" + interval +
                 ", totalTimes=" + totalTimes +
                 ", remainTimes=" + remainTimes +
+                ", easinessFactor=" + easinessFactor +
                 ", tagIds='" + tagIds + '\'' +
                 ", repeat=" + repeat +
                 ", user=" + (user!=null?user.getId():"null") +
                 ", type=" + (type!=null?type.getId():"null") +
-//                ", tags=" + tags +
+//                ", tags=" + (tags.size()>0?tags.get(0).getId():"null") +
                 '}';
+
     }
 }

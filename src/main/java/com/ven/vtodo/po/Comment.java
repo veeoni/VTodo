@@ -119,7 +119,7 @@ public class Comment {
                 ", content='" + content + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", createTime=" + createTime +
-                ", blog=" + blog +
+                ", blog=" + (blog!=null?blog.getId():"null") +
                 ", replyComments=" + replyComments +
                 ", parentComment=" + parentComment +
                 ", adminComment=" + adminComment +

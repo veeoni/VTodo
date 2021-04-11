@@ -18,4 +18,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsernameAndPassword(username, SHA256Util.getSHA256(username+password));
         return user;
     }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.getOne(id);
+    }
 }

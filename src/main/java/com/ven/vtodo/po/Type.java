@@ -61,8 +61,8 @@ public class Type {
         return "Type{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", blogs=" + blogs +
-                ", todos=" + todos +
+                ", blogs=" + (blogs!=null?blogs.get(0).getId():"null") +
+                ", todos=" + (todos!=null?todos.get(0).getId():"null") +
                 '}';
     }
 }

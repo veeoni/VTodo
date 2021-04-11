@@ -16,7 +16,7 @@ public class User {
     private String password;
     private String email;
     private String avatar;
-    private Integer type;
+    private Integer type;//1管理员 2普通用户
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
     @Temporal(TemporalType.TIMESTAMP)
@@ -130,8 +130,8 @@ public class User {
                 ", type=" + type +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", blogs=" + blogs +
-                ", todos=" + todos +
+                ", blogs=" + (blogs!=null?blogs.get(0).getId():"null") +
+                ", todos=" + (todos!=null?todos.get(0).getId():"null") +
                 '}';
     }
 }

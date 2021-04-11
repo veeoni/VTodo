@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.ven.vtodo.util.ListToStringUtil.tagsToIds;
+
 @Entity
 @Table(name = "t_blog")
 public class Blog {
@@ -202,24 +204,9 @@ public class Blog {
     }
 
     public void init() {
-        this.tagIds = tagsToIds(this.getTags());
-    }
-
-    private String tagsToIds(List<Tag> tags) {
-        if (!tags.isEmpty()) {
-            StringBuffer ids = new StringBuffer();
-            boolean flag = false;
-            for (Tag tag : tags) {
-                if (flag) {
-                    ids.append(",");
-                } else {
-                    flag = true;
-                }
-                ids.append(tag.getId());
-            }
-            return ids.toString();
-        } else {
-            return tagIds;
+        String tagIds = tagsToIds(this.getTags());
+        if(!tagIds.equals("")){
+            this.tagIds = tagIds;
         }
     }
 
@@ -241,8 +228,8 @@ public class Blog {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", type=" + type +
-                ", tags=" + tags +
-                ", user=" + user +
+                ", tags=" + tagsToIds(tags) +
+                ", user=" + (user!=null?user.getId():"null") +
                 ", comments=" + comments +
                 ", tagIds='" + tagIds + '\'' +
                 ", description='" + description + '\'' +
