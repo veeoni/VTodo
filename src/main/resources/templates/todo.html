@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>代办列表</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.3/jquery.scrollTo.min.js"></script>
+    <link rel="stylesheet prefetch" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
     <link rel="stylesheet  prefetch" href="../static/css/me.css" th:href="@{/css/me.css}"/>
 </head>
@@ -229,7 +232,6 @@
                                         <textarea name="content" placeholder="请输入待办内容"></textarea>
                                     </div>
                                 </div>
-                                <div class="two fields">
                                     <div class="required field">
                                         <div class="ui left labeled input">
                                             <label class="ui compact teal basic label">分类</label>
@@ -238,8 +240,7 @@
                                                 <i class="dropdown icon"></i>
                                                 <div class="default text">分类</div>
                                                 <div class="menu">
-                                                    <div class="item" data-value="1">错误日志
-                                                    </div>
+                                                    <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}">错误日志</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,27 +253,25 @@
                                                 <i class="dropdown icon"></i>
                                                 <div class="default text">标签</div>
                                                 <div class="menu">
-                                                    <div class="item" data-value="1">Java
-                                                    </div>
+                                                    <div th:each="tag : ${tags}" class="item" data-value="1" th:data-value="${tag.id}" th:text="${tag.name}" >Java</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 <div class="two fields">
                                     <div class="required field">
-                                        <input id="tasktime" type="date" name="tasktime" value=""/>
+                                        <input id="taskDate" type="date" name="taskDate" value=""/>
                                     </div>
                                     <div class="inline fields">
                                         <div id="repeat_div" class="center aligned field">
                                             <div class="ui checkbox">
-                                                <input id="repeat" checked type="checkbox" name="repeat" class="hidden">
+                                                <input id="repeat" type="checkbox" name="repeat" class="hidden">
                                                 <label for="repeat">重复</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="repeat_input" class="two fields">
+                                <div id="repeat_input" class="two fields" style="display: none;">
                                     <div id="m_interval_div" class="field">
                                         <div class="ui left labeled input">
                                             <label class="ui teal basic label">间隔天数</label>
@@ -392,11 +391,73 @@
                         </div>
                         <!--*/-->
                     </div>
-                    <!--一定要先jquery，再Semantic！！！！！-->
-                    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.3/jquery.scrollTo.min.js"></script>
+                    <!--一定要先jquery，再Semantic！！！！！
+                        放这儿是因为，这部分的页面要动态加载，但是，动态加载过后，在js里绑定的事件就用不了了，索性直接塞里面
+                    -->
                     <script th:inline="javascript">
+                        //ajax发送请求
+                        function postData() {
+                            //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
+                            $('#todo_container').load(/*[[@{/todos}]]*/+"",{
+                                'id': $("[name='id']").val(),
+                                'flag': $("[name='flag']").val(),
+                                'title': $("[name='title']").val(),
+                                'content': $("[name='content']").val(),
+                                'type.id': $("[name='type.id']").val(),
+                                'tagIds': $("[name='tagIds']").val(),
+                                'taskDate': $("[name='taskDate']").val(),
+                                'repeat': $("[name='repeat']").checked,
+                                'interval': $("[name='m_interval']").val(),
+                                'totalTimes': $("[name='total_times']").val()
+                            }, function (responseTxt, statusTxt, xhr) {
+                                //callback 回调方法
+                                //判断是否成功，刷新，滚动到comment头
+                                $(window).scrollTo($('#todo_container'),500);
+                                clearContent();
+                            });
+                        }
+                    </script>
+                    <script>
+                        //表单验证
+                        $('#todo-form').form({
+                            fields: {
+                                title: {
+                                    identifier: 'title',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '标题：请输入待办标题'
+                                    }]
+                                },
+                                content: {
+                                    identifier: 'content',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '内容：请输入待办内容'
+                                    }]
+                                },
+                                typeId: {
+                                    identifier: 'type.id',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '分类：请选择分类'
+                                    }]
+                                },
+                                m_interval: {
+                                    identifier: 'm_interval',
+                                    rules: [{
+                                        type: 'integer[1..65535]',
+                                        prompt: '间隔：只能输入1~65535间的数字哦'
+                                    }]
+                                },
+                                total_times: {
+                                    identifier: 'total_times',
+                                    rules: [{
+                                        type: 'integer[-1..65535]',
+                                        prompt: '间隔只能输入-1~65535间的数字哦'
+                                    }]
+                                }
+                            }
+                        });
                     //获取当前日期
                     function getdate() {
                         var time = new Date();
@@ -404,26 +465,6 @@
                         var month = ("0" + (time.getMonth() + 1)).slice(-2);
                         var today = time.getFullYear() + "-" + (month) + "-" + (day);
                         return today;
-                    }
-                    //ajax发送请求
-                    function postData() {
-                        //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
-                        $('#todo_container').load(/*[[@{/todos}]]*/+"",{
-                            'id': $("[name='id']").val(),
-                            'title': $("[name='title']").val(),
-                            'content': $("[name='content']").val(),
-                            'type.id': $("[name='type.id']").val(),
-                            'tagIds': $("[name='tagIds']").val(),
-                            'taskTime': $("[name='tasktime']").val(),
-                            'repeat': $("[name='repeat']").val(),
-                            'interval': $("[name='m_interval']").val(),
-                            'totalTimes': $("[name='total_times']").val()
-                        }, function (responseTxt, statusTxt, xhr) {
-                            //callback 回调方法
-                            //判断是否成功，刷新，滚动到comment头
-                            $(window).scrollTo($('#todo_container'),500);
-                            clearContent();
-                        });
                     }
                     //根据日期查待办选择的日期
                     $('#query_date').val(getdate()).change(function () {
@@ -448,7 +489,7 @@
                         if (status == "none") {
                             document.getElementById("create_todo_btn").innerText = "放弃新增";
                             document.getElementById("create_todo_form").style.display = "";
-                            $('#tasktime').val(getdate());
+                            $('#taskDate').val(getdate());
                         } else {
                             document.getElementById("create_todo_btn").innerText = "新增待办";
                             document.getElementById("create_todo_form").style.display = "none";
@@ -470,46 +511,6 @@
                             document.getElementById('m_interval_div').classList.remove("required");
                         }
                     }
-                    //表单验证
-                    $('.ui.form').form({
-                        fields: {
-                            title: {
-                                identifier: 'title',
-                                rules: [{
-                                    type: 'empty',
-                                    prompt: '标题：请输入待办标题'
-                                }]
-                            },
-                            content: {
-                                identifier: 'content',
-                                rules: [{
-                                    type: 'empty',
-                                    prompt: '内容：请输入待办内容'
-                                }]
-                            },
-                            typeId: {
-                                identifier: 'type.id',
-                                rules: [{
-                                    type: 'empty',
-                                    prompt: '分类：请选择分类'
-                                }]
-                            },
-                            m_interval: {
-                                identifier: 'm_interval',
-                                rules: [{
-                                    type: 'integer[1..65535]',
-                                    prompt: '间隔：只能输入1~65535间的数字哦'
-                                }]
-                            },
-                            total_times: {
-                                identifier: 'total_times',
-                                rules: [{
-                                    type: 'integer[-1..65535]',
-                                    prompt: '间隔只能输入-1~65535间的数字哦'
-                                }]
-                            }
-                        }
-                    });
                     //Semantic UI的下拉框生效
                     $('.ui.dropdown').dropdown();
                     // TODO 添加校验域
@@ -542,7 +543,7 @@
 
                     //点击提交添加后，进行表单校验后，传送数据
                     $('#add-btn').click(function () {
-                        var boo = $('.ui.form').form('validate form');
+                        var boo = $('.ui.form').form('is valid');
                         if (boo) {
                             console.log("校验成功");
                             postData();
