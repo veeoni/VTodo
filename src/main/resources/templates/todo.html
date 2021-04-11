@@ -62,7 +62,7 @@
                                 'type.id': $("[name='type.id']").val(),
                                 'tagIds': $("[name='tagIds']").val(),
                                 'taskDate': $("[name='taskDate']").val(),
-                                'repeat': $("[name='repeat']").checked,
+                                'repeat': $("[name='repeat']").prop("checked"),
                                 'interval': $("[name='m_interval']").val(),
                                 'totalTimes': $("[name='total_times']").val()
                             }, function (responseTxt, statusTxt, xhr) {

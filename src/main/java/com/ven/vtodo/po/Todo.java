@@ -42,7 +42,7 @@ public class Todo {
     private User user;
     @ManyToOne
     private Type type;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     private List<Tag> tags;
 
     public Todo() {
