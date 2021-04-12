@@ -34,16 +34,16 @@ public class TodoServiceImpl implements TodoService {
                 } else if(todo.getTotalTimes() == -1) {
                     todo.setTotalTimes(65535);
                 }
-            } else if (todo.getFlag().equals("复习")){
+            } else {
                 //单次待办
                 todo.setTotalTimes(1);
-            } else {
-                System.out.println("无此flag");
             }
         }else if(todo.getFlag().equals("复习")){//是复习条目
             todo.setInterval(1.0);
             todo.setEasinessFactor(2.0);
             todo.setTotalTimes(65535);
+        } else {
+            System.out.println("无此flag");
         }
         todo.setRemainTimes(todo.getTotalTimes());
         return todoRepository.save(todo);

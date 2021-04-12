@@ -58,6 +58,11 @@ public class TodoController {
         } else {
             todo.setUser(userService.getUserById(1L));
         }
+        if(todo.getId()==null){
+            System.out.println("-------------------新增");
+        }else{
+            System.out.println("-------------------修改"+todo.getId());
+        }
         todoService.saveTodo(todo);
         System.out.println(todo.toString());
         return "redirect:/todos";

@@ -108,7 +108,7 @@
                                     identifier: 'total_times',
                                     rules: [{
                                         type: 'integer[-1..65535]',
-                                        prompt: '间隔只能输入-1~65535间的数字哦'
+                                        prompt: '重复次数：只能输入-1~65535间的数字哦'
                                     }]
                                 }
                             }
@@ -203,7 +203,8 @@
 
                         //点击提交添加后，进行表单校验后，传送数据
                         $('#add-btn').click(function () {
-                            var boo = $('.ui.form').form('validate form');
+                            $('#todo-form').form('validate form');
+                            var boo = $('#todo-form').form('is valid');
                             // var boo = $('.ui.form').form('validate field(todo_container)');
                             if (boo) {
                                 console.log("校验成功");
@@ -468,14 +469,13 @@
                                     </div>
                                     <div id="total_times_div" class="field">
                                         <div class="ui left labeled input">
-                                            <label class="ui teal basic label">循环次数</label>
+                                            <label class="ui teal basic label">重复次数</label>
                                             <input id="total_times" type="number" name="total_times" value="5"/>
                                         </div>
-                                        <p>循环次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
+                                        <p>重复次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
                                     </div>
                                 </div>
                                 <div class="ui error message"></div>
-
                                 <div class="ui right aligned container">
                                     <!--若不指定type=button，则默认为submit-->
                                     <button type="button" id="add-btn" class="ui basic primary button">添加</button>
@@ -484,6 +484,144 @@
                         </div>
                     </div>
                     <!--修改的表单-->
+                    <script  th:inline="javascript">
+                        //表单验证
+                        $('#edit_todo_form').form({
+                            fields: {
+                                edit_title: {
+                                    identifier: 'edit_title',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '标题：请输入待办标题'
+                                    }]
+                                },
+                                edit_content: {
+                                    identifier: 'edit_content',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '内容：请输入待办内容'
+                                    }]
+                                },
+                                edit_typeId: {
+                                    identifier: 'edit_type.id',
+                                    rules: [{
+                                        type: 'empty',
+                                        prompt: '分类：请选择分类'
+                                    }]
+                                },
+                                edit_m_interval: {
+                                    identifier: 'edit_m_interval',
+                                    rules: [{
+                                        type: 'integer[1..65535]',
+                                        prompt: '间隔：只能输入1~65535间的数字哦'
+                                    }]
+                                },
+                                edit_total_times: {
+                                    identifier: 'edit_total_times',
+                                    rules: [{
+                                        type: 'integer[-1..65535]',
+                                        prompt: '间隔只能输入-1~65535间的数字哦'
+                                    }]
+                                }
+                            }
+                        });
+                        //多选框“重复”被选中后 TODO 改成switch样式会好看点
+                        $('#edit_repeat').change(function () {
+                            edit_repeatChange();
+                        });
+                        //勾选重复之后的操作
+                        function edit_repeatChange() {
+                            if ($('#edit_repeat').prop('checked')) {
+                                document.getElementById("edit_repeat_input").style.display = "";
+                                document.getElementById('edit_total_times_div').classList.add("required");
+                                document.getElementById('edit_m_interval_div').classList.add("required");
+                            } else {
+                                document.getElementById("edit_repeat_input").style.display = "none";
+                                document.getElementById('edit_total_times_div').classList.remove("required");
+                                document.getElementById('edit_m_interval_div').classList.remove("required");
+                            }
+                        }
+                        // TODO 添加校验域
+                        // $('.add.example .ui.positive.button')
+                        //     .on('click', function() {
+                        //         $('.add.example .ui.form')
+                        //         // adding longform
+                        //             .form('add rule', 'gender', {
+                        //                 rules: [
+                        //                     {
+                        //                         type   : 'empty',
+                        //                         prompt : 'Entering your gender is necessary'
+                        //                     }
+                        //                 ]
+                        //             })
+                        //             // adding shorthand
+                        //             .form('add rule', 'password', ['empty', 'minLength[5]'])
+                        //         ;
+                        //     })
+                        // ;
+                        // TODO 删除校验域
+                        // $('.add.example .ui.negative.button')
+                        //     .on('click', function() {
+                        //         $('.add.example .ui.form')
+                        //         // removing multiple at once
+                        //             .form('remove fields', ['gender', 'password'])
+                        //         ;
+                        //     })
+                        // ;
+
+                        //点击提交添加后，进行表单校验后，传送数据
+                        $('#edit-submit-btn').click(function () {
+                            $('#edit_todo_form').form('validate form');
+                            var boo = $('#edit_todo_form').form('is valid');
+                            if (boo) {
+                                console.log("校验成功");
+                                postEditData();
+                            } else {
+                                console.log("校验失败");
+                            }
+                        });
+
+                        //ajax发送请求
+                        function postEditData() {
+                            //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
+                            $('#todo_container').load(/*[[@{/todos}]]*/+"", {
+                                'id': $("[name='edit_id']").val(),
+                                'flag': $("[name='edit_flag']").val(),
+                                'title': $("[name='edit_title']").val(),
+                                'content': $("[name='edit_content']").val(),
+                                'type.id': $("[name='edit_type.id']").val(),
+                                'tagIds': $("[name='edit_tagIds']").val(),
+                                'taskDate': $("[name='edit_taskDate']").val(),
+                                'repeat': $("[name='edit_repeat']").prop("checked"),
+                                'interval': $("[name='edit_m_interval']").val(),
+                                'totalTimes': $("[name='edit_total_times']").val()
+                            }, function (responseTxt, statusTxt, xhr) {
+                                //callback 回调方法
+                                //判断是否成功，刷新，滚动到comment头
+                                $(window).scrollTo($('#todo_container'), 500);
+                                clearEditContent();
+                            });
+                        }
+                        //表单恢复默认值
+                        function clearEditContent() {
+                            $("[name='edit_id']").val("");
+                            $("[name='edit_flag']").val("待办");
+                            $("[name='edit_title']").val("");
+                            $("[name='edit_content']").val("");
+                            $("[name='edit_type.id']").val("");
+                            $("[name='edit_tagIds']").val("");
+                            $("[name='edit_repeat']").prop("checked",false);
+                            $("[name='edit_m_interval']").val(1);
+                            $("[name='edit_total_times']").val(5);
+                        }
+                        function reply(obj) {
+                            var commentId = $(obj).data('commentid');//因为使用了data-前缀，所以此处可以直接data('commentId')
+                            var commentNickname = $(obj).data('commentnickname');
+                            $("[name='content']").attr("placeholder", "@"+commentNickname).focus();
+                            $("[name='parentComment.id']").val(commentId);
+                            $(window).scrollTo($('#comment-form'), 500);
+                        }
+                    </script>
                     <div id="edit_todo_form" class="ui attached segment" style="display: block;">
                         <div class="ui container">
                             <div id="edit-form" class="ui form">
@@ -492,14 +630,10 @@
                                 <div class="required field">
                                     <div class="ui left labeled input">
                                         <!--flag不可更改-->
-                                        <div class="ui selection compact teal basic dropdown label">
+                                        <div class="ui selection compact grey basic dropdown label">
                                             <input id="edit_todo_or_review_input" type="hidden" name="edit_flag" value="待办">
                                             <i class="dropdown icon"></i>
                                             <div class="text">待办</div>
-                                            <div class="menu">
-                                                <label id="edit_review_item" class="item" data-value="复习">复习</label>
-                                                <label id="edit_todo_item" class="item" data-value="待办">待办</label>
-                                            </div>
                                         </div>
                                         <input type="text" name="edit_title" placeholder="标题">
                                     </div>
@@ -562,10 +696,10 @@
                                     </div>
                                     <div id="edit_total_times_div" class="field">
                                         <div class="ui left labeled input">
-                                            <label class="ui teal basic label">循环次数</label>
+                                            <label class="ui teal basic label">重复次数</label>
                                             <input id="edit_total_times" type="number" name="edit_total_times" value="5"/>
                                         </div>
-                                        <p>循环次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
+                                        <p>重复次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
                                     </div>
                                 </div>
                                 <div class="ui error message"></div>
