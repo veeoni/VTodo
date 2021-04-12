@@ -635,6 +635,10 @@
                             $("[name='edit_remainTimes']").val($(obj).data('remaintimes'));
                             $(window).scrollTo($('#edit_todo_form'), 500);
                         }
+                        $('#edit-drop-btn').click(function () {
+                            clearEditContent();
+                            document.getElementById("edit_todo_form").style.display = "none";
+                        });
                     </script>
                     <div id="edit_todo_form" class="ui attached segment" style="display: none;">
                         <div class="ui container">
@@ -723,6 +727,7 @@
 
                                 <div class="ui right aligned container">
                                     <!--若不指定type=button，则默认为submit-->
+                                    <button type="button" id="edit-drop-btn" class="ui basic secondary button">放弃修改</button>
                                     <button type="button" id="edit-submit-btn" class="ui basic primary button">提交修改</button>
                                 </div>
                             </div>
