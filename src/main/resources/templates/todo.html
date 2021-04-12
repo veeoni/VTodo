@@ -146,6 +146,7 @@
                             if (status == "none") {
                                 document.getElementById("create_todo_btn").innerText = "放弃新增";
                                 document.getElementById("create_todo_form").style.display = "";
+                                document.getElementById("edit_todo_form").style.display = "none";
                                 $('#taskDate').val(getdate());
                             } else {
                                 document.getElementById("create_todo_btn").innerText = "新增待办";
@@ -214,7 +215,15 @@
 
                         //表单恢复默认值
                         function clearContent() {
-
+                            $("[name='id']").val("");
+                            $("[name='flag']").val("待办");
+                            $("[name='title']").val("");
+                            $("[name='content']").val("");
+                            $("[name='type.id']").val("");
+                            $("[name='tagIds']").val("");
+                            $("[name='repeat']").prop("checked",false);
+                            $("[name='m_interval']").val(1);
+                            $("[name='total_times']").val(5);
                         }
                     </script>
                     <!--顶部日期选择-->
