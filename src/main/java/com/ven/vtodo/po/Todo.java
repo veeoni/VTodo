@@ -18,8 +18,10 @@ public class Todo {
     private String title;
     private String content;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//th传值时，需要的是String，此处是Date，类型不匹配，所以要转换
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//th传值时，需要的是String，此处是Date，类型不匹配，所以要转换
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
     @DateTimeFormat(pattern="yyyy-MM-dd")

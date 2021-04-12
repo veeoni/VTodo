@@ -580,7 +580,8 @@
                                 'taskDate': $("[name='edit_taskDate']").val(),
                                 'repeat': $("[name='edit_repeat']").prop("checked"),
                                 'interval': $("[name='edit_m_interval']").val(),
-                                'totalTimes': $("[name='edit_total_times']").val()
+                                'totalTimes': $("[name='edit_total_times']").val(),
+                                'createTime': $("[name='edit_createtime']").val()
                             }, function (responseTxt, statusTxt, xhr) {
                                 //callback 回调方法
                                 //判断是否成功，刷新，滚动到comment头

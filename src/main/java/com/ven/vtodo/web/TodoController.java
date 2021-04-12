@@ -51,7 +51,7 @@ public class TodoController {
         User user = (User) session.getAttribute("user");
         //前端传值回来，仅会填满可填满的内容，剩下的都为空，如：返回typeid，则，有type对象，但只有id，无name和其他属性。
         //所以这里需要自己查一下并设置以下。吗？
-//        todo.setType(typeService.getType(todo.getType().getId()));
+//        to do.setType(typeService.getType(to do.getType().getId()));
         todo.setTags(tagService.listTag(todo.getTagIds()));
         if(user != null){// FIXME 后期这里必须登录才能用，否则不通过
             todo.setUser(user);
@@ -60,10 +60,11 @@ public class TodoController {
         }
         if(todo.getId()==null){
             System.out.println("-------------------新增");
+            todoService.saveTodo(todo);
         }else{
             System.out.println("-------------------修改"+todo.getId());
+            todoService.saveTodo(todo);
         }
-        todoService.saveTodo(todo);
         System.out.println(todo.toString());
         return "redirect:/todos";
     }
