@@ -66,8 +66,9 @@ public class TodoController {
     @GetMapping("/todos/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes attributes){
         todoService.deleteTodo(id);
+        System.out.println("-------------------------delete"+id);
         attributes.addFlashAttribute("message", "删除成功");
-        return "redirect:/admin/blogs";
+        return "redirect:/";
     }
 
 }

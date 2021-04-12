@@ -249,6 +249,7 @@
                     <!--今日未完成内容-->
                     <div class="ui attached segment">
                         <div class="ui raised attached segment" th:each="todo : ${todos}">
+                            <input type="hidden" name="eachTodoId" th:value="${todo.id}">
                             <div class="ui ribbon label">遗留的复习</div><!-- th:classappend="red/pik/olive/pink"-->
                             <strong th:text="${todo.title}">待复习的主题</strong>
                             <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
@@ -269,8 +270,8 @@
                                             <button href="#" class="ui basic blue m-padded-tb-small button">编辑</button>
                                             <button href="#" class="ui basic positive m-padded-tb-small button">完成
                                             </button>
-                                            <button href="#" class="ui basic negative m-padded-tb-small button">删除
-                                            </button>
+                                            <a href="#" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
