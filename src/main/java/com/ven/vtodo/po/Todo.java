@@ -169,6 +169,12 @@ public class Todo {
     }
 
     public Boolean getRepeat() {
+        if(this.flag.equals("复习")){
+            return false;
+        }
+        if(this.repeat==null){
+            this.repeat = this.totalTimes != 1;
+        }
         return repeat;
     }
 
@@ -177,6 +183,7 @@ public class Todo {
     }
 
     public String getTagIds() {
+        init();
         return tagIds;
     }
 
@@ -189,7 +196,7 @@ public class Todo {
     }
 
     private String tagsToIds(List<Tag> tags) {
-        if (!tags.isEmpty()) {
+        if (tags!=null && !tags.isEmpty()) {
             StringBuffer ids = new StringBuffer();
             boolean flag = false;
             for (Tag tag : tags) {
