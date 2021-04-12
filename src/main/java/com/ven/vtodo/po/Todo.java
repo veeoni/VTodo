@@ -29,7 +29,7 @@ public class Todo {
     @Temporal(TemporalType.DATE)
     private Date taskDate;
     @Column(name = "m_interval")
-    private Integer interval;
+    private Double interval;
     private Integer totalTimes;
     private Integer remainTimes;
     private Double easinessFactor;
@@ -144,11 +144,11 @@ public class Todo {
         this.taskDate = taskDate;
     }
 
-    public Integer getInterval() {
+    public Double getInterval() {
         return interval;
     }
 
-    public void setInterval(Integer interval) {
+    public void setInterval(Double interval) {
         this.interval = interval;
     }
 
