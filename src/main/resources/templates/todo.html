@@ -172,36 +172,6 @@
                             }
                         }
 
-                        //Semantic UI的下拉框生效
-                        // $('.ui.dropdown').dropdown();
-                        // TODO 添加校验域
-                        // $('.add.example .ui.positive.button')
-                        //     .on('click', function() {
-                        //         $('.add.example .ui.form')
-                        //         // adding longform
-                        //             .form('add rule', 'gender', {
-                        //                 rules: [
-                        //                     {
-                        //                         type   : 'empty',
-                        //                         prompt : 'Entering your gender is necessary'
-                        //                     }
-                        //                 ]
-                        //             })
-                        //             // adding shorthand
-                        //             .form('add rule', 'password', ['empty', 'minLength[5]'])
-                        //         ;
-                        //     })
-                        // ;
-                        // TODO 删除校验域
-                        // $('.add.example .ui.negative.button')
-                        //     .on('click', function() {
-                        //         $('.add.example .ui.form')
-                        //         // removing multiple at once
-                        //             .form('remove fields', ['gender', 'password'])
-                        //         ;
-                        //     })
-                        // ;
-
                         //点击提交添加后，进行表单校验后，传送数据
                         $('#add-btn').click(function () {
                             $('#todo-form').form('validate form');
@@ -227,6 +197,44 @@
                             $("[name='m_interval']").val(1);
                             $("[name='total_times']").val(5);
                         }
+
+                        // $('.ui.finbtn')
+                        //     .popup({
+                        //         popup : $('#pop_finish'),
+                        //         on    : 'click'
+                        //     });
+
+                        function isFinish(obj) {
+                            console.log(obj);
+                            console.log($(obj));
+                            // console.log();
+                            console.log($('#add-btn'));
+                            //判断，是待办，则显示model，提示是否完成
+                            //是复习，则显示popup，3个按钮打分，获取id、打分内容、进行更新$(obj).data('id')
+                            // if($(obj).data('flag') == "待办"){
+                            //     $('.ui.modal')
+                            //         .modal({
+                            //             onDeny    : function(){
+                            //                 return false;
+                            //             },
+                            //             onApprove : function() {
+                            //                 // window.alert('Approved!');
+                            //                 // 传请求，根据id更新待办，return “_todo:: todoList"
+                            //             }
+                            //         })
+                            //         .modal('show')
+                            //     ;
+                            // }else if($(obj).data('flag') == "复习"){
+                            //     $(this).popup({
+                            //             popup : $('.ui.popup.top.left'),
+                            //             // on    : 'click'
+                            //         })
+                            //     ;
+                            // }else{
+                            //     window.alert('既不是待办也不是复习！！！');
+                            // }
+                        }
+
                     </script>
                     <!--顶部日期选择-->
                     <div class="ui segment">
@@ -242,7 +250,37 @@
                             </div>
                         </div>
                     </div>
-
+                    <!--确认对话框-->
+                    <div class="ui modal">
+                        <div class="ui icon header">
+                            <i class="archive icon"></i>
+                            Archive Old Messages
+                        </div>
+                        <div class="content">
+                            <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+                        </div>
+                        <div class="actions">
+                            <div class="ui red cancel inverted button">
+                                <i class="remove icon"></i>
+                                No
+                            </div>
+                            <div class="ui green ok inverted button">
+                                <i class="checkmark icon"></i>
+                                Yes
+                            </div>
+                        </div>
+                    </div>
+                    <!--弹出框-->
+<!--                    <div id="pop_finish" class="ui popup top center aligned transition hidden">-->
+<!--                        <div class="ui column divided center aligned grid">-->
+<!--                            <p class="column">评价：</p>-->
+<!--                            </div>-->
+<!--                        <div class="ui buttons">-->
+<!--                            <a href="#" class="ui m-padded-tiny basic red button">不熟</a>-->
+<!--                            <a href="#" class="ui m-padded-tiny basic blue button">一般</a>-->
+<!--                            <a href="#" class="ui m-padded-tiny basic green button">很熟</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <!--今日未完成标题-->
                     <div class="ui red top attached segment">
                         <div class="ui middle aligned two column grid">
@@ -290,10 +328,45 @@
                                                 data-repeat=${todo.repeat}, data-typeid=${todo.type.id}"
                                                onclick="editTodo(this)">编辑</a>
 
-                                            <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成
-                                            </button>
+                                            <button href="javascript:;" th:id="finbtn+${todo.id}" onclick="isFinish(this)"
+                                                    th:attr="data-id=${todo.id}, data-flag=${todo.flag},
+                                                     data-html=|<div class='header'>评价：${todo.id}</div>
+                                                                <div class='content'>
+                                                                    <div class='ui buttons'>
+                                                                        <a href='#' class='ui m-padded-tiny basic red button'>不熟</a>
+                                                                        <a href='#' class='ui m-padded-tiny basic blue button'>一般</a>
+                                                                        <a href='#' class='ui m-padded-tiny basic green button'>很熟</a>
+                                                                    </div>
+                                                                </div>|"
+                                                    class="ui finbtn basic positive m-padded-tb-small button"
+                                                    th:attrappend="data-a=${todo.flag}==复习 ? |<div class='header'>评价：${todo.id}</div>
+                                                                <div class='content'>
+                                                                    <div class='ui buttons'>
+                                                                        <a href='#' class='ui m-padded-tiny basic red button'>不熟</a>
+                                                                        <a href='#' class='ui m-padded-tiny basic blue button'>一般</a>
+                                                                        <a href='#' class='ui m-padded-tiny basic green button'>很熟</a>
+                                                                    </div>
+                                                                </div>|"
+                                                    data-html='
+                                                    <div class=”header“>评价：</div>
+                                                    <div class=“content”>
+                                                    <div class="ui buttons">
+                                                        <a href="#" class="ui m-padded-tiny basic red button">不熟</a>
+                                                        <a href="#" class="ui m-padded-tiny basic blue button">一般</a>
+                                                        <a href="#" class="ui m-padded-tiny basic green button">很熟</a>
+                                                        </div>
+                                                    </div>'>完成</button>
                                             <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除
                                             </a>
+                                            <script>
+                                                // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
+                                                // console.log($('.ui[data-html]'));
+                                                $('.ui[data-html]')
+                                                    .popup({
+                                                        on: 'click'
+                                                    });
+
+                                            </script>
                                         </div>
                                     </div>
                                 </div>
