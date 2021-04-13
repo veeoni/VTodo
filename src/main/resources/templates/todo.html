@@ -211,12 +211,13 @@
                                 $('.ui.modal')
                                     .modal({
                                         onDeny    : function(){
-                                            return false;
+                                            console.log("用户点击取消");
                                         },
                                         onApprove : function() {
                                             // window.alert('Approved!');
                                             // 传请求，根据id更新待办，return “_todo:: todoList"
                                             console.log($(obj).data("id"));
+                                            postFinish($(obj).data("id"));
                                         }
                                     })
                                     .modal('show')
@@ -227,7 +228,14 @@
                                 window.alert('既不是待办也不是复习！！！');
                             }
                         }
+                        function postFinish(id){
+                            console.log("id"+id);
+                        }
 
+                        function postRating(id, rate) {
+                            console.log("id="+id);
+                            console.log("rate="+rate);
+                        }
                     </script>
                     <!--顶部日期选择-->
                     <div class="ui segment">
@@ -245,21 +253,20 @@
                     </div>
                     <!--确认对话框-->
                     <div class="ui modal">
-                        <div class="ui icon header">
-                            <i class="archive icon"></i>
-                            Archive Old Messages
+                        <div class="ui header">
+                            本条待办已经完成？
                         </div>
                         <div class="content">
-                            <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+                            <p>点击 ’确定‘ 后，此待办将进入已完成列表，不可撤销！</p>
                         </div>
                         <div class="actions">
                             <div class="ui red cancel inverted button">
                                 <i class="remove icon"></i>
-                                No
+                                取消
                             </div>
                             <div class="ui green ok inverted button">
                                 <i class="checkmark icon"></i>
-                                Yes
+                                确定
                             </div>
                         </div>
                     </div>
@@ -327,17 +334,17 @@
                                                     th:attrappend="data-html=${todo.flag}==复习 ? |<div class='header'>评价：${todo.id}</div>
                                                                 <div class='content'>
                                                                     <div class='ui buttons'>
-                                                                        <a href='javascript:console.log(${todo.id}_2);' class='ui m-padded-tiny basic red button'>不熟</a>
-                                                                        <a href='javascript:console.log(${todo.id}_4);' class='ui m-padded-tiny basic blue button'>一般</a>
-                                                                        <a href='javascript:console.log(${todo.id}_6);' class='ui m-padded-tiny basic green button'>很熟</a>
+                                                                        <a href='javascript:console.log(${todo.id}_2);' onclick='postRating(${todo.id},2)' class='ui m-padded-tiny basic red button'>不熟</a>
+                                                                        <a href='javascript:console.log(${todo.id}_4);' onclick='postRating(${todo.id},4)' class='ui m-padded-tiny basic blue button'>一般</a>
+                                                                        <a href='javascript:console.log(${todo.id}_6);' onclick='postRating(${todo.id},6)' class='ui m-padded-tiny basic green button'>很熟</a>
                                                                     </div>
                                                                 </div>|"
                                                     >完成</button>
-                                            <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除
-                                            </a>
+                                            <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除</a>
                                             <script>
                                                 // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
                                                 // console.log($('.ui[data-html]'));
+                                                // 保证复习按钮的弹出
                                                 $('.ui[data-html]')
                                                     .popup({
                                                         on: 'click'
@@ -365,8 +372,7 @@
                                     <div class="right aligned eight wide column">
                                         <div class="ui buttons">
                                             <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
-                                            <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成
-                                            </button>
+                                            <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成</button>
                                             <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
                                             </button>
                                         </div>
