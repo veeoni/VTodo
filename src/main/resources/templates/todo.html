@@ -205,34 +205,27 @@
                         //     });
 
                         function isFinish(obj) {
-                            console.log(obj);
-                            console.log($(obj));
-                            // console.log();
-                            console.log($('#add-btn'));
-                            //判断，是待办，则显示model，提示是否完成
-                            //是复习，则显示popup，3个按钮打分，获取id、打分内容、进行更新$(obj).data('id')
-                            // if($(obj).data('flag') == "待办"){
-                            //     $('.ui.modal')
-                            //         .modal({
-                            //             onDeny    : function(){
-                            //                 return false;
-                            //             },
-                            //             onApprove : function() {
-                            //                 // window.alert('Approved!');
-                            //                 // 传请求，根据id更新待办，return “_todo:: todoList"
-                            //             }
-                            //         })
-                            //         .modal('show')
-                            //     ;
-                            // }else if($(obj).data('flag') == "复习"){
-                            //     $(this).popup({
-                            //             popup : $('.ui.popup.top.left'),
-                            //             // on    : 'click'
-                            //         })
-                            //     ;
-                            // }else{
-                            //     window.alert('既不是待办也不是复习！！！');
-                            // }
+                            // 判断，是待办，则显示model，提示是否完成
+                            // 是复习，则显示popup，3个按钮打分，获取id、打分内容、进行更新$(obj).data('id')
+                            if($(obj).data('flag') == "待办"){
+                                $('.ui.modal')
+                                    .modal({
+                                        onDeny    : function(){
+                                            return false;
+                                        },
+                                        onApprove : function() {
+                                            // window.alert('Approved!');
+                                            // 传请求，根据id更新待办，return “_todo:: todoList"
+                                            console.log($(obj).data("id"));
+                                        }
+                                    })
+                                    .modal('show')
+                                ;
+                            }else if($(obj).data('flag') == "复习"){
+                                console.log("复习");
+                            }else{
+                                window.alert('既不是待办也不是复习！！！');
+                            }
                         }
 
                     </script>
@@ -329,33 +322,17 @@
                                                onclick="editTodo(this)">编辑</a>
 
                                             <button href="javascript:;" th:id="finbtn+${todo.id}" onclick="isFinish(this)"
-                                                    th:attr="data-id=${todo.id}, data-flag=${todo.flag},
-                                                     data-html=|<div class='header'>评价：${todo.id}</div>
-                                                                <div class='content'>
-                                                                    <div class='ui buttons'>
-                                                                        <a href='#' class='ui m-padded-tiny basic red button'>不熟</a>
-                                                                        <a href='#' class='ui m-padded-tiny basic blue button'>一般</a>
-                                                                        <a href='#' class='ui m-padded-tiny basic green button'>很熟</a>
-                                                                    </div>
-                                                                </div>|"
+                                                    th:attr="data-id=${todo.id}, data-flag=${todo.flag}"
                                                     class="ui finbtn basic positive m-padded-tb-small button"
-                                                    th:attrappend="data-a=${todo.flag}==复习 ? |<div class='header'>评价：${todo.id}</div>
+                                                    th:attrappend="data-html=${todo.flag}==复习 ? |<div class='header'>评价：${todo.id}</div>
                                                                 <div class='content'>
                                                                     <div class='ui buttons'>
-                                                                        <a href='#' class='ui m-padded-tiny basic red button'>不熟</a>
-                                                                        <a href='#' class='ui m-padded-tiny basic blue button'>一般</a>
-                                                                        <a href='#' class='ui m-padded-tiny basic green button'>很熟</a>
+                                                                        <a href='javascript:console.log(${todo.id}_2);' class='ui m-padded-tiny basic red button'>不熟</a>
+                                                                        <a href='javascript:console.log(${todo.id}_4);' class='ui m-padded-tiny basic blue button'>一般</a>
+                                                                        <a href='javascript:console.log(${todo.id}_6);' class='ui m-padded-tiny basic green button'>很熟</a>
                                                                     </div>
                                                                 </div>|"
-                                                    data-html='
-                                                    <div class=”header“>评价：</div>
-                                                    <div class=“content”>
-                                                    <div class="ui buttons">
-                                                        <a href="#" class="ui m-padded-tiny basic red button">不熟</a>
-                                                        <a href="#" class="ui m-padded-tiny basic blue button">一般</a>
-                                                        <a href="#" class="ui m-padded-tiny basic green button">很熟</a>
-                                                        </div>
-                                                    </div>'>完成</button>
+                                                    >完成</button>
                                             <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除
                                             </a>
                                             <script>

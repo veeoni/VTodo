@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css' rel='stylesheet prefetch'>
+    <script src="../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+    <script src="../static/js/semantic.js" th:src="@{/js/semantic.js}"></script>
+
+
+</head>
+<body>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class='header'>User Rating</div>
+<div class='content'>
+    <div class='ui star rating'>
+        <i class='active icon'></i>
+        <i class='active icon'></i>
+        <i class='active icon'></i>
+        <i class='active icon'></i>
+        <i class='active icon'></i>
+    </div>
+</div>
+
+<div class="ui popup top center aligned transition hidden">
+    <div class="ui column divided center aligned grid">
+        <p class="column">评价：</p>
+    </div>
+    <div class="ui buttons">
+        <a href="#" class="ui m-padded-tiny basic red button">不熟</a>
+        <a href="#" class="ui m-padded-tiny basic blue button">一般</a>
+        <a href="#" class="ui m-padded-tiny basic green button">很熟</a>
+    </div>
+</div>
+<div class=”header“>评价：</div>
+<div class=“content”>
+    <a href="#" class="ui m-padded-tiny basic red button">不熟</a>
+    <a href="#" class="ui m-padded-tiny basic blue button">一般</a>
+    <a href="#" class="ui m-padded-tiny basic green button">很熟</a>
+</div>
+<div class="ui column divided center aligned grid">
+    <p class="column">评价：</p>
+
+<div class="ui buttons">
+    <a href="#" class="ui m-padded-tiny basic red button">不熟</a>
+    <a href="#" class="ui m-padded-tiny basic blue button">一般</a>
+    <a href="#" class="ui m-padded-tiny basic green button">很熟</a>
+</div>
+
+<div class="ui card"
+     data-html='
+<div class=”header“>评价：</div>
+<div class=“content”>
+<div class="ui buttons">
+    <a href="#" class="ui m-padded-tiny basic red button">不熟</a>
+    <a href="#" class="ui m-padded-tiny basic blue button">一般</a>
+    <a href="#" class="ui m-padded-tiny basic green button">很熟</a>
+    </div>
+</div>'>
+    <div class="image">
+        <script>
+            // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
+            // console.log($('.ui[data-html]'));
+            $('.ui[data-html]')
+                .popup({
+                    on: 'click'
+                });
+
+        </script>
+        <img src="/images/movies/totoro-horizontal.jpg">
+    </div>
+    <div class="content">
+        <div class="header">My Neighbor Totoro</div>
+        <div class="description">
+            Two sisters move to the country with their father in order to be closer to their hospitalized mother, and
+            discover the surrounding trees are inhabited by magical spirits.
+        </div>
+    </div>
+    <div class="ui two bottom attached buttons">
+        <div class="ui button">
+            <i class="add icon"></i>
+            Queue
+        </div>
+        <div class="ui primary button">
+            <i class="play icon"></i>
+            Watch
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
