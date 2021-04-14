@@ -40,6 +40,9 @@ public class Todo {
     private String tagIds;
     @Transient//不保存至数据库
     private Boolean repeat;
+    // TODO 前端编辑之后，这两项数据未传递到后台，请注意
+    @Transient//不保存至数据库
+    private Boolean isRemain;
     @ManyToOne
     private User user;
     @ManyToOne
@@ -48,6 +51,14 @@ public class Todo {
     private List<Tag> tags;
 
     public Todo() {
+    }
+
+    public boolean isRemain() {
+        return isRemain;
+    }
+
+    public void setRemain(boolean remain) {
+        isRemain = remain;
     }
 
     public String getFlag() {

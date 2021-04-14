@@ -198,12 +198,6 @@
                             $("[name='total_times']").val(5);
                         }
 
-                        // $('.ui.finbtn')
-                        //     .popup({
-                        //         popup : $('#pop_finish'),
-                        //         on    : 'click'
-                        //     });
-
                         function isFinish(obj) {
                             // 判断，是待办，则显示model，提示是否完成
                             // 是复习，则显示popup，3个按钮打分，获取id、打分内容、进行更新$(obj).data('id')
@@ -270,17 +264,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--弹出框-->
-<!--                    <div id="pop_finish" class="ui popup top center aligned transition hidden">-->
-<!--                        <div class="ui column divided center aligned grid">-->
-<!--                            <p class="column">评价：</p>-->
-<!--                            </div>-->
-<!--                        <div class="ui buttons">-->
-<!--                            <a href="#" class="ui m-padded-tiny basic red button">不熟</a>-->
-<!--                            <a href="#" class="ui m-padded-tiny basic blue button">一般</a>-->
-<!--                            <a href="#" class="ui m-padded-tiny basic green button">很熟</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
                     <!--今日未完成标题-->
                     <div class="ui red top attached segment">
                         <div class="ui middle aligned two column grid">
@@ -299,8 +282,8 @@
                     <div class="ui attached segment">
                         <div class="ui raised attached segment" th:each="todo : ${todos}">
                             <input type="hidden" name="eachTodoId" th:value="${todo.id}">
-                            // TODO 这里可以改一下逻辑，TODO类加一个不存数据库的遗留属性，如果是遗留，在返回List的时候，这个属性=true，如果不是遗留，就=false
-                            <div class="ui ribbon label" th:text="${todo.flag}" th:classappend="${todo.flag}=='复习'?'olive':'teal'">遗留的复习</div>
+                            <!-- TODO这里可以改一下逻辑，TODO类加一个不存数据库的遗留属性，如果是遗留，在返回List的时候，这个属性=true，如果不是遗留，就=false-->
+                            <div class="ui ribbon label" th:text="(${todo.isRemain}?'遗留的':'')+${todo.flag}" th:classappend="${todo.flag}=='复习'?'olive':'teal'">遗留的复习</div>
                             <strong th:text="${todo.title}">待复习的主题</strong>
                             <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
                                 待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
@@ -792,6 +775,7 @@
                         </div>
                     </div>
 
+                    <!--为了统计方便，必须将待办分为两个list，已完成与未完成，后台查询list，进行分类即可-->
                     <!--今日已完成的标题-->
                     <div class="ui green top attached m-margin-top-large segment">
                         <div class="ui middle aligned two column grid">
