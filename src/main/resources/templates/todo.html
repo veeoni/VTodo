@@ -35,7 +35,7 @@
 </nav>
 
 <!--中间内容-->
-<div class="m-container m-padded-tb-big">
+<div class="m-container m-padded-tb">
     <div class="ui container">
         <!-- container有响应式效果，根据屏幕不同的尺寸达到适应的效果-->
         <div class="ui stackable grid">
@@ -224,24 +224,26 @@
                         }
                         function postFinish(id){
                             console.log("id"+id);
+                            window.open("/todos/"+id+"/finish", "_self");
                         }
 
                         function postRating(id, rate) {
                             console.log("id="+id);
                             console.log("rate="+rate);
+                            window.open("/todos/"+id+"/finish/"+rate, "_self");
                         }
                     </script>
                     <!--顶部日期选择-->
                     <div class="ui segment">
-                        <div class="ui middle aligned three column grid">
+                        <div class="ui middle aligned three column grid stackable">
                             <div class="column">
-                                <a class="ui mini teal basic button" href="javascript:;">前一日</a>
+                                <a class="ui mini teal basic button fluid" href="javascript:;">前一日</a>
                             </div>
                             <div class="center aligned column">
-                                <input id="query_date" type="date">
+                                <input class="ui date" id="query_date" type="date">
                             </div>
                             <div class="right aligned column">
-                                <a class="ui mini teal basic button" href="javascript:;">前一日</a>
+                                <a class="ui mini teal basic button fluid" href="javascript:;">前一日</a>
                             </div>
                         </div>
                     </div>
@@ -251,7 +253,7 @@
                             本条待办已经完成？
                         </div>
                         <div class="content">
-                            <p>点击 ’确定‘ 后，此待办将进入已完成列表，不可撤销！</p>
+                            <p>点击 ’确定‘ 后，此待办将进入已完成列表，<strong class="red">不可撤销！</strong></p>
                         </div>
                         <div class="actions">
                             <div class="ui red cancel inverted button">
@@ -329,7 +331,7 @@
                                             <script>
                                                 // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
                                                 // console.log($('.ui[data-html]'));
-                                                // 保证复习按钮的弹出
+                                                // 保证复习的评价框的弹出
                                                 $('.ui[data-html]')
                                                     .popup({
                                                         on: 'click'

@@ -71,6 +71,24 @@ public class TodoController {
         return "todo :: todoList";
     }
 
+    @GetMapping("/todos/{id}/finish")//完成待办
+    public String finished(@PathVariable Long id, RedirectAttributes attributes){
+        Todo todo = todoService.getTodo(id);
+        System.out.println("待办,id="+id);
+        System.out.println("-------------------------finished"+id);
+        attributes.addFlashAttribute("message", "已完成");
+        return "redirect:/";
+    }
+
+    @GetMapping("/todos/{id}/finish/{rate}")//完成复习
+    public String finished(@PathVariable Long id, @PathVariable int rate,  RedirectAttributes attributes){
+        Todo todo = todoService.getTodo(id);
+        System.out.println("复习，id="+id+",rate="+rate);
+        System.out.println("-------------------------finished"+id);
+        attributes.addFlashAttribute("message", "已完成");
+        return "redirect:/";
+    }
+
 
     @PostMapping("/todos")
     public String todoSave(Todo todo, HttpSession session){
