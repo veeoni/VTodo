@@ -785,13 +785,55 @@
                             </div>
                             <div class="right aligned column">
                                 <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
-                                共 <h2 class="ui green header m-inline-block m-text-thin">
+                                共 <h2 class="ui green header m-inline-block m-text-thin"
+                                      th:text="${finishedTodos}!=null ? ${finishedTodos.size}:0">
                                 14 </h2> 个
                             </div>
                         </div>
                     </div>
                     <!--已完成的内容-->
                     <div class="ui attached segment">
+                        <div class="ui raised attached segment" th:each="todo : ${finishedTodos}">
+                            <input type="hidden" name="eachTodoId" th:value="${todo.id}">
+                            <div class="ui ribbon green label" th:text="(${todo.isRemain}?'超时完成的':'')+${todo.flag}">遗留的复习</div>
+                            <strong th:text="${todo.title}">待复习的主题</strong>
+                            <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                            <div class="ui mobile stackable grid">
+                                <div class="row">
+                                    <div class="eight wide column">
+                                        <label class="ui m-padded-tb-small basic blue label" th:text="${todo.type.name}">类型</label>
+                                        <label class="ui m-padded-tb-small basic teal left pointing label"
+                                               th:each="tag : ${todo.tags}"
+                                               th:text="${tag.name}">标签1</label>
+                                        <!--/*-->
+                                        <label class="ui m-padded-tb-small left pointing label">标签2</label>
+                                        <!--*/-->
+                                    </div>
+                                    <div class="right aligned eight wide column">
+                                        <div class="ui buttons">
+                                            <!--                  这里先留着，万一以后要加编辑功能，就用这个
+                                                                  <a href="javascript:;" class="ui basic blue m-padded-tb-small button"
+                                                                   data-id="1" data-flag="复习" data-title="标题" data-content="内容" data-createtime="2021-04-10 xx:xx:xx"
+                                                                   data-updatetime="2021-04-10 xx:xx:xx" data-finisheddate="2021-04-10" data-taskdate="2021-04-10"
+                                                                   data-interval="1" data-totaltimes="5" data-remaintimes="5" data-easinessfactor="2.0" data-tagids="1,2,3"
+                                                                   data-repeat="true" data-typeid="10"
+                                                                   th:attr="data-id=${todo.id}, data-flag=${todo.flag}, data-title=${todo.title}, data-content=${todo.content},
+                                                                    data-createtime=${todo.createTime}, data-updatetime=${todo.updateTime}, data-finisheddate=${todo.finishedDate},
+                                                                    data-taskdate=${todo.taskDate}, data-interval=${todo.interval}, data-totaltimes=${todo.totalTimes},
+                                                                    data-remaintimes=${todo.remainTimes}, data-easinessfactor=${todo.easinessFactor}, data-tagids=${todo.tagIds},
+                                                                    data-repeat=${todo.repeat}, data-typeid=${todo.type.id}"
+                                                                   onclick="editTodo(this)">编辑</a> -->
+                                            <button href="javascript:;" class="ui basic disabled blue m-padded-tb-small button">编辑</button>
+                                            <!--TODO 这里可以改成撤销，但是先不改-->
+                                            <button href="javascript:;" class="ui basic disabled m-padded-tb-small button">完成</button>
+                                            <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/*-->
                         <div class="ui raised attached segment">
                             <div class="ui green ribbon label">复习</div><!--复习or待办-->
                             <strong>待复习的主题</strong>
@@ -816,7 +858,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--/*-->
                         <div class="ui raised attached segment">
                             <div class="ui green ribbon label">复习</div>
                             <strong>待复习的主题</strong>

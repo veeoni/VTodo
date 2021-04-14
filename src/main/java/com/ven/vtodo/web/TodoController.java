@@ -46,6 +46,10 @@ public class TodoController {
     @GetMapping("/todos")
     public String todos(Model model){
         // TODO 到时候新增一个方法，类似此方法，但是多一个日期参数（可以用String），放URL或者传对象都行，用日期查询
+        // 是未来? 仅按日期当日，仅显示未完成:区分是否遗留
+        // 数据库里查
+        // 1.未finishedDate且taskDate<=指定日期，小于指定日期，isRemain=true，加入todos
+        // 2.finishedDate==指定日期，标记为已完成，finished>taskdate的，标记isRemain=true，html改为未按时，加入finishedTodos
         date = new Date();
         List<Todo> todos = todoService.listTodo();
         List<Todo> normalTodos = new ArrayList<>();
