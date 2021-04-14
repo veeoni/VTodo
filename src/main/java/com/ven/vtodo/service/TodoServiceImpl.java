@@ -47,7 +47,10 @@ public class TodoServiceImpl implements TodoService {
                 System.out.println("无此flag");
             }
             todo.setRemainTimes(todo.getTotalTimes());
-        } else {
+        } else if (todo.getId()==-1L) {
+            //用于保存暂时完成的记录
+            todo.setId(null);
+        }else{
             todo.setUpdateTime(new Date());
             if(todo.getFlag().equals("待办")){
                 //此处必须用getRepeat，否则，万一提前修改了totalTimes，然后选了flag=“复习”,有可能出错

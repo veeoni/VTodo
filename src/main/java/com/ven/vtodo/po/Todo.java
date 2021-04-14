@@ -53,9 +53,14 @@ public class Todo {
     public Todo() {
     }
 
-    public boolean isRemain() {
+    public Boolean isRemain() {
         return isRemain;
     }
+
+    public void setRemain(Boolean remain) {
+        isRemain = remain;
+    }
+
 
     public void setRemain(boolean remain) {
         isRemain = remain;

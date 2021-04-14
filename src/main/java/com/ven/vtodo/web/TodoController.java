@@ -4,6 +4,7 @@ package com.ven.vtodo.web;
 import com.ven.vtodo.po.Todo;
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class TodoController {
     private UserService userService;
     Date date;
     SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+    Calendar calendar = Calendar.getInstance();
 
     @GetMapping
     public String todo(Model model){
@@ -75,6 +78,32 @@ public class TodoController {
     public String finished(@PathVariable Long id, RedirectAttributes attributes){
         Todo todo = todoService.getTodo(id);
         System.out.println("待办,id="+id);
+        todo.setRemainTimes(todo.getRemainTimes()-1);
+        if(todo.getRemainTimes()==0){
+            //完成待办
+            todo.setFinishedDate(new Date());
+        }else{
+            // 为多次待办添加已完成记录的方法，两种解决方案：
+            // 1.新增一个完成记录（方法一增加的记录太多了，但是，为了方便未来的查询，还是有必要的）
+            // 2.给待办设置finishedDate，同时remainTimes--，
+            //   在分类处，以remainTimes+finishedDate为依据，判断是否完成，
+            //   这就要保证remainTimes、TotalTimes的严格设置
+            //   这个方法的问题在于，日后往前查的时候，很多已完成待办会消失
+            // 综上所述，为了方便日后的查询，这里选择方法一
+            // 又想到一种方案，给finishedDate做成list，这应该会是最优解（保证唯一性，允许进行编辑），但是先不考虑，等整个系统实现，再进行重构
+            Todo todoCpy = new Todo();
+            BeanUtils.copyProperties(todo, todoCpy);
+            todoCpy.setFinishedDate(new Date());
+            todoCpy.setId(-1L);//-1说明，该todo是暂时完成的多次待办，此处用来存储完成的记录
+            todoService.saveTodo(todoCpy);
+            // 这里有点考究，如果推迟完成了，那是按原规定出现，还是以完成日期为基础推进？暂定后者，
+            // TODO 自主选择原规定还是完成日记推进
+            calendar.setTime(todo.getTaskDate()); //需要将date数据转移到Calender对象中操作
+            calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
+            date=calendar.getTime();   //这个时间就是日期往后推一天的结果
+            todo.setTaskDate(date);
+        }
+        todoService.saveTodo(todo);
         System.out.println("-------------------------finished"+id);
         attributes.addFlashAttribute("message", "已完成");
         return "redirect:/";
