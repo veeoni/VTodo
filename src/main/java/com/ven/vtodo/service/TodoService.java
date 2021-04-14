@@ -8,6 +8,8 @@ public interface TodoService {
 
     Todo saveTodo(Todo todo);
 
+    Todo saveFinishedTodo(Todo todo);
+
     Todo getTodo(Long id);
 
     List<Todo> listTodo();

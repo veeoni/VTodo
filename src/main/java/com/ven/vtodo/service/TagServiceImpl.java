@@ -3,6 +3,7 @@ package com.ven.vtodo.service;
 import com.ven.vtodo.dao.TagRepository;
 import com.ven.vtodo.handler.NotFoundException;
 import com.ven.vtodo.po.Tag;
+import com.ven.vtodo.po.Todo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,6 +69,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public Page<Tag> listTag(Pageable pageable) {
         return tagRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Tag> listTagByTodo(Todo todo) {
+        return tagRepository.findAllByTodos(todo);
     }
 
     @Transactional

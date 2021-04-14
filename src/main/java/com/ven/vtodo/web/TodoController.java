@@ -1,6 +1,7 @@
 package com.ven.vtodo.web;
 
 
+import com.ven.vtodo.po.Tag;
 import com.ven.vtodo.po.Todo;
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.*;
@@ -91,21 +92,31 @@ public class TodoController {
             //   这个方法的问题在于，日后往前查的时候，很多已完成待办会消失
             // 综上所述，为了方便日后的查询，这里选择方法一
             // 又想到一种方案，给finishedDate做成list，这应该会是最优解（保证唯一性，允许进行编辑），但是先不考虑，等整个系统实现，再进行重构
-            Todo todoCpy = new Todo();
-            BeanUtils.copyProperties(todo, todoCpy);
+            Todo todoCpy = copyTodo(todo);
             todoCpy.setFinishedDate(new Date());
             todoCpy.setId(-1L);//-1说明，该todo是暂时完成的多次待办，此处用来存储完成的记录
-            todoService.saveTodo(todoCpy);
+            todoService.saveFinishedTodo(todoCpy);
             // 这里有点考究，如果推迟完成了，那是按原规定出现，还是以完成日期为基础推进？暂定后者，
             // TODO 自主选择原规定还是完成日记推进
             calendar.setTime(todo.getTaskDate()); //需要将date数据转移到Calender对象中操作
             calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
             todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推n天的结果
         }
-        todoService.saveTodo(todo);
+        todoService.saveFinishedTodo(todo);//此处可以考虑重新写一个save方法，都调用todoRepository的saveTodo就行。
         System.out.println("-------------------------finished"+id);
         attributes.addFlashAttribute("message", "已完成");
         return "redirect:/";
+    }
+
+    private Todo copyTodo(Todo todo){
+        Todo todoCpy = new Todo();
+        BeanUtils.copyProperties(todo, todoCpy);
+        List<Tag> tags = tagService.listTagByTodo(todo);
+        List<Tag> newTags = new ArrayList<>(tags.size());
+        tags.forEach(tag -> newTags.add(tag));
+        todoCpy.setTags(newTags);
+        System.out.println(tags.toString()+" "+newTags.toString());
+        return todoCpy;
     }
 
     @GetMapping("/todos/{id}/finish/{rate}")//完成复习
@@ -114,11 +125,11 @@ public class TodoController {
         System.out.println("复习，id="+id+",rate="+rate);
         todo.setRemainTimes(todo.getRemainTimes()-1);
         //保存一条已完成的记录
-        Todo todoCpy = new Todo();
-        BeanUtils.copyProperties(todo, todoCpy);
+        Todo todoCpy = copyTodo(todo);
+
         todoCpy.setFinishedDate(new Date());
         todoCpy.setId(-1L);//-1说明，该todo是暂时完成的多次待办，此处用来存储完成的记录
-        todoService.saveTodo(todoCpy);
+        todoService.saveFinishedTodo(todoCpy);
 
         Double interval = todo.getInterval();
         Double EF = todo.getEasinessFactor();
@@ -143,7 +154,7 @@ public class TodoController {
         calendar.setTime(todo.getTaskDate()); //需要将date数据转移到Calender对象中操作
         calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
         todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推一天的结果
-        todoService.saveTodo(todo);
+        todoService.saveFinishedTodo(todo);
         System.out.println("-------------------------finished"+id);
         attributes.addFlashAttribute("message", "已完成");
         return "redirect:/";

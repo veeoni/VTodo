@@ -1,6 +1,7 @@
 package com.ven.vtodo.dao;
 
 import com.ven.vtodo.po.Tag;
+import com.ven.vtodo.po.Todo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,4 +12,6 @@ public interface TagRepository extends JpaRepository<Tag,Long>  {
     Tag findByName(String name);
     @Query("select t from Tag t")
     List<Tag> findTop(Pageable pageable);
+
+    List<Tag> findAllByTodos(Todo todo);
 }
