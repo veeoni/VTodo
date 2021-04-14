@@ -660,7 +660,7 @@
                             $('.ui.dropdown').dropdown();
                             $('#edit_tags_dropdown').dropdown();
                             if($(obj).data('flag')=="复习"){
-                                $("[name='edit_repeat']").prop("checked",false).addClass("disabled");
+                                $("[name='edit_repeat']").prop("checked",false).prop("disabled",true);
                             }else{
                                 $("[name='edit_repeat']").prop("checked",$(obj).data('repeat'));
                             }
