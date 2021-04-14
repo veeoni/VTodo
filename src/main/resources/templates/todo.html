@@ -283,7 +283,8 @@
                         <div class="ui raised attached segment" th:each="todo : ${todos}">
                             <input type="hidden" name="eachTodoId" th:value="${todo.id}">
                             <!-- TODO这里可以改一下逻辑，TODO类加一个不存数据库的遗留属性，如果是遗留，在返回List的时候，这个属性=true，如果不是遗留，就=false-->
-                            <div class="ui ribbon label" th:text="(${todo.isRemain}?'遗留的':'')+${todo.flag}" th:classappend="${todo.flag}=='复习'?'olive':'teal'">遗留的复习</div>
+                            <div class="ui ribbon label" th:text="(${todo.isRemain}?'遗留的':'')+${todo.flag}"
+                                 th:classappend="(${todo.isRemain}?(${todo.flag}=='复习'?'red':'pink'):(${todo.flag}=='复习'?'olive':'teal'))">遗留的复习</div>
                             <strong th:text="${todo.title}">待复习的主题</strong>
                             <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
                                 待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
