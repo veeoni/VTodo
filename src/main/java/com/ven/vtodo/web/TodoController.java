@@ -100,8 +100,7 @@ public class TodoController {
             // TODO 自主选择原规定还是完成日记推进
             calendar.setTime(todo.getTaskDate()); //需要将date数据转移到Calender对象中操作
             calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
-            date=calendar.getTime();   //这个时间就是日期往后推一天的结果
-            todo.setTaskDate(date);
+            todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推n天的结果
         }
         todoService.saveTodo(todo);
         System.out.println("-------------------------finished"+id);
@@ -113,6 +112,38 @@ public class TodoController {
     public String finished(@PathVariable Long id, @PathVariable int rate,  RedirectAttributes attributes){
         Todo todo = todoService.getTodo(id);
         System.out.println("复习，id="+id+",rate="+rate);
+        todo.setRemainTimes(todo.getRemainTimes()-1);
+        //保存一条已完成的记录
+        Todo todoCpy = new Todo();
+        BeanUtils.copyProperties(todo, todoCpy);
+        todoCpy.setFinishedDate(new Date());
+        todoCpy.setId(-1L);//-1说明，该todo是暂时完成的多次待办，此处用来存储完成的记录
+        todoService.saveTodo(todoCpy);
+
+        Double interval = todo.getInterval();
+        Double EF = todo.getEasinessFactor();
+        System.out.println("原EF="+EF+",原Interval="+interval);
+        //更新EF,EF==4时，EF不改变，这里加速计算
+        if(rate!=4){
+            EF = EF-0.8+(0.28-0.02*rate)*rate;
+            if(EF>2.5) EF=2.5;
+            else if(EF<1.1) EF=1.1;
+            todo.setEasinessFactor(EF);
+        }
+        if(interval<6){
+            interval = interval+rate-1;
+            if(rate==4){
+                interval--;
+            }
+            todo.setInterval(interval);
+        } else {
+            todo.setInterval(interval*EF);
+        }
+        System.out.println("现EF="+EF+",现Interval="+interval);
+        calendar.setTime(todo.getTaskDate()); //需要将date数据转移到Calender对象中操作
+        calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
+        todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推一天的结果
+        todoService.saveTodo(todo);
         System.out.println("-------------------------finished"+id);
         attributes.addFlashAttribute("message", "已完成");
         return "redirect:/";

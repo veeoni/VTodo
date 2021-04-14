@@ -4,6 +4,7 @@ import com.ven.vtodo.dao.TodoRepository;
 import com.ven.vtodo.po.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ public class TodoServiceImpl implements TodoService {
         return todoRepository.findAll();
     }
 
+    @Transactional
     @Override
     public Todo saveTodo(Todo todo) {
         //新增 id==null
@@ -84,6 +86,7 @@ public class TodoServiceImpl implements TodoService {
         return todoRepository.getOne(id);
     }
 
+    @Transactional
     @Override
     public void deleteTodo(Long id) {
         todoRepository.deleteById(id);

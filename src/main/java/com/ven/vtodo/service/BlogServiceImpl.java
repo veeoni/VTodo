@@ -24,6 +24,7 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     BlogRepository blogRepository;
 
+    @Transactional
     @Override
     public Blog getBlog(Long id) {
         blogRepository.updateViews(id);

@@ -49,7 +49,7 @@ public class TagServiceImpl implements TagService {
         if(!"".equals(ids) && ids != null){
             String[] idArray = ids.split(",");
             for (String s : idArray) {
-                list.add(new Long(s));
+                list.add(Long.valueOf(s));
             }
         }
         return list;
