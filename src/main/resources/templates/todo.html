@@ -330,7 +330,8 @@
                                                                         </div>
                                                                     </div>|"
                                                         >完成</button>
-                                                <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete/{taskDate}(id=${todo.id},taskDate=${todo.taskDate})}">删除</a>
+<!--                                                <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:onclick="deleteTodo(${todo.id},${todo.taskDate})" th:href="@{/todos/{id}/delete/{taskDate}(id=${todo.id},taskDate=${todo.taskDate})}">删除</a>-->
+                                                <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="|javascript:deleteTodo(${todo.id},$('#query_date').val());|">删除</a>
                                                 <script>
                                                     // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
                                                     // console.log($('.ui[data-html]'));
@@ -840,8 +841,7 @@
                                                 <button href="javascript:;" class="ui basic disabled blue m-padded-tb-small button">编辑</button>
                                                 <!--TODO 这里可以改成撤销，但是先不改-->
                                                 <button href="javascript:;" class="ui basic disabled m-padded-tb-small button">完成</button>
-                                                <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除</a>
-                                            </div>
+                                                <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="|javascript:deleteTodo(${todo.id},$('#query_date').val());|">删除</a>                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1161,6 +1161,14 @@
             function(responseTxt,statusTxt,xhr) {
                 responseFromTodos(responseTxt,statusTxt,xhr,date);
         });
+    }
+    function deleteTodo(id,taskDate){
+        $('.ui.dimmer').addClass("active");
+        console.log("id="+id+",taskDate="+taskDate);
+        $('#todo_container').load("/todos/"+id+"/delete/"+taskDate,
+            function(responseTxt,statusTxt,xhr) {
+                responseFromTodos(responseTxt,statusTxt,xhr,taskDate);
+            });
     }
     //获取当前日期
     function getdate() {

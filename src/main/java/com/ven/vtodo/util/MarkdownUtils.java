@@ -1,5 +1,6 @@
 package com.ven.vtodo.util;
 
+
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.commonmark.ext.gfm.tables.TablesExtension;
@@ -11,11 +12,14 @@ import org.commonmark.renderer.html.AttributeProvider;
 import org.commonmark.renderer.html.AttributeProviderContext;
 import org.commonmark.renderer.html.AttributeProviderFactory;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class MarkdownUtils {
 
+    private static Logger logger = LoggerFactory.getLogger(MarkdownUtils.class);
 
     /**
      * markdown格式转换成HTML格式
@@ -80,6 +84,6 @@ public class MarkdownUtils {
                 "| 阿什顿发  | 非固定杆 | 撒阿什顿发 |\n" +
                 "\n";
         String a = "[imCoding 爱编程](http://www.lirenmi.cn)";
-        System.out.println(markdownToHtmlExtensions(table));
+        logger.info(markdownToHtmlExtensions(table));
     }
 }

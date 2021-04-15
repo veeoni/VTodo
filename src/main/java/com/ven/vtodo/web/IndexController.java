@@ -3,6 +3,8 @@ package com.ven.vtodo.web;
 import com.ven.vtodo.service.BlogService;
 import com.ven.vtodo.service.TagService;
 import com.ven.vtodo.service.TypeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,6 +28,7 @@ public class IndexController {
     private TypeService typeService;
     @Autowired
     private TagService tagService;
+    private static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
 
     @GetMapping("/index")
@@ -37,7 +40,7 @@ public class IndexController {
         model.addAttribute("types", typeService.listTypeTop(6));//可定义在配置文件
         model.addAttribute("tags", tagService.listTagTop(10));
         model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
-        System.out.println("----------index--------------");
+        logger.info("----------index--------------");
         return "index";
     }
     //通过以下两个方法决定使用commonmark还是editormd显示blog

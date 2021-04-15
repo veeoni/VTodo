@@ -2,6 +2,9 @@ package com.ven.vtodo.service;
 
 import com.ven.vtodo.dao.TodoRepository;
 import com.ven.vtodo.po.Todo;
+import com.ven.vtodo.web.TodoController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,8 @@ public class TodoServiceImpl implements TodoService {
     public List<Todo> listTodo() {
         return todoRepository.findAll();
     }
+
+    private static Logger logger = LoggerFactory.getLogger(TodoServiceImpl.class);
 
     @Transactional
     @Override
@@ -46,7 +51,7 @@ public class TodoServiceImpl implements TodoService {
                 todo.setEasinessFactor(2.0);
                 todo.setTotalTimes(65535);
             } else {
-                System.out.println("无此flag");
+                logger.info("无此flag");
             }
             todo.setRemainTimes(todo.getTotalTimes());
         } else if (todo.getId()==-1L) {
@@ -76,7 +81,7 @@ public class TodoServiceImpl implements TodoService {
     //                todo.setEasinessFactor(2.0);
     //                todo.setTotalTimes(65535);
                 } else {
-                    System.out.println("无此flag");
+                    logger.info("无此flag");
                 }
 //            }
         }

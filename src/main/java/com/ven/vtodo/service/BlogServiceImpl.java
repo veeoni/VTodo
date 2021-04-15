@@ -5,6 +5,9 @@ import com.ven.vtodo.handler.NotFoundException;
 import com.ven.vtodo.po.Blog;
 import com.ven.vtodo.util.MarkdownUtils;
 import com.ven.vtodo.vo.BlogQuery;
+import com.ven.vtodo.web.TodoController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +26,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     BlogRepository blogRepository;
+    private static Logger logger = LoggerFactory.getLogger(BlogServiceImpl.class);
 
     @Transactional
     @Override
@@ -101,10 +105,10 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public TreeMap<String, List<Blog>> archiveBlog() {
         List<String> years = blogRepository.findGroupYears();
-        System.out.println(years.toString());
+        logger.info(years.toString());
         TreeMap<String, List<Blog>> map = new TreeMap<>();
         for(String year : years){
-            System.out.println(year);
+            logger.info(year);
             map.put(year, blogRepository.findByYear(year));
         }
         return map;

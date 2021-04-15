@@ -5,9 +5,10 @@ import com.ven.vtodo.po.Tag;
 import com.ven.vtodo.po.Todo;
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,16 +37,17 @@ public class TodoController {
     private TodoService todoService;
     @Autowired
     private UserService userService;
-    Date date;
-    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-    Calendar calendar = Calendar.getInstance();
+    private Date date;
+    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+    private Calendar calendar = Calendar.getInstance();
+    private static Logger logger = LoggerFactory.getLogger(TodoController.class);
 
     @GetMapping
     public String todo(Model model){
         model.addAttribute("types", typeService.listTypeTop(6));//可定义在配置文件
         model.addAttribute("tags", tagService.listTagTop(10));
         model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
-        System.out.println("----------index--------------");
+        logger.info("----------index--------------");
         return "todo";
     }
 
@@ -61,7 +63,7 @@ public class TodoController {
         List<Todo> normalTodos = new ArrayList<>();
         List<Todo> finishedTodos = new ArrayList<>();
         for(Todo todo : todos){
-            System.out.println(todo.getTaskDate().toString()+"vs"+sdf.format(date));
+            logger.info(todo.getTaskDate().toString()+"vs"+sdf.format(date));
             todo.setRemain(todo.getTaskDate().toString().compareTo(sdf.format(date))<0);
             if(todo.getFinishedDate()==null){
                 normalTodos.add(todo);
@@ -91,7 +93,14 @@ public class TodoController {
         date = sdf.parse(strDate);
         List<Todo> unfinishedTodos = todoService.listUnfinishedTodosByDate(date);
         List<Todo> finishedTodos = todoService.listFinishedTodosByDate(date);
-        //TODO 分类所有todos
+        for(Todo todo : unfinishedTodos){
+            logger.info(todo.getTaskDate().toString()+"vs"+sdf.format(date));
+            todo.setRemain(todo.getTaskDate().toString().compareTo(sdf.format(date))<0);
+        }
+        for(Todo todo : finishedTodos){
+            logger.info(todo.getTaskDate().toString()+"vs"+sdf.format(date));
+            todo.setRemain(todo.getTaskDate().toString().compareTo(sdf.format(date))<0);
+        }
         model.addAttribute("todos", unfinishedTodos);
         model.addAttribute("finishedTodos", finishedTodos);
         model.addAttribute("types", typeService.listType());
@@ -102,7 +111,8 @@ public class TodoController {
     @GetMapping("/todos/{id}/finish")//完成待办
     public String finished(@PathVariable Long id, RedirectAttributes attributes){
         Todo todo = todoService.getTodo(id);
-        System.out.println("待办,id="+id);
+        logger.info("待办,id="+id);
+
         todo.setRemainTimes(todo.getRemainTimes()-1);
         if(todo.getRemainTimes()==0){
             //完成待办
@@ -127,7 +137,7 @@ public class TodoController {
             todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推n天的结果
         }
         todoService.saveFinishedTodo(todo);//此处可以考虑重新写一个save方法，都调用todoRepository的saveTodo就行。
-        System.out.println("-------------------------finished"+id);
+        logger.info("-------------------------finished"+id);
         attributes.addFlashAttribute("message", "已完成");
         return "redirect:/";
     }
@@ -139,14 +149,14 @@ public class TodoController {
         List<Tag> newTags = new ArrayList<>(tags.size());
         tags.forEach(tag -> newTags.add(tag));
         todoCpy.setTags(newTags);
-        System.out.println(tags.toString()+" "+newTags.toString());
+        logger.info(tags.toString()+" "+newTags.toString());
         return todoCpy;
     }
 
     @GetMapping("/todos/{id}/finish/{rate}")//完成复习
     public String finished(@PathVariable Long id, @PathVariable int rate,  RedirectAttributes attributes){
         Todo todo = todoService.getTodo(id);
-        System.out.println("复习，id="+id+",rate="+rate);
+        logger.info("复习，id="+id+",rate="+rate);
         todo.setRemainTimes(todo.getRemainTimes()-1);
         //保存一条已完成的记录
         Todo todoCpy = copyTodo(todo);
@@ -157,7 +167,7 @@ public class TodoController {
 
         Double interval = todo.getInterval();
         Double EF = todo.getEasinessFactor();
-        System.out.println("原EF="+EF+",原Interval="+interval);
+        logger.info("原EF="+EF+",原Interval="+interval);
         //更新EF,EF==4时，EF不改变，这里加速计算
         if(rate!=4){
             EF = EF-0.8+(0.28-0.02*rate)*rate;
@@ -174,12 +184,12 @@ public class TodoController {
         } else {
             todo.setInterval(interval*EF);
         }
-        System.out.println("现EF="+EF+",现Interval="+interval);
+        logger.info("现EF="+EF+",现Interval="+interval);
         calendar.setTime(todo.getTaskDate()); //需要将date数据转移到Calender对象中操作
         calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
         todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推一天的结果
         todoService.saveFinishedTodo(todo);
-        System.out.println("-------------------------finished"+id);
+        logger.info("-------------------------finished"+id);
         attributes.addFlashAttribute("message", "已完成");
         return "redirect:/";
     }
@@ -198,22 +208,22 @@ public class TodoController {
             todo.setUser(userService.getUserById(1L));
         }
         if(todo.getId()==null){
-            System.out.println("-------------------新增");
+            logger.info("-------------------新增");
             todoService.saveTodo(todo);
         }else{
-            System.out.println("-------------------修改"+todo.getId());
+            logger.info("-------------------修改"+todo.getId());
             todoService.saveTodo(todo);
         }
-        System.out.println(todo.toString());
+        logger.info(todo.toString());
         return "redirect:/todos";
     }
 
-    @GetMapping("/todos/{id}/delete")
-    public String delete(@PathVariable Long id, RedirectAttributes attributes){
+    @GetMapping("/todos/{id}/delete/{taskDate}")
+    public String delete(@PathVariable Long id, @PathVariable String taskDate, RedirectAttributes attributes){
         todoService.deleteTodo(id);
-        System.out.println("-------------------------delete"+id);
+        logger.info("-------------------------delete"+id);
         attributes.addFlashAttribute("message", "删除成功");
-        return "redirect:/";
+        return "redirect:/todos/"+taskDate;
     }
 
 }
