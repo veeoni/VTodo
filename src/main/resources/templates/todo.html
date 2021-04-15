@@ -53,6 +53,7 @@
                     <script th:inline="javascript">
                         //ajax发送请求
                         function postData() {
+                            $('.ui.dimmer').addClass("active");
                             //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
                             $('#todo_container').load(/*[[@{/todos}]]*/+"", {
                                 'id': $("[name='id']").val(),
@@ -228,16 +229,16 @@
                     <div class="ui segment">
                         <div class="ui middle aligned four column grid stackable">
                             <div class="column">
-                                <a class="ui mini teal basic button" href="javascript:;">前一日</a>
+                                <a class="ui mini teal fluid basic button" href="javascript:;">前一日</a>
                             </div>
                             <div class="center aligned column">
                                 <input class="ui date" id="query_date" type="date">
                             </div>
                             <div class="center aligned column">
-                                <button type="button" class="ui button" id="query_btn" onclick="queryByDate()">查询</button>
+                                <button type="button" class="ui mini basic fluid blue button" id="query_btn" onclick="queryByDate()">查询</button>
                             </div>
                             <div class="right aligned column">
-                                <a class="ui mini teal basic button" href="javascript:;">后一日</a>
+                                <a class="ui mini teal fluid basic button" href="javascript:;">后一日</a>
                             </div>
                         </div>
                     </div>
@@ -260,656 +261,671 @@
                             </div>
                         </div>
                     </div>
-                    <!--今日未完成标题-->
-                    <div class="ui red top attached segment">
-                        <div class="ui middle aligned two column grid">
-                            <div class="column">
-                                <h3 class="ui orange header">今日未完成</h3>
-                            </div>
-                            <div class="right aligned column">
-                                <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
-                                共 <h2 class="ui orange header m-inline-block m-text-thin"
-                                      th:text="${todos}!=null ? ${todos.size}:0">
-                                14 </h2> 个
+                    <div id="todo_content">
+                        <!--今日未完成标题-->
+                        <div class="ui red top attached segment">
+                            <div class="ui middle aligned two column grid">
+                                <div class="column">
+                                    <h3 class="ui orange header">今日未完成</h3>
+                                </div>
+                                <div class="right aligned column">
+                                    <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
+                                    共 <h2 class="ui orange header m-inline-block m-text-thin"
+                                          th:text="${todos}!=null ? ${todos.size}:0">
+                                    14 </h2> 个
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!--今日未完成内容-->
-                    <div class="ui attached segment">
-                        <div class="ui raised attached segment" th:each="todo : ${todos}">
-                            <input type="hidden" name="eachTodoId" th:value="${todo.id}">
-                            <!-- TODO这里可以改一下逻辑，TODO类加一个不存数据库的遗留属性，如果是遗留，在返回List的时候，这个属性=true，如果不是遗留，就=false-->
-                            <div class="ui ribbon label" th:text="(${todo.isRemain}?'遗留的':'')+${todo.flag}"
-                                 th:classappend="(${todo.isRemain}?(${todo.flag}=='复习'?'red':'pink'):(${todo.flag}=='复习'?'olive':'teal'))">遗留的复习</div>
-                            <strong th:text="${todo.title}">待复习的主题</strong>
-                            <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label class="ui m-padded-tb-small basic blue label" th:text="${todo.type.name}">类型</label>
-                                        <label class="ui m-padded-tb-small basic teal left pointing label"
-                                               th:each="tag : ${todo.tags}"
-                                               th:text="${tag.name}">标签1</label>
-                                        <!--/*-->
-                                        <label class="ui m-padded-tb-small left pointing label">标签2</label>
-                                        <!--*/-->
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <a href="javascript:;" class="ui basic blue m-padded-tb-small button"
-                                               data-id="1" data-flag="复习" data-title="标题" data-content="内容" data-createtime="2021-04-10 xx:xx:xx"
-                                               data-updatetime="2021-04-10 xx:xx:xx" data-finisheddate="2021-04-10" data-taskdate="2021-04-10"
-                                               data-interval="1" data-totaltimes="5" data-remaintimes="5" data-easinessfactor="2.0" data-tagids="1,2,3"
-                                               data-repeat="true" data-typeid="10"
-                                               th:attr="data-id=${todo.id}, data-flag=${todo.flag}, data-title=${todo.title}, data-content=${todo.content},
-                                                data-createtime=${todo.createTime}, data-updatetime=${todo.updateTime}, data-finisheddate=${todo.finishedDate},
-                                                data-taskdate=${todo.taskDate}, data-interval=${todo.interval}, data-totaltimes=${todo.totalTimes},
-                                                data-remaintimes=${todo.remainTimes}, data-easinessfactor=${todo.easinessFactor}, data-tagids=${todo.tagIds},
-                                                data-repeat=${todo.repeat}, data-typeid=${todo.type.id}"
-                                               onclick="editTodo(this)">编辑</a>
+                        <!--今日未完成内容-->
+                        <div class="ui attached segment">
+                            <div class="ui inverted dimmer">
+                                <div class="ui loader"></div>
+                            </div>
 
-                                            <button href="javascript:;" th:id="finbtn+${todo.id}" onclick="isFinish(this)"
-                                                    th:attr="data-id=${todo.id}, data-flag=${todo.flag}"
-                                                    class="ui finbtn basic positive m-padded-tb-small button"
-                                                    th:attrappend="data-html=${todo.flag}==复习 ? |<div class='header'>评价：${todo.id}</div>
-                                                                <div class='content'>
-                                                                    <div class='ui buttons'>
-                                                                        <a href='javascript:console.log(${todo.id}_2);' onclick='postRating(${todo.id},2)' class='ui m-padded-tiny basic red button'>不熟</a>
-                                                                        <a href='javascript:console.log(${todo.id}_4);' onclick='postRating(${todo.id},4)' class='ui m-padded-tiny basic blue button'>一般</a>
-                                                                        <a href='javascript:console.log(${todo.id}_6);' onclick='postRating(${todo.id},6)' class='ui m-padded-tiny basic green button'>很熟</a>
-                                                                    </div>
-                                                                </div>|"
-                                                    >完成</button>
-                                            <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete/{taskDate}(id=${todo.id},taskDate=${todo.taskDate})}">删除</a>
-                                            <script>
-                                                // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
-                                                // console.log($('.ui[data-html]'));
-                                                // 保证复习的评价框的弹出
-                                                $('.ui[data-html]')
-                                                    .popup({
-                                                        on: 'click'
-                                                    });
+                            <div class="ui raised attached segment" th:if="${todos}==null or ${todos.size}==0">
+                                <p>今天的任务全部完成啦~</p>
+                            </div>
+                            <div class="ui raised attached segment" th:each="todo : ${todos}">
+                                <input type="hidden" name="eachTodoId" th:value="${todo.id}">
+                                <!-- TODO这里可以改一下逻辑，TODO类加一个不存数据库的遗留属性，如果是遗留，在返回List的时候，这个属性=true，如果不是遗留，就=false-->
+                                <div class="ui ribbon label" th:text="(${todo.isRemain}?'遗留的':'')+${todo.flag}"
+                                     th:classappend="(${todo.isRemain}?(${todo.flag}=='复习'?'red':'pink'):(${todo.flag}=='复习'?'olive':'teal'))">遗留的复习</div>
+                                <strong th:text="${todo.title}">待复习的主题</strong>
+                                <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label class="ui m-padded-tb-small basic blue label" th:text="${todo.type.name}">类型</label>
+                                            <label class="ui m-padded-tb-small basic teal left pointing label"
+                                                   th:each="tag : ${todo.tags}"
+                                                   th:text="${tag.name}">标签1</label>
+                                            <!--/*-->
+                                            <label class="ui m-padded-tb-small left pointing label">标签2</label>
+                                            <!--*/-->
+                                        </div>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <a href="javascript:;" class="ui basic blue m-padded-tb-small button"
+                                                   data-id="1" data-flag="复习" data-title="标题" data-content="内容" data-createtime="2021-04-10 xx:xx:xx"
+                                                   data-updatetime="2021-04-10 xx:xx:xx" data-finisheddate="2021-04-10" data-taskdate="2021-04-10"
+                                                   data-interval="1" data-totaltimes="5" data-remaintimes="5" data-easinessfactor="2.0" data-tagids="1,2,3"
+                                                   data-repeat="true" data-typeid="10"
+                                                   th:attr="data-id=${todo.id}, data-flag=${todo.flag}, data-title=${todo.title}, data-content=${todo.content},
+                                                    data-createtime=${todo.createTime}, data-updatetime=${todo.updateTime}, data-finisheddate=${todo.finishedDate},
+                                                    data-taskdate=${todo.taskDate}, data-interval=${todo.interval}, data-totaltimes=${todo.totalTimes},
+                                                    data-remaintimes=${todo.remainTimes}, data-easinessfactor=${todo.easinessFactor}, data-tagids=${todo.tagIds},
+                                                    data-repeat=${todo.repeat}, data-typeid=${todo.type.id}"
+                                                   onclick="editTodo(this)">编辑</a>
 
-                                            </script>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/*-->
-                        <div class="ui raised attached segment">
-                            <div class="ui red ribbon label">遗留的复习</div>
-                            <strong>待复习的主题</strong>
-                            <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
-                                            <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成</button>
-                                            <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui raised attached segment">
-                            <div class="ui pink ribbon label">遗留的待办</div>
-                            <strong>待办的主题</strong>
-                            <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
-                                            <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成
-                                            </button>
-                                            <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui raised attached segment">
-                            <div class="ui olive ribbon label">复习</div>
-                            <strong>待复习的主题</strong>
-                            <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
-                                            <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成
-                                            </button>
-                                            <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui raised attached segment">
-                            <div class="ui teal ribbon label">待办</div>
-                            <strong>待办的主题</strong>
-                            <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
-                                            <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成
-                                            </button>
-                                            <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--*/-->
-                    </div>
-                    <!--新增待办按钮-->
-                    <div class="ui attached segment">
-                        <button id="create_todo_btn" class="ui basic blue fluid button">新增待办</button>
-                    </div>
-                    <!--新增的表单-->
-                    <div id="create_todo_form" class="ui attached segment" style="display: none;">
-                        <div class="ui container">
-                            <div id="todo-form" class="ui form">
-                                <input type="hidden" name="id">
-                                <input type="hidden" name="createTime">
-                                <!--            <input type="hidden" name="updateTime" th:value="*{updateTime}">-->
-                                <div class="required field">
-                                    <div class="ui left labeled input">
-                                        <div class="ui add selection compact teal basic dropdown label">
-                                            <input id="todo_or_review_input" type="hidden" name="flag" value="待办">
-                                            <i class="dropdown icon"></i>
-                                            <div class="text">待办</div>
-                                            <div class="menu">
-                                                <label id="review_item" class="item" data-value="复习">复习</label>
-                                                <label id="todo_item" class="item" data-value="待办">待办</label>
-                                            </div>
-                                        </div>
-                                        <input type="text" name="title" placeholder="标题">
-                                    </div>
-                                </div>
-                                <div class="required field">
-                                    <div>
-                                        <textarea name="content" placeholder="请输入待办内容"></textarea>
-                                    </div>
-                                </div>
-                                <div class="required field">
-                                    <div class="ui left labeled input">
-                                        <label class="ui compact teal basic label">分类</label>
-                                        <div class="ui add fluid selection dropdown">
-                                            <input type="hidden" name="type.id">
-                                            <i class="dropdown icon"></i>
-                                            <div class="default text">分类</div>
-                                            <div class="menu">
-                                                <div th:each="type : ${types}" class="item" data-value="1"
-                                                     th:data-value="${type.id}" th:text="${type.name}">错误日志
-                                                </div>
+                                                <button href="javascript:;" th:id="finbtn+${todo.id}" onclick="isFinish(this)"
+                                                        th:attr="data-id=${todo.id}, data-flag=${todo.flag}"
+                                                        class="ui finbtn basic positive m-padded-tb-small button"
+                                                        th:attrappend="data-html=${todo.flag}==复习 ? |<div class='header'>评价：${todo.id}</div>
+                                                                    <div class='content'>
+                                                                        <div class='ui buttons'>
+                                                                            <a href='javascript:console.log(${todo.id}_2);' onclick='postRating(${todo.id},2)' class='ui m-padded-tiny basic red button'>不熟</a>
+                                                                            <a href='javascript:console.log(${todo.id}_4);' onclick='postRating(${todo.id},4)' class='ui m-padded-tiny basic blue button'>一般</a>
+                                                                            <a href='javascript:console.log(${todo.id}_6);' onclick='postRating(${todo.id},6)' class='ui m-padded-tiny basic green button'>很熟</a>
+                                                                        </div>
+                                                                    </div>|"
+                                                        >完成</button>
+                                                <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete/{taskDate}(id=${todo.id},taskDate=${todo.taskDate})}">删除</a>
+                                                <script>
+                                                    // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
+                                                    // console.log($('.ui[data-html]'));
+                                                    // 保证复习的评价框的弹出
+                                                    $('.ui[data-html]')
+                                                        .popup({
+                                                            on: 'click'
+                                                        });
+
+                                                </script>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="field">
-                                    <div class="ui left labeled input">
-                                        <label class="ui compact teal basic label">标签</label>
-                                        <div class="ui add fluid selection multiple search dropdown">
-                                            <input type="hidden" name="tagIds">
-                                            <i class="dropdown icon"></i>
-                                            <div class="default text">标签</div>
-                                            <div class="menu">
-                                                <div th:each="tag : ${tags}" class="item" data-value="1"
-                                                     th:data-value="${tag.id}" th:text="${tag.name}">Java
-                                                </div>
+                            </div>
+                            <!--/*-->
+                            <div class="ui raised attached segment">
+                                <div class="ui red ribbon label">遗留的复习</div>
+                                <strong>待复习的主题</strong>
+                                <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                        </div>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                                <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成</button>
+                                                <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="two fields">
+                            </div>
+                            <div class="ui raised attached segment">
+                                <div class="ui pink ribbon label">遗留的待办</div>
+                                <strong>待办的主题</strong>
+                                <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                        </div>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                                <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成
+                                                </button>
+                                                <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui raised attached segment">
+                                <div class="ui olive ribbon label">复习</div>
+                                <strong>待复习的主题</strong>
+                                <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                        </div>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                                <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成
+                                                </button>
+                                                <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui raised attached segment">
+                                <div class="ui teal ribbon label">待办</div>
+                                <strong>待办的主题</strong>
+                                <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                        </div>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                                <button href="javascript:;" class="ui basic positive m-padded-tb-small button">完成
+                                                </button>
+                                                <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--*/-->
+                        </div>
+                        <!--新增待办按钮-->
+                        <div class="ui attached segment">
+                            <button id="create_todo_btn" class="ui basic blue fluid button">新增待办</button>
+                        </div>
+                        <!--新增的表单-->
+                        <div id="create_todo_form" class="ui attached segment" style="display: none;">
+                            <div class="ui container">
+                                <div id="todo-form" class="ui form">
+                                    <input type="hidden" name="id">
+                                    <input type="hidden" name="createTime">
+                                    <!--            <input type="hidden" name="updateTime" th:value="*{updateTime}">-->
                                     <div class="required field">
-                                        <input id="taskDate" type="date" name="taskDate" value=""/>
+                                        <div class="ui left labeled input">
+                                            <div class="ui add selection compact teal basic dropdown label">
+                                                <input id="todo_or_review_input" type="hidden" name="flag" value="待办">
+                                                <i class="dropdown icon"></i>
+                                                <div class="text">待办</div>
+                                                <div class="menu">
+                                                    <label id="review_item" class="item" data-value="复习">复习</label>
+                                                    <label id="todo_item" class="item" data-value="待办">待办</label>
+                                                </div>
+                                            </div>
+                                            <input type="text" name="title" placeholder="标题">
+                                        </div>
                                     </div>
-                                    <div class="inline fields">
-                                        <div id="repeat_div" class="center aligned field">
-                                            <div class="ui toggle checkbox">
-                                                <input id="repeat" type="checkbox" name="repeat" class="hidden">
-                                                <label for="repeat">重复</label>
+                                    <div class="required field">
+                                        <div>
+                                            <textarea name="content" placeholder="请输入待办内容"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="required field">
+                                        <div class="ui left labeled input">
+                                            <label class="ui compact teal basic label">分类</label>
+                                            <div class="ui add fluid selection dropdown">
+                                                <input type="hidden" name="type.id">
+                                                <i class="dropdown icon"></i>
+                                                <div class="default text">分类</div>
+                                                <div class="menu">
+                                                    <div th:each="type : ${types}" class="item" data-value="1"
+                                                         th:data-value="${type.id}" th:text="${type.name}">错误日志
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div id="repeat_input" class="two fields" style="display: none;">
-                                    <div id="m_interval_div" class="field">
+                                    <div class="field">
                                         <div class="ui left labeled input">
-                                            <label class="ui teal basic label">间隔天数</label>
-                                            <input id="m_interval" type="number" name="m_interval" value="1"/>
+                                            <label class="ui compact teal basic label">标签</label>
+                                            <div class="ui add fluid selection multiple search dropdown">
+                                                <input type="hidden" name="tagIds">
+                                                <i class="dropdown icon"></i>
+                                                <div class="default text">标签</div>
+                                                <div class="menu">
+                                                    <div th:each="tag : ${tags}" class="item" data-value="1"
+                                                         th:data-value="${tag.id}" th:text="${tag.name}">Java
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <p>间隔天数应为正整数，当其为1时，代表每天都有此待办。</p>
                                     </div>
-                                    <div id="total_times_div" class="field">
-                                        <div class="ui left labeled input">
-                                            <label class="ui teal basic label">重复次数</label>
-                                            <input id="total_times" type="number" name="total_times" value="5"/>
+                                    <div class="two fields">
+                                        <div class="required field">
+                                            <input id="taskDate" type="date" name="taskDate" value=""/>
                                         </div>
-                                        <p>重复次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
+                                        <div class="inline fields">
+                                            <div id="repeat_div" class="center aligned field">
+                                                <div class="ui toggle checkbox">
+                                                    <input id="repeat" type="checkbox" name="repeat" class="hidden">
+                                                    <label for="repeat">重复</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="ui error message"></div>
-                                <div class="ui right aligned container">
-                                    <!--若不指定type=button，则默认为submit-->
-                                    <button type="button" id="add-btn" class="ui basic primary button">添加</button>
+                                    <div id="repeat_input" class="two fields" style="display: none;">
+                                        <div id="m_interval_div" class="field">
+                                            <div class="ui left labeled input">
+                                                <label class="ui teal basic label">间隔天数</label>
+                                                <input id="m_interval" type="number" name="m_interval" value="1"/>
+                                            </div>
+                                            <p>间隔天数应为正整数，当其为1时，代表每天都有此待办。</p>
+                                        </div>
+                                        <div id="total_times_div" class="field">
+                                            <div class="ui left labeled input">
+                                                <label class="ui teal basic label">重复次数</label>
+                                                <input id="total_times" type="number" name="total_times" value="5"/>
+                                            </div>
+                                            <p>重复次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
+                                        </div>
+                                    </div>
+                                    <div class="ui error message"></div>
+                                    <div class="ui right aligned container">
+                                        <!--若不指定type=button，则默认为submit-->
+                                        <button type="button" id="add-btn" class="ui basic primary button">添加</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--修改的表单-->
-                    <script  th:inline="javascript">
-                        //表单验证
-                        $('#edit_todo_form').form({
-                            fields: {
-                                edit_title: {
-                                    identifier: 'edit_title',
-                                    rules: [{
-                                        type: 'empty',
-                                        prompt: '标题：请输入待办标题'
-                                    }]
-                                },
-                                edit_content: {
-                                    identifier: 'edit_content',
-                                    rules: [{
-                                        type: 'empty',
-                                        prompt: '内容：请输入待办内容'
-                                    }]
-                                },
-                                edit_typeId: {
-                                    identifier: 'edit_type.id',
-                                    rules: [{
-                                        type: 'empty',
-                                        prompt: '分类：请选择分类'
-                                    }]
-                                },
-                                edit_m_interval: {
-                                    identifier: 'edit_m_interval',
-                                    rules: [{
-                                        type: 'integer[1..65535]',
-                                        prompt: '间隔：只能输入1~65535间的数字哦'
-                                    }]
-                                },
-                                edit_total_times: {
-                                    identifier: 'edit_total_times',
-                                    rules: [{
-                                        type: 'integer[-1..65535]',
-                                        prompt: '间隔只能输入-1~65535间的数字哦'
-                                    }]
+                        <!--修改的表单-->
+                        <script  th:inline="javascript">
+                            //表单验证
+                            $('#edit_todo_form').form({
+                                fields: {
+                                    edit_title: {
+                                        identifier: 'edit_title',
+                                        rules: [{
+                                            type: 'empty',
+                                            prompt: '标题：请输入待办标题'
+                                        }]
+                                    },
+                                    edit_content: {
+                                        identifier: 'edit_content',
+                                        rules: [{
+                                            type: 'empty',
+                                            prompt: '内容：请输入待办内容'
+                                        }]
+                                    },
+                                    edit_typeId: {
+                                        identifier: 'edit_type.id',
+                                        rules: [{
+                                            type: 'empty',
+                                            prompt: '分类：请选择分类'
+                                        }]
+                                    },
+                                    edit_m_interval: {
+                                        identifier: 'edit_m_interval',
+                                        rules: [{
+                                            type: 'integer[1..65535]',
+                                            prompt: '间隔：只能输入1~65535间的数字哦'
+                                        }]
+                                    },
+                                    edit_total_times: {
+                                        identifier: 'edit_total_times',
+                                        rules: [{
+                                            type: 'integer[-1..65535]',
+                                            prompt: '间隔只能输入-1~65535间的数字哦'
+                                        }]
+                                    }
+                                }
+                            });
+                            //多选框“重复”被选中后 TODO 改成switch样式会好看点
+                            $('#edit_repeat').change(function () {
+                                edit_repeatChange();
+                            });
+                            //勾选重复之后的操作
+                            function edit_repeatChange() {
+                                if ($('#edit_repeat').prop('checked')) {
+                                    document.getElementById("edit_repeat_input").style.display = "";
+                                    document.getElementById('edit_total_times_div').classList.add("required");
+                                    document.getElementById('edit_m_interval_div').classList.add("required");
+                                } else {
+                                    document.getElementById("edit_repeat_input").style.display = "none";
+                                    document.getElementById('edit_total_times_div').classList.remove("required");
+                                    document.getElementById('edit_m_interval_div').classList.remove("required");
                                 }
                             }
-                        });
-                        //多选框“重复”被选中后 TODO 改成switch样式会好看点
-                        $('#edit_repeat').change(function () {
-                            edit_repeatChange();
-                        });
-                        //勾选重复之后的操作
-                        function edit_repeatChange() {
-                            if ($('#edit_repeat').prop('checked')) {
-                                document.getElementById("edit_repeat_input").style.display = "";
-                                document.getElementById('edit_total_times_div').classList.add("required");
-                                document.getElementById('edit_m_interval_div').classList.add("required");
-                            } else {
-                                document.getElementById("edit_repeat_input").style.display = "none";
-                                document.getElementById('edit_total_times_div').classList.remove("required");
-                                document.getElementById('edit_m_interval_div').classList.remove("required");
-                            }
-                        }
 
 
-                        //点击提交添加后，进行表单校验后，传送数据
-                        $('#edit-submit-btn').click(function () {
-                            $('#edit_todo_form').form('validate form');
-                            var boo = $('#edit_todo_form').form('is valid');
-                            if (boo) {
-                                console.log("校验成功");
-                                postEditData();
-                            } else {
-                                console.log("校验失败");
-                            }
-                        });
-
-                        //ajax发送请求
-                        function postEditData() {
-                            //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
-                            $('#todo_container').load(/*[[@{/todos}]]*/+"", {
-                                'id': $("[name='edit_id']").val(),
-                                'flag': $("[name='edit_flag']").val(),
-                                'title': $("[name='edit_title']").val(),
-                                'content': $("[name='edit_content']").val(),
-                                'type.id': $("[name='edit_type.id']").val(),
-                                'tagIds': $("[name='edit_tagIds']").val(),
-                                'taskDate': $("[name='edit_taskDate']").val(),
-                                'repeat': $("[name='edit_repeat']").prop("checked"),
-                                'interval': $("[name='edit_m_interval']").val(),
-                                'totalTimes': $("[name='edit_total_times']").val(),
-                                'createTime': $("[name='edit_createtime']").val()
-                            }, function (responseTxt, statusTxt, xhr) {
-                                //callback 回调方法
-                                //判断是否成功，刷新，滚动到comment头
-                                responseFromTodos(responseTxt,statusTxt,xhr,getdate());
-                                $(window).scrollTo($('#todo_container'), 500);
-                                clearEditContent();
+                            //点击提交添加后，进行表单校验后，传送数据
+                            $('#edit-submit-btn').click(function () {
+                                $('#edit_todo_form').form('validate form');
+                                var boo = $('#edit_todo_form').form('is valid');
+                                if (boo) {
+                                    console.log("校验成功");
+                                    postEditData();
+                                } else {
+                                    console.log("校验失败");
+                                }
                             });
-                        }
-                        //表单恢复默认值
-                        function clearEditContent() {
-                            $("[name='edit_id']").val("");
-                            $("[name='edit_flag']").val("待办");
-                            $("[name='edit_title']").val("");
-                            $("[name='edit_content']").val("");
-                            $("[name='edit_type.id']").val("");
-                            $("[name='edit_tagIds']").val("");
-                            $("[name='edit_repeat']").prop("checked",false);
-                            edit_repeatChange();
-                            $("[name='edit_m_interval']").val(1);
-                            $("[name='edit_total_times']").val(5);
-                        }
-                        function editTodo(obj) {
-                            document.getElementById("create_todo_btn").innerText = "新增待办";
-                            document.getElementById("create_todo_form").style.display = "none";
-                            document.getElementById("edit_todo_form").style.display = "";
-                            $("[name='edit_id']").val($(obj).data('id'));
-                            $("[name='edit_flag']").val($(obj).data('flag'));
-                            $("#edit_todo_or_review_text").text($(obj).data('flag')).val($(obj).data('flag'));
-                            $("[name='edit_title']").val($(obj).data('title'));
-                            $("[name='edit_content']").val($(obj).data('content')).focus();
-                            $('.ui.edit.dropdown').dropdown('clear');
-                            $("[name='edit_type.id']").val($(obj).data('typeid'));
-                            $("[name='edit_tagIds']").val($(obj).data('tagids'));
-                            $('.ui.dropdown').dropdown();
-                            $('#edit_tags_dropdown').dropdown();
-                            if($(obj).data('flag')=="复习"){
-                                $("[name='edit_repeat']").prop("checked",false).prop("disabled",true);
-                            }else{
-                                $("[name='edit_repeat']").prop("checked",$(obj).data('repeat'));
+
+                            //ajax发送请求
+                            function postEditData() {
+                                $('.ui.dimmer').addClass("active");
+                                //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
+                                $('#todo_container').load(/*[[@{/todos}]]*/+"", {
+                                    'id': $("[name='edit_id']").val(),
+                                    'flag': $("[name='edit_flag']").val(),
+                                    'title': $("[name='edit_title']").val(),
+                                    'content': $("[name='edit_content']").val(),
+                                    'type.id': $("[name='edit_type.id']").val(),
+                                    'tagIds': $("[name='edit_tagIds']").val(),
+                                    'taskDate': $("[name='edit_taskDate']").val(),
+                                    'repeat': $("[name='edit_repeat']").prop("checked"),
+                                    'interval': $("[name='edit_m_interval']").val(),
+                                    'totalTimes': $("[name='edit_total_times']").val(),
+                                    'createTime': $("[name='edit_createtime']").val()
+                                }, function (responseTxt, statusTxt, xhr) {
+                                    //callback 回调方法
+                                    //判断是否成功，刷新，滚动到comment头
+                                    responseFromTodos(responseTxt,statusTxt,xhr,getdate());
+                                    $(window).scrollTo($('#todo_container'), 500);
+                                    clearEditContent();
+                                });
                             }
-                            edit_repeatChange();
-                            $("[name='edit_m_interval']").val(Math.round($(obj).data('interval')));
-                            $("[name='edit_total_times']").val($(obj).data('totaltimes'));
-                            $("[name='edit_taskDate']").val($(obj).data('taskdate'));
-                            //额外赋值操作
-                            // $("[name='edit_type.name']").text($(obj).data('typename')).removeClass("default");
+                            //表单恢复默认值
+                            function clearEditContent() {
+                                $("[name='edit_id']").val("");
+                                $("[name='edit_flag']").val("待办");
+                                $("[name='edit_title']").val("");
+                                $("[name='edit_content']").val("");
+                                $("[name='edit_type.id']").val("");
+                                $("[name='edit_tagIds']").val("");
+                                $("[name='edit_repeat']").prop("checked",false);
+                                edit_repeatChange();
+                                $("[name='edit_m_interval']").val(1);
+                                $("[name='edit_total_times']").val(5);
+                            }
+                            function editTodo(obj) {
+                                document.getElementById("create_todo_btn").innerText = "新增待办";
+                                document.getElementById("create_todo_form").style.display = "none";
+                                document.getElementById("edit_todo_form").style.display = "";
+                                $("[name='edit_id']").val($(obj).data('id'));
+                                $("[name='edit_flag']").val($(obj).data('flag'));
+                                $("#edit_todo_or_review_text").text($(obj).data('flag')).val($(obj).data('flag'));
+                                $("[name='edit_title']").val($(obj).data('title'));
+                                $("[name='edit_content']").val($(obj).data('content')).focus();
+                                $('.ui.edit.dropdown').dropdown('clear');
+                                $("[name='edit_type.id']").val($(obj).data('typeid'));
+                                $("[name='edit_tagIds']").val($(obj).data('tagids'));
+                                $('.ui.dropdown').dropdown();
+                                $('#edit_tags_dropdown').dropdown();
+                                if($(obj).data('flag')=="复习"){
+                                    $("[name='edit_repeat']").prop("checked",false).prop("disabled",true);
+                                }else{
+                                    $("[name='edit_repeat']").prop("checked",$(obj).data('repeat'));
+                                }
+                                edit_repeatChange();
+                                $("[name='edit_m_interval']").val(Math.round($(obj).data('interval')));
+                                $("[name='edit_total_times']").val($(obj).data('totaltimes'));
+                                $("[name='edit_taskDate']").val($(obj).data('taskdate'));
+                                //额外赋值操作
+                                // $("[name='edit_type.name']").text($(obj).data('typename')).removeClass("default");
 
-                            //隐含域
-                            $("[name='edit_createtime']").val($(obj).data('createtime'));
-                            $("[name='edit_updatetime']").val($(obj).data('updatetime'));
-                            $("[name='edit_finisheddate']").val($(obj).data('finisheddate'));
-                            $("[name='edit_easinessfactor']").val($(obj).data('easinessfactor'));
-                            $("[name='edit_remainTimes']").val($(obj).data('remaintimes'));
-                            $(window).scrollTo($('#edit_todo_form'), 500);
-                        }
-                        $('#edit-drop-btn').click(function () {
-                            clearEditContent();
-                            document.getElementById("edit_todo_form").style.display = "none";
-                        });
-                    </script>
-                    <div id="edit_todo_form" class="ui attached segment" style="display: none;">
-                        <div class="ui container">
-                            <div id="edit-form" class="ui form">
-                                <input type="hidden" name="edit_id" placeholder="id">
-                                <input type="hidden" name="edit_createtime" placeholder="createtime">
-                                <input type="hidden" name="edit_updatetime" placeholder="updatetime">
-                                <input type="hidden" name="edit_finisheddate"  placeholder="finisheddate">
-                                <input type="hidden" name="edit_easinessfactor"  placeholder="easinessfactor">
-                                <input type="hidden" name="edit_remainTimes"  placeholder="remainTimes">
-                                <div class="required field">
-                                    <div class="ui left labeled input">
-                                        <!--flag不可更改-->
-                                        <div class="ui compact grey basic label">
-                                            <input id="edit_todo_or_review_input" type="hidden" name="edit_flag" value="待办">
-                                            <div id="edit_todo_or_review_text" class="text">待办</div>
-                                        </div>
-                                        <input type="text" name="edit_title" placeholder="标题">
-                                    </div>
-                                </div>
-                                <div class="required field">
-                                    <div>
-                                        <textarea name="edit_content" placeholder="请输入待办内容"></textarea>
-                                    </div>
-                                </div>
-                                <div class="required field">
-                                    <div class="ui left labeled input">
-                                        <label class="ui compact teal basic label">分类</label>
-                                        <div class="ui edit fluid selection dropdown">
-                                            <input type="hidden" name="edit_type.id">
-                                            <i class="dropdown icon"></i>
-                                            <div name="edit_type.name" class="default text">分类</div>
-                                            <div class="menu">
-                                                <div th:each="type : ${types}" class="item" data-value="1"
-                                                     th:data-value="${type.id}" th:text="${type.name}">错误日志
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <div class="ui left labeled input">
-                                        <label class="ui compact teal basic label">标签</label>
-                                        <div id="edit_tags_dropdown" class="ui edit fluid selection multiple search dropdown">
-                                            <input type="hidden" name="edit_tagIds">
-                                            <i class="dropdown icon"></i>
-                                            <div class="default text">标签</div>
-                                            <div class="menu">
-                                                <div th:each="tag : ${tags}" class="item" data-value="1"
-                                                     th:data-value="${tag.id}" th:text="${tag.name}">Java
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="two fields">
+                                //隐含域
+                                $("[name='edit_createtime']").val($(obj).data('createtime'));
+                                $("[name='edit_updatetime']").val($(obj).data('updatetime'));
+                                $("[name='edit_finisheddate']").val($(obj).data('finisheddate'));
+                                $("[name='edit_easinessfactor']").val($(obj).data('easinessfactor'));
+                                $("[name='edit_remainTimes']").val($(obj).data('remaintimes'));
+                                $(window).scrollTo($('#edit_todo_form'), 500);
+                            }
+                            $('#edit-drop-btn').click(function () {
+                                clearEditContent();
+                                document.getElementById("edit_todo_form").style.display = "none";
+                            });
+                        </script>
+                        <div id="edit_todo_form" class="ui attached segment" style="display: none;">
+                            <div class="ui container">
+                                <div id="edit-form" class="ui form">
+                                    <input type="hidden" name="edit_id" placeholder="id">
+                                    <input type="hidden" name="edit_createtime" placeholder="createtime">
+                                    <input type="hidden" name="edit_updatetime" placeholder="updatetime">
+                                    <input type="hidden" name="edit_finisheddate"  placeholder="finisheddate">
+                                    <input type="hidden" name="edit_easinessfactor"  placeholder="easinessfactor">
+                                    <input type="hidden" name="edit_remainTimes"  placeholder="remainTimes">
                                     <div class="required field">
-                                        <input id="edit_taskDate" type="date" name="edit_taskDate" value=""/>
+                                        <div class="ui left labeled input">
+                                            <!--flag不可更改-->
+                                            <div class="ui compact grey basic label">
+                                                <input id="edit_todo_or_review_input" type="hidden" name="edit_flag" value="待办">
+                                                <div id="edit_todo_or_review_text" class="text">待办</div>
+                                            </div>
+                                            <input type="text" name="edit_title" placeholder="标题">
+                                        </div>
                                     </div>
-                                    <div class="inline fields">
-                                        <div id="edit_repeat_div" class="center aligned field">
-                                            <div class="ui toggle checkbox">
-                                                <input id="edit_repeat" type="checkbox" name="edit_repeat" class="hidden">
-                                                <label for="edit_repeat">重复</label>
+                                    <div class="required field">
+                                        <div>
+                                            <textarea name="edit_content" placeholder="请输入待办内容"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="required field">
+                                        <div class="ui left labeled input">
+                                            <label class="ui compact teal basic label">分类</label>
+                                            <div class="ui edit fluid selection dropdown">
+                                                <input type="hidden" name="edit_type.id">
+                                                <i class="dropdown icon"></i>
+                                                <div name="edit_type.name" class="default text">分类</div>
+                                                <div class="menu">
+                                                    <div th:each="type : ${types}" class="item" data-value="1"
+                                                         th:data-value="${type.id}" th:text="${type.name}">错误日志
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui left labeled input">
+                                            <label class="ui compact teal basic label">标签</label>
+                                            <div id="edit_tags_dropdown" class="ui edit fluid selection multiple search dropdown">
+                                                <input type="hidden" name="edit_tagIds">
+                                                <i class="dropdown icon"></i>
+                                                <div class="default text">标签</div>
+                                                <div class="menu">
+                                                    <div th:each="tag : ${tags}" class="item" data-value="1"
+                                                         th:data-value="${tag.id}" th:text="${tag.name}">Java
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="two fields">
+                                        <div class="required field">
+                                            <input id="edit_taskDate" type="date" name="edit_taskDate" value=""/>
+                                        </div>
+                                        <div class="inline fields">
+                                            <div id="edit_repeat_div" class="center aligned field">
+                                                <div class="ui toggle checkbox">
+                                                    <input id="edit_repeat" type="checkbox" name="edit_repeat" class="hidden">
+                                                    <label for="edit_repeat">重复</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="edit_repeat_input" class="two fields" style="display: none;">
+                                        <div id="edit_m_interval_div" class="field">
+                                            <div class="ui left labeled input">
+                                                <label class="ui teal basic label">间隔天数</label>
+                                                <input id="edit_m_interval" type="number" name="edit_m_interval" value="1"/>
+                                            </div>
+                                            <p>间隔天数应为正整数，当其为1时，代表每天都有此待办。</p>
+                                        </div>
+                                        <div id="edit_total_times_div" class="field">
+                                            <div class="ui left labeled input">
+                                                <label class="ui teal basic label">重复次数</label>
+                                                <input id="edit_total_times" type="number" name="edit_total_times" value="5"/>
+                                            </div>
+                                            <p>重复次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
+                                        </div>
+                                    </div>
+                                    <div class="ui error message"></div>
+
+                                    <div class="ui right aligned container">
+                                        <!--若不指定type=button，则默认为submit-->
+                                        <button type="button" id="edit-drop-btn" class="ui basic secondary button">放弃修改</button>
+                                        <button type="button" id="edit-submit-btn" class="ui basic primary button">提交修改</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--为了统计方便，必须将待办分为两个list，已完成与未完成，后台查询list，进行分类即可-->
+                        <!--今日已完成的标题-->
+                        <div class="ui green top attached m-margin-top-large segment">
+                            <div class="ui middle aligned two column grid">
+                                <div class="column">
+                                    <h3 class="ui green header">今日已完成</h3>
+                                </div>
+                                <div class="right aligned column">
+                                    <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
+                                    共 <h2 class="ui green header m-inline-block m-text-thin"
+                                          th:text="${finishedTodos}!=null ? ${finishedTodos.size}:0">
+                                    14 </h2> 个
+                                </div>
+                            </div>
+                        </div>
+                        <!--已完成的内容-->
+                        <div class="ui attached segment">
+                            <div class="ui inverted dimmer">
+                                <div class="ui loader"></div>
+                            </div>
+                            <div class="ui raised attached segment" th:if="${finishedTodos}==null or ${finishedTodos.size}==0">
+                                <p>今天还没有已完成的任务哦~</p>
+                            </div>
+                            <div class="ui raised attached segment" th:each="todo : ${finishedTodos}">
+                                <input type="hidden" name="eachTodoId" th:value="${todo.id}">
+                                <div class="ui ribbon green label" th:text="(${todo.isRemain}?'超时完成的':'')+${todo.flag}">遗留的复习</div>
+                                <strong th:text="${todo.title}">待复习的主题</strong>
+                                <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label class="ui m-padded-tb-small basic blue label" th:text="${todo.type.name}">类型</label>
+                                            <label class="ui m-padded-tb-small basic teal left pointing label"
+                                                   th:each="tag : ${todo.tags}"
+                                                   th:text="${tag.name}">标签1</label>
+                                            <!--/*-->
+                                            <label class="ui m-padded-tb-small left pointing label">标签2</label>
+                                            <!--*/-->
+                                        </div>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <!--                  这里先留着，万一以后要加编辑功能，就用这个
+                                                                      <a href="javascript:;" class="ui basic blue m-padded-tb-small button"
+                                                                       data-id="1" data-flag="复习" data-title="标题" data-content="内容" data-createtime="2021-04-10 xx:xx:xx"
+                                                                       data-updatetime="2021-04-10 xx:xx:xx" data-finisheddate="2021-04-10" data-taskdate="2021-04-10"
+                                                                       data-interval="1" data-totaltimes="5" data-remaintimes="5" data-easinessfactor="2.0" data-tagids="1,2,3"
+                                                                       data-repeat="true" data-typeid="10"
+                                                                       th:attr="data-id=${todo.id}, data-flag=${todo.flag}, data-title=${todo.title}, data-content=${todo.content},
+                                                                        data-createtime=${todo.createTime}, data-updatetime=${todo.updateTime}, data-finisheddate=${todo.finishedDate},
+                                                                        data-taskdate=${todo.taskDate}, data-interval=${todo.interval}, data-totaltimes=${todo.totalTimes},
+                                                                        data-remaintimes=${todo.remainTimes}, data-easinessfactor=${todo.easinessFactor}, data-tagids=${todo.tagIds},
+                                                                        data-repeat=${todo.repeat}, data-typeid=${todo.type.id}"
+                                                                       onclick="editTodo(this)">编辑</a> -->
+                                                <button href="javascript:;" class="ui basic disabled blue m-padded-tb-small button">编辑</button>
+                                                <!--TODO 这里可以改成撤销，但是先不改-->
+                                                <button href="javascript:;" class="ui basic disabled m-padded-tb-small button">完成</button>
+                                                <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="edit_repeat_input" class="two fields" style="display: none;">
-                                    <div id="edit_m_interval_div" class="field">
-                                        <div class="ui left labeled input">
-                                            <label class="ui teal basic label">间隔天数</label>
-                                            <input id="edit_m_interval" type="number" name="edit_m_interval" value="1"/>
+                            </div>
+                            <!--/*-->
+                            <div class="ui raised attached segment">
+                                <div class="ui green ribbon label">复习</div><!--复习or待办-->
+                                <strong>待复习的主题</strong>
+                                <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
                                         </div>
-                                        <p>间隔天数应为正整数，当其为1时，代表每天都有此待办。</p>
-                                    </div>
-                                    <div id="edit_total_times_div" class="field">
-                                        <div class="ui left labeled input">
-                                            <label class="ui teal basic label">重复次数</label>
-                                            <input id="edit_total_times" type="number" name="edit_total_times" value="5"/>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                                <button href="javascript:;" class="ui basic disabled m-padded-tb-small button">已完成
+                                                </button>
+                                                <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
+                                                </button>
+                                            </div>
                                         </div>
-                                        <p>重复次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
                                     </div>
-                                </div>
-                                <div class="ui error message"></div>
-
-                                <div class="ui right aligned container">
-                                    <!--若不指定type=button，则默认为submit-->
-                                    <button type="button" id="edit-drop-btn" class="ui basic secondary button">放弃修改</button>
-                                    <button type="button" id="edit-submit-btn" class="ui basic primary button">提交修改</button>
                                 </div>
                             </div>
+                            <div class="ui raised attached segment">
+                                <div class="ui green ribbon label">复习</div>
+                                <strong>待复习的主题</strong>
+                                <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                        </div>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                                <button href="javascript:;"
+                                                        class="ui basic disabled positive m-padded-tb-small button">
+                                                    完成
+                                                </button>
+                                                <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui raised attached segment">
+                                <div class="ui green ribbon label">待办</div>
+                                <strong>待办的主题</strong>
+                                <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                    待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
+                                <div class="ui mobile stackable grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
+                                            <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
+                                        </div>
+                                        <div class="right aligned eight wide column">
+                                            <div class="ui buttons">
+                                                <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
+                                                <button href="javascript:;"
+                                                        class="ui basic disabled positive m-padded-tb-small button">
+                                                    完成
+                                                </button>
+                                                <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--*/-->
                         </div>
                     </div>
-
-                    <!--为了统计方便，必须将待办分为两个list，已完成与未完成，后台查询list，进行分类即可-->
-                    <!--今日已完成的标题-->
-                    <div class="ui green top attached m-margin-top-large segment">
-                        <div class="ui middle aligned two column grid">
-                            <div class="column">
-                                <h3 class="ui green header">今日已完成</h3>
-                            </div>
-                            <div class="right aligned column">
-                                <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
-                                共 <h2 class="ui green header m-inline-block m-text-thin"
-                                      th:text="${finishedTodos}!=null ? ${finishedTodos.size}:0">
-                                14 </h2> 个
-                            </div>
-                        </div>
-                    </div>
-                    <!--已完成的内容-->
-                    <div class="ui attached segment">
-                        <div class="ui raised attached segment" th:each="todo : ${finishedTodos}">
-                            <input type="hidden" name="eachTodoId" th:value="${todo.id}">
-                            <div class="ui ribbon green label" th:text="(${todo.isRemain}?'超时完成的':'')+${todo.flag}">遗留的复习</div>
-                            <strong th:text="${todo.title}">待复习的主题</strong>
-                            <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label class="ui m-padded-tb-small basic blue label" th:text="${todo.type.name}">类型</label>
-                                        <label class="ui m-padded-tb-small basic teal left pointing label"
-                                               th:each="tag : ${todo.tags}"
-                                               th:text="${tag.name}">标签1</label>
-                                        <!--/*-->
-                                        <label class="ui m-padded-tb-small left pointing label">标签2</label>
-                                        <!--*/-->
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <!--                  这里先留着，万一以后要加编辑功能，就用这个
-                                                                  <a href="javascript:;" class="ui basic blue m-padded-tb-small button"
-                                                                   data-id="1" data-flag="复习" data-title="标题" data-content="内容" data-createtime="2021-04-10 xx:xx:xx"
-                                                                   data-updatetime="2021-04-10 xx:xx:xx" data-finisheddate="2021-04-10" data-taskdate="2021-04-10"
-                                                                   data-interval="1" data-totaltimes="5" data-remaintimes="5" data-easinessfactor="2.0" data-tagids="1,2,3"
-                                                                   data-repeat="true" data-typeid="10"
-                                                                   th:attr="data-id=${todo.id}, data-flag=${todo.flag}, data-title=${todo.title}, data-content=${todo.content},
-                                                                    data-createtime=${todo.createTime}, data-updatetime=${todo.updateTime}, data-finisheddate=${todo.finishedDate},
-                                                                    data-taskdate=${todo.taskDate}, data-interval=${todo.interval}, data-totaltimes=${todo.totalTimes},
-                                                                    data-remaintimes=${todo.remainTimes}, data-easinessfactor=${todo.easinessFactor}, data-tagids=${todo.tagIds},
-                                                                    data-repeat=${todo.repeat}, data-typeid=${todo.type.id}"
-                                                                   onclick="editTodo(this)">编辑</a> -->
-                                            <button href="javascript:;" class="ui basic disabled blue m-padded-tb-small button">编辑</button>
-                                            <!--TODO 这里可以改成撤销，但是先不改-->
-                                            <button href="javascript:;" class="ui basic disabled m-padded-tb-small button">完成</button>
-                                            <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/*-->
-                        <div class="ui raised attached segment">
-                            <div class="ui green ribbon label">复习</div><!--复习or待办-->
-                            <strong>待复习的主题</strong>
-                            <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
-                                            <button href="javascript:;" class="ui basic disabled m-padded-tb-small button">已完成
-                                            </button>
-                                            <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui raised attached segment">
-                            <div class="ui green ribbon label">复习</div>
-                            <strong>待复习的主题</strong>
-                            <p>待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
-                                            <button href="javascript:;"
-                                                    class="ui basic disabled positive m-padded-tb-small button">
-                                                完成
-                                            </button>
-                                            <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui raised attached segment">
-                            <div class="ui green ribbon label">待办</div>
-                            <strong>待办的主题</strong>
-                            <p>待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
-                                待办的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
-                            <div class="ui mobile stackable grid">
-                                <div class="row">
-                                    <div class="eight wide column">
-                                        <label href="javascript:;" class="ui m-padded-tb-small label">类型</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签1</label>
-                                        <label href="javascript:;" class="ui m-padded-tb-small left pointing label">标签2</label>
-                                    </div>
-                                    <div class="right aligned eight wide column">
-                                        <div class="ui buttons">
-                                            <button href="javascript:;" class="ui basic blue m-padded-tb-small button">编辑</button>
-                                            <button href="javascript:;"
-                                                    class="ui basic disabled positive m-padded-tb-small button">
-                                                完成
-                                            </button>
-                                            <button href="javascript:;" class="ui basic negative m-padded-tb-small button">删除
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--*/-->
-                    </div>
-
                 </div>
             </div>
 
@@ -1115,6 +1131,7 @@
 </footer>
 
 <script>
+    $('.ui.dimmer').addClass("active");
     $('#todo_container').load("/todos",
         function(responseTxt,statusTxt,xhr) {
             responseFromTodos(responseTxt,statusTxt,xhr,getdate());
@@ -1139,6 +1156,7 @@
     //根据日期查询待办
     function queryByDate(){
         let date = $('#query_date').val();
+        $('.ui.dimmer').addClass("active");
         $('#todo_container').load("/todos/"+date,
             function(responseTxt,statusTxt,xhr) {
                 responseFromTodos(responseTxt,statusTxt,xhr,date);
