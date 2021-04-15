@@ -8,6 +8,7 @@ import com.ven.vtodo.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,7 +49,7 @@ public class TodoController {
         return "todo";
     }
 
-    @GetMapping("/todos")
+    @GetMapping("/alltodos")//用来查整张表的待办
     public String todos(Model model){
         // TODO 到时候新增一个方法，类似此方法，但是多一个日期参数（可以用String），放URL或者传对象都行，用日期查询
         // 是未来? 仅按日期当日，仅显示未完成:区分是否遗留
@@ -69,6 +71,28 @@ public class TodoController {
         }
         //TODO 分类所有todos
         model.addAttribute("todos", normalTodos);
+        model.addAttribute("finishedTodos", finishedTodos);
+        model.addAttribute("types", typeService.listType());
+        model.addAttribute("tags", tagService.listTag());
+        return "todo :: todoList";
+    }
+
+    @GetMapping(value = {"/todos/{strDate}", "/todos"})
+    public String todosByDate(@Nullable @PathVariable String strDate, Model model) throws ParseException {
+
+        // 是未来? 仅按日期当日，仅显示未完成:区分是否遗留
+        // 数据库里查
+        // 1.未finishedDate且taskDate<=指定日期，小于指定日期，isRemain=true，加入todos
+        // 2.finishedDate==指定日期，标记为已完成，finished>taskdate的，标记isRemain=true，html改为未按时，加入finishedTodos
+        Date date;
+        if(strDate==null || strDate.equals("")){
+            strDate = sdf.format(new Date());
+        }
+        date = sdf.parse(strDate);
+        List<Todo> unfinishedTodos = todoService.listUnfinishedTodosByDate(date);
+        List<Todo> finishedTodos = todoService.listFinishedTodosByDate(date);
+        //TODO 分类所有todos
+        model.addAttribute("todos", unfinishedTodos);
         model.addAttribute("finishedTodos", finishedTodos);
         model.addAttribute("types", typeService.listType());
         model.addAttribute("tags", tagService.listTag());

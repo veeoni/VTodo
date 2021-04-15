@@ -68,7 +68,6 @@
                             }, function (responseTxt, statusTxt, xhr) {
                                 //callback 回调方法
                                 //判断是否成功，刷新，滚动到comment头
-                                responseFromTodos(responseTxt,statusTxt,xhr,getdate());
                                 $(window).scrollTo($('#todo_container'), 500);
                                 clearContent();
                             });
@@ -114,12 +113,22 @@
                                 }
                             }
                         });
-                        //根据日期查待办选择的日期
-                        function setQuery_date(date){
-                            $('#query_date').val(date).change(function () {
-                                console.log($('#query_date').val());
-                            });
+
+                        //获取当前日期
+                        function getdate() {
+                            var time = new Date();
+                            var day = ("0" + time.getDate()).slice(-2);
+                            var month = ("0" + (time.getMonth() + 1)).slice(-2);
+                            var today = time.getFullYear() + "-" + (month) + "-" + (day);
+                            return today;
                         }
+
+                        //根据日期查待办选择的日期
+                        $('#query_date').val(getdate()).change(function () {
+                            console.log($('#query_date').val());
+                        });
+
+
                         //当选中的为复习时
                         $("#review_item").on("click", function () {
                             $('#repeat').prop("checked", false).prop("disabled", true);
@@ -226,18 +235,15 @@
                     </script>
                     <!--顶部日期选择-->
                     <div class="ui segment">
-                        <div class="ui middle aligned four column grid stackable">
+                        <div class="ui middle aligned three column grid stackable">
                             <div class="column">
-                                <a class="ui mini teal basic button" href="javascript:;">前一日</a>
+                                <a class="ui mini teal basic button fluid" href="javascript:;">前一日</a>
                             </div>
                             <div class="center aligned column">
                                 <input class="ui date" id="query_date" type="date">
                             </div>
-                            <div class="center aligned column">
-                                <button type="button" class="ui button" id="query_btn" onclick="queryByDate()">查询</button>
-                            </div>
                             <div class="right aligned column">
-                                <a class="ui mini teal basic button" href="javascript:;">后一日</a>
+                                <a class="ui mini teal basic button fluid" href="javascript:;">前一日</a>
                             </div>
                         </div>
                     </div>
@@ -321,7 +327,7 @@
                                                                     </div>
                                                                 </div>|"
                                                     >完成</button>
-                                            <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete/{taskDate}(id=${todo.id},taskDate=${todo.taskDate})}">删除</a>
+                                            <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="@{/todos/{id}/delete(id=${todo.id})}">删除</a>
                                             <script>
                                                 // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
                                                 // console.log($('.ui[data-html]'));
@@ -622,7 +628,6 @@
                             }, function (responseTxt, statusTxt, xhr) {
                                 //callback 回调方法
                                 //判断是否成功，刷新，滚动到comment头
-                                responseFromTodos(responseTxt,statusTxt,xhr,getdate());
                                 $(window).scrollTo($('#todo_container'), 500);
                                 clearEditContent();
                             });
@@ -1115,43 +1120,13 @@
 </footer>
 
 <script>
-    $('#todo_container').load("/todos",
-        function(responseTxt,statusTxt,xhr) {
-            responseFromTodos(responseTxt,statusTxt,xhr,getdate());
-        });
+    $('#todo_container').load("/todos");
     //加载底部的新博客推荐
     $('#newblog-container').load("/footer/newblog");
     //当设备width过小时，顶部菜单切换为折叠样式
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
     });
-    //查询todos的回调方法
-    function responseFromTodos(responseTxt,statusTxt,xhr,date) {
-        if (statusTxt == "success"){
-            console.log("External content loaded successfully!"+date);
-            setQuery_date(date);
-        }
-        if (statusTxt == "error"){
-            console.log("Error: " + xhr.status + ": " + xhr.statusText+date);
-            setQuery_date(getdate());
-        }
-    }
-    //根据日期查询待办
-    function queryByDate(){
-        let date = $('#query_date').val();
-        $('#todo_container').load("/todos/"+date,
-            function(responseTxt,statusTxt,xhr) {
-                responseFromTodos(responseTxt,statusTxt,xhr,date);
-        });
-    }
-    //获取当前日期
-    function getdate() {
-        var time = new Date();
-        var day = ("0" + time.getDate()).slice(-2);
-        var month = ("0" + (time.getMonth() + 1)).slice(-2);
-        var today = time.getFullYear() + "-" + (month) + "-" + (day);
-        return today;
-    }
 </script>
 </body>
 </html>

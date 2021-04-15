@@ -84,6 +84,16 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    public List<Todo> listUnfinishedTodosByDate(Date date) {
+        return todoRepository.findAllByTaskDateLessThanEqualAndFinishedDateNull(date);
+    }
+
+    @Override
+    public List<Todo> listFinishedTodosByDate(Date date) {
+        return todoRepository.findAllByFinishedDateEquals(date);
+    }
+
+    @Override
     public Todo saveFinishedTodo(Todo todo) {
         todo.setUpdateTime(new Date());
         return todoRepository.save(todo);
