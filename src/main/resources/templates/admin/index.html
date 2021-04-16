@@ -22,8 +22,8 @@
             <div class="right menu">
                 <div class="ui dropdown m-item m-mobile-hide item">
                     <div class="text">
-                        <img src="https://unsplash.it/100/100?image=1005" alt="" class="ui avatar image">
-                        王友宁
+                        <img th:src="@{/images/meteor.jpeg}" alt="" class="ui avatar image">
+                        <span th:text="${session.user.nickname}">少先队员</span>
                     </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
@@ -43,10 +43,10 @@
     <div class="ui container">
         <div class="ui success large message">
             <h3>Hi,</h3>
-            <p>王友宁，欢迎登录！</p>
+            <p><span th:text="${session.user.nickname}">少先队员</span>，欢迎登录！</p>
         </div>
 
-        <img src="https://picsum.photos/1000/400?image=1005" alt="" class="ui rounded bordered fluid image">
+        <img th:src="@{/images/meteor.jpeg}" alt="" class="ui rounded bordered fluid image">
     </div>
 </div>
 <br>

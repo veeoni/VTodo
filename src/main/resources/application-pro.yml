@@ -1,9 +1,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/myblog?characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+#    url: jdbc:mysql://localhost/myblog?characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+#    username: root
+#    password: 123456
+#    url: jdbc:mysql://1.15.89.54:3306/vtodo_v1?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1/vtodo_v1?characterEncoding=utf8&useSSL=true&serverTimezone=UTC
     username: root
-    password: 123456
+    password: mysql5.7VEN
 
   jpa:
     hibernate:
