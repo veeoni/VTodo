@@ -29,10 +29,15 @@ public class TagShowController {
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable Long id, Model model){
         List<Tag> tags = tagService.listTagTop(10000);
-        if(id==-1){
-            id = tags.get(0).getId();
+        Page<Blog> page = null;
+        if(tags.size()>0){
+            if(id==-1){
+                id = tags.get(0).getId();
+            }
+            page = blogService.listBlog(pageable, id);
+        }else{
+            page = blogService.listBlog(pageable);
         }
-        Page<Blog> page = blogService.listBlog(pageable, id);
         model.addAttribute("tags", tags);
         model.addAttribute("page", page);
         model.addAttribute("activeTagId", id);

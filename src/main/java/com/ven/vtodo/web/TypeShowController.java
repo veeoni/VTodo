@@ -31,11 +31,16 @@ public class TypeShowController {
             @PathVariable Long id, Model model){
         List<Type> types = typeService.listTypeTop(10000);
         BlogQuery blog = new BlogQuery();
-        if(id==-1){
-            id = types.get(0).getId();
+        Page<Blog> page;
+        if(types.size()>0){
+            if(id==-1){
+                id = types.get(0).getId();
+            }
+            blog.setTypeId(id);
+            page = blogService.listBlog(pageable, blog);
+        }else{
+            page = blogService.listBlog(pageable);
         }
-        blog.setTypeId(id);
-        Page<Blog> page = blogService.listBlog(pageable, blog);
         model.addAttribute("types", types);
         model.addAttribute("page", page);
         model.addAttribute("activeTypeId", id);
