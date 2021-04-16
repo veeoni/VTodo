@@ -53,7 +53,7 @@
                     <script th:inline="javascript">
                         //ajax发送请求
                         function postData() {
-                            $('.ui.dimmer').addClass("active");
+                            prepost();
                             //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
                             $('#todo_container').load("/todos/"+$("[name='taskDate']").val(), {
                                 'id': $("[name='id']").val(),
@@ -215,11 +215,13 @@
                             }
                         }
                         function postFinish(id){
+                            prepost();
                             console.log("id"+id);
                             window.open("/todos/"+id+"/finish", "_self");
                         }
 
                         function postRating(id, rate) {
+                            prepost();
                             console.log("id="+id);
                             console.log("rate="+rate);
                             window.open("/todos/"+id+"/finish/"+rate, "_self");
@@ -229,7 +231,7 @@
                     <div class="ui segment">
                         <div class="ui middle aligned grid padded stackable">
                             <div class="three wide column m-padded-mini">
-                                <a class="ui mini fluid teal basic button" href="javascript:;">前一日</a>
+                                <a class="ui mini fluid teal basic button" href="javascript:queryByDate(-1);">前一日</a>
                             </div>
                             <div class="three wide right aligned column">
                                 查询日期：
@@ -238,10 +240,10 @@
                                 <input class="ui date" id="query_date" type="date">
                             </div>
                             <div class="three wide column m-padded-tb-mini m-padded-mini">
-                                <button type="button" class="ui mini basic fluid blue button" id="query_btn" onclick="queryByDate()">查询</button>
+                                <button type="button" class="ui mini basic fluid blue button" id="query_btn" onclick="queryByDate(0)">查询</button>
                             </div>
                             <div class="three wide column m-padded-mini">
-                                <a class="ui mini fluid teal basic button" href="javascript:;">后一日</a>
+                                <a class="ui mini fluid teal basic button" href="javascript:queryByDate(1);">后一日</a>
                             </div>
                         </div>
                     </div>
@@ -290,11 +292,11 @@
                             </div>
                             <div class="ui raised attached segment" th:each="todo : ${todos}">
                                 <input type="hidden" name="eachTodoId" th:value="${todo.id}">
-                                <!-- TODO这里可以改一下逻辑，TODO类加一个不存数据库的遗留属性，如果是遗留，在返回List的时候，这个属性=true，如果不是遗留，就=false-->
                                 <div class="ui ribbon label" th:text="(${todo.isRemain}?'遗留的':'')+${todo.flag}"
                                      th:classappend="(${todo.isRemain}?(${todo.flag}=='复习'?'red':'pink'):(${todo.flag}=='复习'?'olive':'teal'))">遗留的复习</div>
-                                <strong th:text="${todo.title}">待复习的主题</strong>
-                                <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                <strong th:text="${todo.title}+'&nbsp;&nbsp;&nbsp;&nbsp;'">待复习的主题</strong><span th:text="${todo.totalTimes>1}?|第${todo.totalTimes-todo.remainTimes+1}次|">第x次</span>
+                                <p style="margin-bottom: 0 !important;" th:text="|目标日期:${todo.taskDate}|">日期：2021年4月16日</p>
+                                <p style="margin-bottom: 5px !important;" th:text="|内容:${todo.content}|">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
                                     待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
                                 <div class="ui mobile stackable grid">
                                     <div class="row">
@@ -324,7 +326,7 @@
                                                 <button href="javascript:;" th:id="finbtn+${todo.id}" onclick="isFinish(this)"
                                                         th:attr="data-id=${todo.id}, data-flag=${todo.flag}"
                                                         class="ui finbtn basic positive m-padded-tb-small button"
-                                                        th:attrappend="data-html=${todo.flag}==复习 ? |<div class='header'>评价：${todo.id}</div>
+                                                        th:attrappend="data-html=${todo.flag}==复习 ? |<div class='header'>评价：</div>
                                                                     <div class='content'>
                                                                         <div class='ui buttons'>
                                                                             <a href='javascript:console.log(${todo.id}_2);' onclick='postRating(${todo.id},2)' class='ui m-padded-tiny basic red button'>不熟</a>
@@ -333,11 +335,8 @@
                                                                         </div>
                                                                     </div>|"
                                                         >完成</button>
-<!--                                                <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:onclick="deleteTodo(${todo.id},${todo.taskDate})" th:href="@{/todos/{id}/delete/{taskDate}(id=${todo.id},taskDate=${todo.taskDate})}">删除</a>-->
                                                 <a href="javascript:;" class="ui basic negative m-padded-tb-small button" th:href="|javascript:deleteTodo(${todo.id},$('#query_date').val());|">删除</a>
                                                 <script>
-                                                    // $('ui[data-html], i[title], i[data-content], i[data-html]').popup()
-                                                    // console.log($('.ui[data-html]'));
                                                     // 保证复习的评价框的弹出
                                                     $('.ui[data-html]')
                                                         .popup({
@@ -619,7 +618,7 @@
 
                             //ajax发送请求
                             function postEditData() {
-                                $('.ui.dimmer').addClass("active");
+                                prepost();
                                 //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
                                 $('#todo_container').load("/todos/"+$("[name='edit_taskDate']").val(), {
                                     'id': $("[name='edit_id']").val(),
@@ -813,8 +812,9 @@
                             <div class="ui raised attached segment" th:each="todo : ${finishedTodos}">
                                 <input type="hidden" name="eachTodoId" th:value="${todo.id}">
                                 <div class="ui ribbon green label" th:text="(${todo.isRemain}?'超时完成的':'')+${todo.flag}">遗留的复习</div>
-                                <strong th:text="${todo.title}">待复习的主题</strong>
-                                <p th:text="${todo.content}">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
+                                <strong th:text="${todo.title}+'&nbsp;&nbsp;&nbsp;&nbsp;'">待复习的主题</strong><span th:text="${todo.totalTimes>1}?|第${todo.totalTimes-todo.remainTimes}次|">第x次</span>
+                                <p style="margin-bottom: 0 !important;" th:text="|目标日期:${todo.taskDate}|">日期：2021年4月16日</p>
+                                <p style="margin-bottom: 5px !important;" th:text="|内容:${todo.content}|">待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。
                                     待复习的细节，第一点，今天背了xxxxx。第二点，今天写了xxxxx。第三点，今天xxxxxx了，等等。</p>
                                 <div class="ui mobile stackable grid">
                                     <div class="row">
@@ -1156,22 +1156,46 @@
             setQuery_date(getdate());
         }
     }
-    //根据日期查询待办
-    function queryByDate(){
-        let date = $('#query_date').val();
-        $('.ui.dimmer').addClass("active");
+    //根据日期查询待办,接受日期偏移 -1 0 1，查昨天 今天 明天
+    function queryByDate(offset){
+        let date = new Date($('#query_date').val());
+        date=date.setDate(date.getDate()+offset);
+        date=new Date(date).format("yyyy-MM-dd");
+        // $('#query_date').val(new Date($('#query_date').val()-1).format('yyyy-MM-dd'));queryByDate($('#query_date').val())
+        console.log(date);
+        prepost();
         $('#todo_container').load("/todos/"+date,
             function(responseTxt,statusTxt,xhr) {
                 responseFromTodos(responseTxt,statusTxt,xhr,date);
         });
     }
     function deleteTodo(id,taskDate){
-        $('.ui.dimmer').addClass("active");
+        prepost();
         console.log("id="+id+",taskDate="+taskDate);
         $('#todo_container').load("/todos/"+id+"/delete/"+taskDate,
             function(responseTxt,statusTxt,xhr) {
                 responseFromTodos(responseTxt,statusTxt,xhr,taskDate);
             });
+    }
+    Date.prototype.format = function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt)) {
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        for(var k in o) {
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
     }
     //获取当前日期
     function getdate() {
@@ -1180,6 +1204,10 @@
         var month = ("0" + (time.getMonth() + 1)).slice(-2);
         var today = time.getFullYear() + "-" + (month) + "-" + (day);
         return today;
+    }
+    //post前，加载圈的显示
+    function prepost(){
+        $('.ui.dimmer').addClass("active");
     }
 </script>
 </body>
