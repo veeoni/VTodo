@@ -78,6 +78,7 @@ public class TodoServiceImpl implements TodoService {
                     } else {
                         //单次待办
                         todo.setTotalTimes(1);
+                        todo.setInterval(1.0);
                     }
                     todo.setRemainTimes(todo.getTotalTimes());
                 }else if(todo.getFlag().equals("复习")){//是复习条目
