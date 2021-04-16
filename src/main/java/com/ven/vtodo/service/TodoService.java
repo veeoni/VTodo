@@ -19,6 +19,8 @@ public interface TodoService {
 
     List<Todo> listFinishedTodosByDate(Date date);
 
+    List<Todo> listUnfinishedTodosByOtherDate(Date date);
+
     void deleteTodo(Long id);
 
 }

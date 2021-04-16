@@ -87,12 +87,15 @@ public class TodoController {
         // 1.未finishedDate且taskDate<=指定日期，小于指定日期，isRemain=true，加入todos
         // 2.finishedDate==指定日期，标记为已完成，finished>taskdate的，标记isRemain=true，html改为未按时，加入finishedTodos
         Date date;
+        boolean isToday = false;
         if(strDate==null || strDate.equals("")){
             strDate = sdf.format(new Date());
+            isToday = true;
+        }else if(strDate.equals(sdf.format(new Date()))){
+            isToday = true;
         }
         date = sdf.parse(strDate);
-        System.out.println(strDate+"------------------------------------------");
-        List<Todo> unfinishedTodos = todoService.listUnfinishedTodosByDate(date);
+        List<Todo> unfinishedTodos = isToday?todoService.listUnfinishedTodosByDate(date):todoService.listUnfinishedTodosByOtherDate(date);
         List<Todo> finishedTodos = todoService.listFinishedTodosByDate(date);
         for(Todo todo : unfinishedTodos){
             logger.info(todo.getTaskDate().toString()+"vs"+sdf.format(date));
