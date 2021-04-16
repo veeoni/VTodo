@@ -1,14 +1,19 @@
 package com.ven.vtodo.service;
 
+import com.ven.vtodo.dao.TagRepository;
 import com.ven.vtodo.dao.TodoRepository;
+import com.ven.vtodo.po.Tag;
 import com.ven.vtodo.po.Todo;
+import com.ven.vtodo.util.TodoCopy;
 import com.ven.vtodo.web.TodoController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +68,7 @@ public class TodoServiceImpl implements TodoService {
                 if(todo.getFlag().equals("待办")){
                     //此处必须用getRepeat，否则，万一提前修改了totalTimes，然后选了flag=“复习”,有可能出错
                     // （可以clearContent）但是还是要双重保险
-                    if(todo.getRepeat()){
+                    if(todo.getRepeat()){//既然在修改时选择了重复，那校验就是打开的，所以，如果不是0和-1，就按照编辑的来
                         //重复待办
                         if(todo.getTotalTimes()==0){
                             todo.setFinishedDate(new Date());
@@ -77,9 +82,10 @@ public class TodoServiceImpl implements TodoService {
                     todo.setRemainTimes(todo.getTotalTimes());
                 }else if(todo.getFlag().equals("复习")){//是复习条目
                     //修改复习条目时，不更改原有信息
-    //                todo.setInterval(1.0);
-    //                todo.setEasinessFactor(2.0);
-    //                todo.setTotalTimes(65535);
+                    Todo todo2 = this.getTodo(todo.getId());
+                    todo.setTotalTimes(todo2.getTotalTimes());
+                    todo.setRemainTimes(todo2.getRemainTimes());
+                    todo.setInterval(todo2.getInterval());
                 } else {
                     logger.info("无此flag");
                 }
