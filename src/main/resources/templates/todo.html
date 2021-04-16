@@ -98,20 +98,6 @@
                                         type: 'empty',
                                         prompt: '分类：请选择分类'
                                     }]
-                                },
-                                m_interval: {
-                                    identifier: 'm_interval',
-                                    rules: [{
-                                        type: 'integer[1..65535]',
-                                        prompt: '间隔：只能输入1~65535间的数字哦'
-                                    }]
-                                },
-                                total_times: {
-                                    identifier: 'total_times',
-                                    rules: [{
-                                        type: 'integer[-1..65535]',
-                                        prompt: '重复次数：只能输入-1~65535间的数字哦'
-                                    }]
                                 }
                             }
                         });
@@ -157,10 +143,24 @@
                                 document.getElementById("repeat_input").style.display = "";
                                 document.getElementById('total_times_div').classList.add("required");
                                 document.getElementById('m_interval_div').classList.add("required");
+                                $('#todo-form').form('add rule',
+                                    'm_interval', {
+                                        rules: [{
+                                            type: 'integer[1..65535]',
+                                            prompt: '间隔：只能输入1~65535间的数字哦'
+                                        }]
+                                    }).form('add rule',
+                                    'total_times', {
+                                        rules: [{
+                                            type: 'integer[1..65535]',
+                                            prompt: '间隔：只能输入1~65535间的数字哦'
+                                        }]
+                                    });
                             } else {
                                 document.getElementById("repeat_input").style.display = "none";
                                 document.getElementById('total_times_div').classList.remove("required");
                                 document.getElementById('m_interval_div').classList.remove("required");
+                                $('#todo-form').form('remove fields', ['m_interval', 'total_times']);
                             }
                         }
 
@@ -596,10 +596,24 @@
                                     document.getElementById("edit_repeat_input").style.display = "";
                                     document.getElementById('edit_total_times_div').classList.add("required");
                                     document.getElementById('edit_m_interval_div').classList.add("required");
+                                    $('#edit_todo_form').form('add rule',
+                                        'edit_m_interval', {
+                                            rules: [{
+                                                type: 'integer[1..65535]',
+                                                prompt: '间隔：只能输入1~65535间的数字哦'
+                                            }]
+                                        }).form('add rule',
+                                        'edit_total_times', {
+                                            rules: [{
+                                                type: 'integer[1..65535]',
+                                                prompt: '间隔：只能输入1~65535间的数字哦'
+                                            }]
+                                        });
                                 } else {
                                     document.getElementById("edit_repeat_input").style.display = "none";
                                     document.getElementById('edit_total_times_div').classList.remove("required");
                                     document.getElementById('edit_m_interval_div').classList.remove("required");
+                                    $('#edit_todo_form').form('remove fields', ['edit_m_interval', 'edit_total_times']);
                                 }
                             }
 
