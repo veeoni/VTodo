@@ -15,7 +15,7 @@ spring:
 logging:
   level:
     root: info #高于此级别的日志才会打印
-    com.ven.myblog: debug
+    com.ven.myblog: info
   file:
     name: log/blog-dev.log
 

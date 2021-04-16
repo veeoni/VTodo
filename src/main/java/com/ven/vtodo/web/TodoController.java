@@ -91,6 +91,7 @@ public class TodoController {
             strDate = sdf.format(new Date());
         }
         date = sdf.parse(strDate);
+        System.out.println(strDate+"------------------------------------------");
         List<Todo> unfinishedTodos = todoService.listUnfinishedTodosByDate(date);
         List<Todo> finishedTodos = todoService.listFinishedTodosByDate(date);
         for(Todo todo : unfinishedTodos){
@@ -105,6 +106,7 @@ public class TodoController {
         model.addAttribute("finishedTodos", finishedTodos);
         model.addAttribute("types", typeService.listType());
         model.addAttribute("tags", tagService.listTag());
+        model.addAttribute("queryDate", strDate);
         return "todo :: todoList";
     }
 
@@ -195,8 +197,8 @@ public class TodoController {
     }
 
 
-    @PostMapping("/todos")
-    public String todoSave(Todo todo, HttpSession session){
+    @PostMapping("/todos/{strDate}")
+    public String todoSave(Todo todo, @PathVariable String strDate, HttpSession session){
         User user = (User) session.getAttribute("user");
         //前端传值回来，仅会填满可填满的内容，剩下的都为空，如：返回typeid，则，有type对象，但只有id，无name和其他属性。
         //所以这里需要自己查一下并设置以下。吗？
@@ -215,7 +217,7 @@ public class TodoController {
             todoService.saveTodo(todo);
         }
         logger.info(todo.toString());
-        return "redirect:/todos";
+        return "redirect:/todos/"+strDate;
     }
 
     @GetMapping("/todos/{id}/delete/{taskDate}")

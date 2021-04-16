@@ -55,7 +55,7 @@
                         function postData() {
                             $('.ui.dimmer').addClass("active");
                             //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
-                            $('#todo_container').load(/*[[@{/todos}]]*/+"", {
+                            $('#todo_container').load("/todos/"+$("[name='taskDate']").val(), {
                                 'id': $("[name='id']").val(),
                                 'flag': $("[name='flag']").val(),
                                 'title': $("[name='title']").val(),
@@ -117,7 +117,7 @@
                         });
                         //根据日期查待办选择的日期
                         function setQuery_date(date){
-                            $('#query_date').val(date).change(function () {
+                            $('#query_date').val(/*[[${queryDate}]]*/"").change(function () {
                                 console.log($('#query_date').val());
                             });
                         }
@@ -227,18 +227,21 @@
                     </script>
                     <!--顶部日期选择-->
                     <div class="ui segment">
-                        <div class="ui middle aligned four column grid stackable">
-                            <div class="column">
-                                <a class="ui mini teal fluid basic button" href="javascript:;">前一日</a>
+                        <div class="ui middle aligned grid padded stackable">
+                            <div class="three wide column m-padded-mini">
+                                <a class="ui mini fluid teal basic button" href="javascript:;">前一日</a>
                             </div>
-                            <div class="center aligned column">
+                            <div class="three wide right aligned column">
+                                查询日期：
+                            </div>
+                            <div class="four wide left aligned column m-padded-mini">
                                 <input class="ui date" id="query_date" type="date">
                             </div>
-                            <div class="center aligned column">
+                            <div class="three wide column m-padded-tb-mini m-padded-mini">
                                 <button type="button" class="ui mini basic fluid blue button" id="query_btn" onclick="queryByDate()">查询</button>
                             </div>
-                            <div class="right aligned column">
-                                <a class="ui mini teal fluid basic button" href="javascript:;">后一日</a>
+                            <div class="three wide column m-padded-mini">
+                                <a class="ui mini fluid teal basic button" href="javascript:;">后一日</a>
                             </div>
                         </div>
                     </div>
@@ -618,7 +621,7 @@
                             function postEditData() {
                                 $('.ui.dimmer').addClass("active");
                                 //第一个参数是请求的地址，第二个参数（代码块）填写相关的参数，这些参数会提交
-                                $('#todo_container').load(/*[[@{/todos}]]*/+"", {
+                                $('#todo_container').load("/todos/"+$("[name='edit_taskDate']").val(), {
                                     'id': $("[name='edit_id']").val(),
                                     'flag': $("[name='edit_flag']").val(),
                                     'title': $("[name='edit_title']").val(),
