@@ -49,6 +49,10 @@
                 </div>
             </div>
         </div>
+
+        <div class="ui segment m-margin-top-large" th:if="${blogCount}==0">
+            <p>这里空空如也~</p>
+        </div>
         <th:block th:each="item : ${archiveMap}">
             <h2 class="ui center aligned header" th:text="${item.key}">2017</h2>
             <div class="ui vertical fluid menu">

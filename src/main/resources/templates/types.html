@@ -83,6 +83,9 @@
         </div>
         <div class="ui top attached padded segment teal">
             <!--遍历，拿到blog对象进行渲染-->
+            <div class="ui segment" th:if="${page.getTotalPages()}==0">
+                <p>我定睛一看，嚯，这里啥都没有~</p>
+            </div>
             <div class="ui padded vertical segment m-padded-tb-large m-mobile-lr-clear" th:each="blog : ${page.content}">
                 <div class="ui middle aligned mobile reversed stackable grid">
                     <div class="ui eleven wide column">
