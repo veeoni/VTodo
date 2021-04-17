@@ -534,7 +534,7 @@
                                             <p>重复次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
                                         </div>
                                     </div>
-                                    <div class="ui error message"></div>
+                                    <div id="add_error_msg" class="ui error message"></div>
                                     <div class="ui right aligned container">
                                         <!--若不指定type=button，则默认为submit-->
                                         <button type="button" id="add-btn" class="ui basic primary button">添加</button>
@@ -621,9 +621,11 @@
                                 $('#edit_todo_form').form('validate form');
                                 var boo = $('#edit_todo_form').form('is valid');
                                 if (boo) {
+                                    document.getElementById("edit_error_msg").style.display = "none";
                                     console.log("校验成功");
                                     postEditData();
                                 } else {
+                                    document.getElementById("edit_error_msg").style.display = "block";
                                     console.log("校验失败");
                                 }
                             });
@@ -785,7 +787,7 @@
                                             <p>重复次数为-1时，此待办永不停止，为0则代表此项已完成。</p>
                                         </div>
                                     </div>
-                                    <div class="ui error message"></div>
+                                    <div id="edit_error_msg" class="ui error message"></div>
 
                                     <div class="ui right aligned container">
                                         <!--若不指定type=button，则默认为submit-->
