@@ -42,8 +42,12 @@ public class TodoController {
     private Calendar calendar = Calendar.getInstance();
     private static Logger logger = LoggerFactory.getLogger(TodoController.class);
 
-    @GetMapping
-    public String todo(Model model){
+    @GetMapping("/todo")
+    public String todo(HttpSession session,RedirectAttributes attributes, Model model){
+        if(session.getAttribute("user")==null){
+            attributes.addFlashAttribute("message","您需要先登录，才能使用日程规划功能");
+            return "redirect:/login";
+        }
         model.addAttribute("types", typeService.listTypeTop(6));//可定义在配置文件
         model.addAttribute("tags", tagService.listTagTop(10));
         model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
