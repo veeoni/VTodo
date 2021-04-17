@@ -231,22 +231,24 @@
                     <div class="ui segment">
                         <div class="ui middle aligned grid padded stackable">
                             <div class="three wide column m-padded-mini">
-                                <a class="ui mini fluid teal basic button" href="javascript:queryByDate(-1);">前一日</a>
+                                <a class="ui fluid teal basic button" href="javascript:queryByDate(-1);">前一日</a>
                             </div>
-                            <div class="three wide left aligned column">
-                                查询日期：
-                            </div>
-                            <div class="four wide left aligned column m-padded-mini">
-                                <input class="ui date" id="query_date" type="date">
+                            <div class="seven wide left aligned column m-padded-tb-mini m-padded-mini">
+                                <div class="ui basic labeled fluid input">
+                                    <div class="ui mini center aligned label">查询日期</div>
+                                    <input class="ui mini date" id="query_date" type="date">
+                                </div>
                             </div>
                             <div class="three wide column m-padded-tb-mini m-padded-mini">
-                                <button type="button" class="ui mini basic fluid blue button" id="query_btn" onclick="queryByDate(0)">查询</button>
+                                <button type="button" class="ui basic fluid blue button" id="query_btn" onclick="queryByDate(0)">查询</button>
                             </div>
                             <div class="three wide column m-padded-mini">
-                                <a class="ui mini fluid teal basic button" href="javascript:queryByDate(1);">后一日</a>
+                                <a class="ui fluid teal basic button" href="javascript:queryByDate(1);">后一日</a>
                             </div>
                         </div>
                     </div>
+
+
                     <!--确认对话框-->
                     <div class="ui modal">
                         <div class="ui header">

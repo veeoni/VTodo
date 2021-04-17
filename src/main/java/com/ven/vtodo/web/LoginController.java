@@ -34,7 +34,7 @@ public class LoginController {
         if(user != null){
             user.setPassword(null);//不能把密码传过去，很不安全
             session.setAttribute("user", user);
-            return "todo";
+            return "redirect:/todo";
         } else {
             attributes.addFlashAttribute("message", "用户名或密码错误");
             //return "admin/login";//不能用这个，否则密码错误重新登录之后路径有问题
