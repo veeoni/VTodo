@@ -21,7 +21,7 @@ public class LoginController {
     public String home(HttpSession session){
         User user = (User) session.getAttribute("user");
         if(user != null){;
-            return "todo";
+            return "redirect:/todo";
         } else {
             return "redirect:/index";
         }

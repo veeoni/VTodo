@@ -6,11 +6,11 @@
     <title th:replace="${title}">博客详情</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
-    <link rel='stylesheet prefetch' href='../static/css/typo.css' th:href="@{/css/typo.css}">
-    <link rel="stylesheet" href="../static/css/animate.min.css" th:href="@{/css/animate.min.css}"/>
-    <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}"/>
-    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}"/>
-    <link rel="stylesheet  prefetch" href="../static/css/me.css" th:href="@{/css/me.css}"/>
+    <link rel='stylesheet prefetch' href='static/css/typo.css' th:href="@{/css/typo.css}">
+    <link rel="stylesheet" href="static/css/animate.min.css" th:href="@{/css/animate.min.css}"/>
+    <link rel="stylesheet" href="static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}"/>
+    <link rel="stylesheet" href="static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}"/>
+    <link rel="stylesheet  prefetch" href="static/css/me.css" th:href="@{/css/me.css}"/>
 
 </head>
 <body>
@@ -27,7 +27,7 @@
             <a class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active' " href="#" th:href="@{/tags/-1}"><i class="tags icon"></i>标签</a>
             <a class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active' " href="#" th:href="@{/archives}"><i class="clone icon"></i>归档</a>
             <a class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active' " href="#" th:href="@{/about}"><i class="info icon"></i>关于我</a>
-            <div class="right m-item item m-mobile-hide">
+            <div class="m-item item m-mobile-hide">
                 <form action="#" name="search" method="post" th:action="@{/search}" target="_blank">
                     <div class="ui icon inverted transparent input">
                         <!--此处是input,所以用th:value，不用th:text-->
@@ -35,6 +35,19 @@
                         <i onclick="document.forms['search'].submit()" class="search link icon"></i>
                     </div>
                 </form>
+            </div>
+            <div class="right menu">
+                <div th:onclick="|javascript:if(${session.user==null})window.open('/login','_self');|" class="ui dropdown m-item m-mobile-hide item">
+                    <div class="text">
+                        <img src="static/images/loginplz.png" th:src="@{(${session.user}!=null)?${session.user.avatar}:'/images/loginplz.png'}" alt="" class="ui avatar image">
+                        <span th:text="${session.user}!=null?${session.user.nickname}:'点击登录'">点击登录</span>
+                    </div>
+                    <i th:if="${session.user!=null}" class="dropdown icon"></i>
+                    <div th:if="${session.user!=null}" class="menu">
+                        <a href="/admin" th:href="@{/admin}" class="item">个人中心</a>
+                        <a href="/logout" th:href="@{/logout}" class="item">注销</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -88,6 +101,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script>
+    $('.ui.dropdown').dropdown();
     $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
 </script>
 </th:block>

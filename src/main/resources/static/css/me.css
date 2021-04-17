@@ -147,7 +147,9 @@ body {
     max-width: 72em !important;
     margin: auto !important;
 }
-
+.m-body-container {
+    min-height: 80% !important;
+}
 .m-container-small {
     max-width: 60em !important;
     margin: auto !important;

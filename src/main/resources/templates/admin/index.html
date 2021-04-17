@@ -43,16 +43,14 @@
     <div class="ui container">
         <div class="ui success large message">
             <h3>Hi,</h3>
-            <p><span th:text="${session.user.nickname}">少先队员</span>，欢迎登录！</p>
+            <p><span th:text="${session.user.nickname}">少先队员</span>，欢迎回家！</p>
         </div>
 
         <img th:src="@{/images/meteor.jpeg}" alt="" class="ui rounded bordered fluid image">
     </div>
 </div>
-<br>
-<br>
 <!--底部footer-->
-<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+<footer th:replace="admin/_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
     <div class="ui center aligned container">
         <div class="ui divided inverted stackable grid">
             <div class="three wide column">

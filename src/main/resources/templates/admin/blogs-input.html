@@ -48,7 +48,7 @@
 </div>
 
 <!--中间内容-->
-<div class="m-container m-padded-tb-big">
+<div class="m-container m-body-container m-padded-tb-big">
     <div class="ui container">
         <form id="blog-form" action="#" th:object="${blog}" th:action="@{/admin/blogs}" method="post" class="ui form">
             <input type="hidden" name="published" th:value="*{published}">
@@ -156,10 +156,8 @@
         </form>
     </div>
 </div>
-<br>
-<br>
 <!--底部footer-->
-<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+<footer th:replace="admin/_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
     <div class="ui center aligned container">
         <div class="ui divided inverted stackable grid">
             <div class="three wide column">
@@ -250,13 +248,6 @@
                 rules:[{
                     type:'empty',
                     prompt: '分类：请选择分类'
-                }]
-            },
-            firstPicture : {
-                identifier: 'firstPicture',
-                rules:[{
-                    type:'empty',
-                    prompt: '首图：请输入首图地址'
                 }]
             },
             description : {

@@ -47,7 +47,7 @@
 </div>
 
 <!--中间内容-->
-<div class="m-container-small m-padded-tb-big">
+<div class="m-container-small m-body-container m-padded-tb-big">
     <div class="ui container">
         <div class="ui segment form">
             <input type="hidden" name="page">
@@ -133,10 +133,8 @@
         </div>
     </div>
 </div>
-<br>
-<br>
 <!--底部footer-->
-<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+<footer th:replace="admin/_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
     <div class="ui center aligned container">
         <div class="ui divided inverted stackable grid">
             <div class="three wide column">

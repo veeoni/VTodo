@@ -35,7 +35,7 @@
 </nav>
 
 <!--中间内容-->
-<div class="m-container m-padded-tb-big">
+<div class="m-container m-body-container m-padded-tb-big">
     <div class="ui container">
         <!-- container有响应式效果，根据屏幕不同的尺寸达到适应的效果-->
         <div class="ui stackable grid">
@@ -471,6 +471,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script>
+    $('.ui.dropdown').dropdown();
     $('#newblog-container').load(/*/footer/newblog*/"/footer/newblog");
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
