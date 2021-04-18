@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -128,6 +129,9 @@ public class BlogServiceImpl implements BlogService {
             blog.setViews(0);
         } else {
             blog.setUpdateTime(new Date());
+        }
+        if(blog.getFirstPicture()==null || blog.getFirstPicture().equals("")){
+            blog.setFirstPicture("/images/meteor.jpeg");
         }
         return blogRepository.save(blog);
     }
