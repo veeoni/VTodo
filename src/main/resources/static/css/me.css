@@ -111,6 +111,10 @@ body {
     margin-bottom: 0.5em !important;
 }
 
+.m-margin-lr {
+    margin: 1.3em !important;
+}
+
 /*--透明度---*/
 .m-opacity-mini {
     opacity: 0.8 !important;

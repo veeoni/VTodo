@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
+    <link rel="stylesheet  prefetch" href="../static/css/me.css" th:href="@{/css/me.css}"/>
+</head>
+<body>
+<div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
+    <div class="ui container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">
+                        用户注册
+                    </div>
+                </h2>
+                <div id="register_form" class="ui large form">
+                    <div class="ui left aligned segment  m-padded-large">
+                        <div class="field">
+                            <label>头像</label>
+                            <div class="ui center aligned stackable  grid">
+                                <div class="row m-padded-tb-mini">
+                                    <input id="input_avatar" type="hidden" placeholder="所选头像" value="/images/avatar/f1.png">
+                                    <img id="img_avatar" class="ui image" src="../static/images/avatar/f1.png" th:src="@{/images/avatar/f1.png}">
+                                </div>
+                                <div class="row m-padded-tb-mini">
+                                    <div class="ui center aligned segment mini images m-margin-lr m-padded-tb-mini">
+                                        <img class="ui image" onclick="javascript:changeAvatar('f1');"  th:onclick="javascript:changeAvatar('f1');"  src="../static/images/avatar/f1.png"  th:src="@{/images/avatar/f1.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f2');"  th:onclick="javascript:changeAvatar('f2');"  src="../static/images/avatar/f2.png"  th:src="@{/images/avatar/f2.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f3');"  th:onclick="javascript:changeAvatar('f3');"  src="../static/images/avatar/f3.png"  th:src="@{/images/avatar/f3.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f4');"  th:onclick="javascript:changeAvatar('f4');"  src="../static/images/avatar/f4.png"  th:src="@{/images/avatar/f4.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f5');"  th:onclick="javascript:changeAvatar('f5');"  src="../static/images/avatar/f5.png"  th:src="@{/images/avatar/f5.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f6');"  th:onclick="javascript:changeAvatar('f6');"  src="../static/images/avatar/f6.png"  th:src="@{/images/avatar/f6.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f7');"  th:onclick="javascript:changeAvatar('f7');"  src="../static/images/avatar/f7.png"  th:src="@{/images/avatar/f7.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f8');"  th:onclick="javascript:changeAvatar('f8');"  src="../static/images/avatar/f8.png"  th:src="@{/images/avatar/f8.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f9');"  th:onclick="javascript:changeAvatar('f9');"  src="../static/images/avatar/f9.png"  th:src="@{/images/avatar/f9.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('f10');" th:onclick="javascript:changeAvatar('f10');" src="../static/images/avatar/f10.png" th:src="@{/images/avatar/f10.png}">
+                                        <img class="ui image" onclick="javascript:changeAvatar('f11');" th:onclick="javascript:changeAvatar('f11');" src="../static/images/avatar/f11.png" th:src="@{/images/avatar/f11.png}">
+                                        <img class="ui image" onclick="javascript:changeAvatar('f12');" th:onclick="javascript:changeAvatar('f12');" src="../static/images/avatar/f12.png" th:src="@{/images/avatar/f12.png}">
+                                        <img class="ui image" onclick="javascript:changeAvatar('f13');" th:onclick="javascript:changeAvatar('f13');" src="../static/images/avatar/f13.png" th:src="@{/images/avatar/f13.png}">
+                                        <img class="ui image" onclick="javascript:changeAvatar('f14');" th:onclick="javascript:changeAvatar('f14');" src="../static/images/avatar/f14.png" th:src="@{/images/avatar/f14.png}">
+                                        <img class="ui image" onclick="javascript:changeAvatar('m1');"  th:onclick="javascript:changeAvatar('m1');"  src="../static/images/avatar/m1.png"  th:src="@{/images/avatar/m1.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('m2');"  th:onclick="javascript:changeAvatar('m2');"  src="../static/images/avatar/m2.png"  th:src="@{/images/avatar/m2.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('m3');"  th:onclick="javascript:changeAvatar('m3');"  src="../static/images/avatar/m3.png"  th:src="@{/images/avatar/m3.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('m4');"  th:onclick="javascript:changeAvatar('m4');"  src="../static/images/avatar/m4.png"  th:src="@{/images/avatar/m4.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('m5');"  th:onclick="javascript:changeAvatar('m5');"  src="../static/images/avatar/m5.png"  th:src="@{/images/avatar/m5.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('m6');"  th:onclick="javascript:changeAvatar('m6');"  src="../static/images/avatar/m6.png"  th:src="@{/images/avatar/m6.png}" >
+                                        <img class="ui image" onclick="javascript:changeAvatar('m7');"  th:onclick="javascript:changeAvatar('m7');"  src="../static/images/avatar/m7.png"  th:src="@{/images/avatar/m7.png}" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>昵称</label>
+                            <input name="nickname" type="text">
+                        </div>
+                        <div class="field">
+                            <label>用户名</label>
+                            <input name="username" type="text">
+                        </div>
+                        <div class="field">
+                            <label>密码</label>
+                            <input name="password" type="password">
+                            <input type="text" >
+                        </div>
+                        <div class="field">
+                            <label>确认密码</label>
+                            <input name="passwordverify" type="password">
+                        </div>
+                        <div class="field">
+                            <label>邮箱</label>
+                            <input name="email" type="email">
+                        </div>
+                        <button id="submit_btn" type="button" onclick="checkForm()" class="ui fluid large teal button" >Register</button>
+                    </div>
+
+                    <div class="ui mini error message"></div>
+                    <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}">
+                        用户名和密码错误
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--一定要先jquery，再Semantic！！！！！-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="static/js/sha256.js" th:src="@{/js/sha256.js}"></script>
+<script>
+    $('#pass_input').bind('keydown', function(event) {
+        if (event.keyCode == "13" && this.form.password.value.length>0) {
+            //回车执行加密
+            $('#pass_input').val(sha256_digest(this.form.password.value));
+        }
+    });
+    $('#username_input').bind('keydown', function(event) {
+        if (event.keyCode == "13" && this.form.password.value.length>0) {
+            //回车执行加密
+            $('#pass_input').val(sha256_digest(this.form.password.value));
+        }
+    });
+    $('#submit_btn').click(function () {
+        if(this.form.password.value.length>0) {
+            $('#pass_input').val(sha256_digest(this.form.password.value));
+        }
+        $('#login_form').submit();
+        // $('#pass_input').val('');
+    });
+    $('.ui.form').form({
+        fields : {
+            username : {
+                identifier: 'username',
+                rules:[{
+                    type:'empty',
+                    prompt: '请输入用户名'
+                }]
+            },
+            nickname : {
+                identifier: 'nickname',
+                rules:[{
+                    type:'empty',
+                    prompt: '请输入昵称'
+                }]
+            },
+            password : {
+                identifier: 'password',
+                rules:[{
+                    type   : 'regExp[^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$]',
+                    prompt : '密码：至少8个字符，至少1个大写字母，1个小写字母和1个数字'
+                }]
+            },
+            passwordverify : {
+                identifier: 'passwordverify',
+                rules:[{
+                    type   : 'match[password]',
+                    prompt : '确认密码：两次密码不一致'
+                }]
+            },
+            email : {
+                identifier: 'email',
+                rules:[{
+                    type:'email',
+                    prompt: '邮箱:请输入正确的邮箱地址'
+                }]
+            }
+        }
+    });
+    function checkForm() {
+        $('.ui.form').form("validate form");
+    }
+    function changeAvatar(name){
+        var url = "/images/avatar/"+name+".png";
+        console.log(url);
+        $('#input_avatar').val(url);
+        $('#img_avatar').attr("src",url);;
+    }
+</script>
+
+</body>
+</html>

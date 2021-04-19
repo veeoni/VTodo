@@ -27,6 +27,12 @@ public class LoginController {
         }
     }
 
+    @GetMapping("/register")
+    public String register(){
+
+        return "register";
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password,
                         HttpSession session, RedirectAttributes attributes){
