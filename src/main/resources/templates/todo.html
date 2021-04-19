@@ -686,7 +686,7 @@
                                 if($(obj).data('flag')=="复习"){
                                     $("[name='edit_repeat']").prop("checked",false).prop("disabled",true);
                                 }else{
-                                    $("[name='edit_repeat']").prop("checked",$(obj).data('repeat'));
+                                    $("[name='edit_repeat']").prop("checked",$(obj).data('repeat')).prop("disabled",false);
                                 }
                                 edit_repeatChange();
                                 $("[name='edit_m_interval']").val(Math.round($(obj).data('interval')));
