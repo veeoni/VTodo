@@ -6,6 +6,8 @@ import com.ven.vtodo.util.SHA256Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -22,5 +24,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         return userRepository.getOne(id);
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
+    @Override
+    public User saveUser(User user) {
+        Date date = new Date();
+        if(user.getId()==null){
+            user.setCreateTime(date);
+            user.setUpdateTime(date);
+            user.setType(0);//默认为非管理员
+        }else{
+            user.setUpdateTime(date);
+        }
+        return userRepository.save(user);
     }
 }

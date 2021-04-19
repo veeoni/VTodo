@@ -12,6 +12,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     private String nickname;
+    @Column(unique=true)
     private String username;
     private String password;
     private String email;
@@ -130,8 +131,8 @@ public class User {
                 ", type=" + type +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", blogs=" + (blogs!=null?blogs.get(0).getId():"null") +
-                ", todos=" + (todos!=null?todos.get(0).getId():"null") +
+                ", blogs=" + (blogs!=null&&blogs.size()>0?blogs.get(0).getId():"null") +
+                ", todos=" + (todos!=null&&todos.size()>0?todos.get(0).getId():"null") +
                 '}';
     }
 }

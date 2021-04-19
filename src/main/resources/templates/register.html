@@ -65,7 +65,6 @@
                         <div class="field">
                             <label>密码</label>
                             <input name="password" type="password">
-                            <input type="text" >
                         </div>
                         <div class="field">
                             <label>确认密码</label>
@@ -75,12 +74,10 @@
                             <label>邮箱</label>
                             <input name="email" type="email">
                         </div>
+                        <div class="ui mini error message"></div>
+                        <div class="ui mini negative message" style="display: none;"></div>
+                        <div class="ui mini success message" style="display: none;"></div>
                         <button id="submit_btn" type="button" onclick="checkForm()" class="ui fluid large teal button" >Register</button>
-                    </div>
-
-                    <div class="ui mini error message"></div>
-                    <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}">
-                        用户名和密码错误
                     </div>
                 </div>
             </div>
@@ -94,25 +91,6 @@
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script src="static/js/sha256.js" th:src="@{/js/sha256.js}"></script>
 <script>
-    $('#pass_input').bind('keydown', function(event) {
-        if (event.keyCode == "13" && this.form.password.value.length>0) {
-            //回车执行加密
-            $('#pass_input').val(sha256_digest(this.form.password.value));
-        }
-    });
-    $('#username_input').bind('keydown', function(event) {
-        if (event.keyCode == "13" && this.form.password.value.length>0) {
-            //回车执行加密
-            $('#pass_input').val(sha256_digest(this.form.password.value));
-        }
-    });
-    $('#submit_btn').click(function () {
-        if(this.form.password.value.length>0) {
-            $('#pass_input').val(sha256_digest(this.form.password.value));
-        }
-        $('#login_form').submit();
-        // $('#pass_input').val('');
-    });
     $('.ui.form').form({
         fields : {
             username : {
@@ -153,8 +131,61 @@
         }
     });
     function checkForm() {
+        $('.negative.message').css('display','none').empty();
         $('.ui.form').form("validate form");
+        var boo = $('.ui.form').form("is valid");
+        if(boo){
+            console.log("验证成功");
+            postData();
+        }else{
+            console.log("验证失败");
+        }
     }
+    function postData(){
+        var cryppassword = sha256_digest($("[name='password']").val());
+        // console.log($("[name='nickname']").val()+" "+$("[name='username']").val()+" "+cryppassword+" "+$("[name='email']").val()+" "+$('#input_avatar').val()+" ");
+        $.post("/register", {
+            'nickname': $("[name='nickname']").val(),
+            'username': $("[name='username']").val(),
+            'password': cryppassword,
+            'email': $("[name='email']").val(),
+            'avatar': $('#input_avatar').val()
+        }, function (responseTxt, statusTxt, xhr) {
+            //callback 回调方法
+            console.log(responseTxt);
+            console.log(statusTxt);
+            console.log(xhr);
+            if (statusTxt == "success"){
+                if(responseTxt == "success"){
+                    console.log("register successfully!");
+                    $('.nagative.message').css('display','none').empty();
+                    $('.success.message').css('display','block');
+                    $('#submit_btn').addClass("disabled").text("注册成功");
+                    var i=3;
+                    $(function(){
+                        setTimeout(function(){
+                            window.location.href="/login";
+                        },3000);//3秒后返回登录页面
+                        after();
+                    });
+                    //自动刷新页面上的时间
+                    function after(){
+                        $(".success.message").empty().append("注册成功~自动登录中，"+i+"秒后返回登录页面");
+                        i=i-1;
+                        setTimeout(function(){
+                            after();
+                        },1000);
+                    }
+                }else{
+                    $('.negative.message').css('display','block').text(responseTxt);
+                }
+            }
+            if (statusTxt == "error"){
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+            }
+        });
+    }
+
     function changeAvatar(name){
         var url = "/images/avatar/"+name+".png";
         console.log(url);

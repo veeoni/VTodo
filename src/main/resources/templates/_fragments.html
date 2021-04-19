@@ -36,14 +36,23 @@
                     </div>
                 </form>
             </div>
-            <div class="right menu">
-                <div th:onclick="|javascript:if(${session.user==null})window.open('/login','_self');|" class="ui dropdown m-item m-mobile-hide item">
+
+            <div th:if="${session.user==null}" th:onclick="|javascript:if(${session.user==null})window.open('/login','_self');|" class="right menu">
+                <div class="ui m-item m-mobile-hide item">
                     <div class="text">
                         <img src="static/images/loginplz.png" th:src="@{(${session.user}!=null)?${session.user.avatar}:'/images/loginplz.png'}" alt="" class="ui avatar image">
                         <span th:text="${session.user}!=null?${session.user.nickname}:'点击登录'">点击登录</span>
                     </div>
-                    <i th:if="${session.user!=null}" class="dropdown icon"></i>
-                    <div th:if="${session.user!=null}" class="menu">
+                </div>
+            </div>
+            <div th:unless="${session.user==null}" class="right menu">
+                <div class="ui dropdown m-item m-mobile-hide item">
+                    <div class="text">
+                        <img src="static/images/loginplz.png" th:src="@{(${session.user}!=null)?${session.user.avatar}:'/images/loginplz.png'}" alt="" class="ui avatar image">
+                        <span th:text="${session.user}!=null?${session.user.nickname}:'点击登录'">点击登录</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
                         <a href="/admin" th:href="@{/admin}" class="item">个人中心</a>
                         <a href="/logout" th:href="@{/logout}" class="item">注销</a>
                     </div>

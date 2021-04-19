@@ -2,12 +2,13 @@ package com.ven.vtodo.web;
 
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.UserService;
+import com.ven.vtodo.util.SHA256Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -28,9 +29,29 @@ public class LoginController {
     }
 
     @GetMapping("/register")
-    public String register(){
-
+    public String getRegister(HttpSession session){
+        User user = (User) session.getAttribute("user");
+        if(user != null){
+            return "redirect:/login";
+        }
         return "register";
+    }
+
+    @PostMapping("/register")
+    @ResponseBody
+    public String postRegister(User user, HttpSession session){
+        User user1 = userService.getUserByUsername(user.getUsername());
+        if(user1!=null){
+            return "用户名已存在";
+        }
+        user.setPassword(SHA256Util.getSHA256(user.getUsername()+user.getPassword()));
+        System.out.println(user.getAvatar()+" "+user.getUsername());
+        User user2 = userService.saveUser(user);
+        if(user2!=null){
+            user2.setPassword(null);
+            session.setAttribute("user", user2);
+        }
+        return "success";
     }
 
     @PostMapping("/login")
