@@ -103,8 +103,8 @@
             </div>
         </div>
         <div class="ui inverted section divider"></div>
-        <p class="m-text-thin m-text-spaced m-opacity-tiny" th:text="|#{index.copyright}${#dates.year(#dates.createToday())}|">Copyright@......</p>
-    </div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny"
+           th:text="|#{index.copyright}${#dates.year(#dates.createToday())}|+' 南京信息工程大学'">版权所有 ©2020- 南京信息工程大学</p>    </div>
 </footer>
 <!--一定要先jquery，再Semantic！！！！！-->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
