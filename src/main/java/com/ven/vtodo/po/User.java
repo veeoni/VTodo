@@ -27,6 +27,26 @@ public class User {
     private List<Blog> blogs = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Todo> todos = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Tag> tags = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Type> types = new ArrayList<>();
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Type> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<Type> types) {
+        this.types = types;
+    }
 
     public List<Todo> getTodos() {
         return todos;
@@ -121,6 +141,7 @@ public class User {
 
     @Override
     public String toString() {
+
         return "User{" +
                 "Id=" + Id +
                 ", nickname='" + nickname + '\'' +
@@ -133,6 +154,8 @@ public class User {
                 ", updateTime=" + updateTime +
                 ", blogs=" + (blogs!=null&&blogs.size()>0?blogs.get(0).getId():"null") +
                 ", todos=" + (todos!=null&&todos.size()>0?todos.get(0).getId():"null") +
+                ", tags=" + (tags!=null&&tags.size()>0?tags.get(0).getId():"null") +
+                ", types=" + (types!=null&&types.size()>0?types.get(0).getId():"null") +
                 '}';
     }
 }

@@ -20,12 +20,22 @@ public class Comment {
 
     @ManyToOne
     private Blog blog;
+    @ManyToOne
+    private User user;
     @OneToMany(mappedBy = "parentComment")
     private List<Comment> replyComments = new ArrayList<>();
     @ManyToOne
     private Comment parentComment;
-
+    //是否为本人的评论，是的话，在头上标“作者”
     private boolean adminComment;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public boolean isAdminComment() {
         return adminComment;
@@ -119,10 +129,11 @@ public class Comment {
                 ", content='" + content + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", createTime=" + createTime +
-                ", blog=" + (blog!=null?blog.getId():"null") +
-                ", replyComments=" + replyComments +
-                ", parentComment=" + parentComment +
-                ", adminComment=" + adminComment +
+                ", blogId=" + (blog!=null?blog.getId():"null") +
+                ", replyComments[0]Id=" + (replyComments!=null&&replyComments.size()>0?replyComments.get(0).getId():"null") +
+                ", parentCommentId=" + (parentComment!=null?parentComment.getId():"null") +
+                ", isAdminComment=" + adminComment +
+                ", userId=" + (user!=null?user.getId():"null") +
                 '}';
     }
 }

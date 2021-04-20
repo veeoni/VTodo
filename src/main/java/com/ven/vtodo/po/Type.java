@@ -20,6 +20,16 @@ public class Type {
     private List<Blog> blogs = new ArrayList<>();
     @OneToMany(mappedBy = "type")
     private List<Todo> todos = new ArrayList<>();
+    @ManyToOne
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public List<Todo> getTodos() {
         return todos;
@@ -58,11 +68,12 @@ public class Type {
 
     @Override
     public String toString() {
-        return "Type{" +
+        return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", blogs=" + (blogs!=null?blogs.get(0).getId():"null") +
-                ", todos=" + (todos!=null?todos.get(0).getId():"null") +
+                ", blogs[0]Id=" + (blogs!=null&&blogs.size()>0?blogs.get(0).getId():"null") +
+                ", todos[0]Id=" + (todos!=null&&todos.size()>0?todos.get(0).getId():"null") +
+                ", userId=" + (user!=null?user.getId():"null") +
                 '}';
     }
 }

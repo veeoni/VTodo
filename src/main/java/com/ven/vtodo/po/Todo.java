@@ -250,7 +250,7 @@ public class Todo {
                 ", repeat=" + repeat +
                 ", user=" + (user!=null?user.getId():"null") +
                 ", type=" + (type!=null?type.getId():"null") +
-//                ", tags=" + (tags.size()>0?tags.get(0).getId():"null") +
+                ", tags=" + tagsToIds(tags) +
                 '}';
 
     }

@@ -228,9 +228,9 @@ public class Blog {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", type=" + type +
-                ", tags=" + tagsToIds(tags) +
-                ", user=" + (user!=null?user.getId():"null") +
-                ", comments=" + comments +
+                ", tagsId=" + tagsToIds(tags) +
+                ", userId=" + (user!=null?user.getId():"null") +
+                ", comments[0]Id=" + (comments!=null&&comments.size()>0?comments.get(0).getId():"null") +
                 ", tagIds='" + tagIds + '\'' +
                 ", description='" + description + '\'' +
                 '}';
