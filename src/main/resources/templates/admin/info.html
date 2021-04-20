@@ -57,7 +57,7 @@
                         <label>头像</label>
                         <div class="ui center aligned stackable  grid">
                             <div class="row m-padded-tb-mini">
-                                <input id="input_avatar" type="hidden" placeholder="所选头像" value="/images/avatar/f1.png" th:value="*{avatar}">
+                                <input id="input_avatar" type="hidden" name="avatar" placeholder="所选头像" value="/images/avatar/f1.png" th:value="*{avatar}">
                                 <img id="img_avatar"  class="ui small avatar image" src="../static/images/avatar/f1.png" th:src="@{*{avatar}}">
                             </div>
                             <div class="row m-padded-tb-mini">

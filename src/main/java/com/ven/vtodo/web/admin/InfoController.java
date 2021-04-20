@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/admin")
@@ -42,6 +43,7 @@ public class InfoController {
         }else{
             User oldUser = userService.getUserById(user.getId());
             UpdateUtil.copyNullProperties(user,oldUser);
+            oldUser.setUpdateTime(new Date());
             User user2 = userService.updateUserInfo(oldUser);
             if(user!=null){
                 attributes.addFlashAttribute("message", "修改成功");
