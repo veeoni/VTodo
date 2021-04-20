@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博客发布</title>
+    <title>基本信息修改</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
     <link rel="stylesheet  prefetch" href="../../static/css/me.css" th:href="@{/css/me.css}" />
@@ -165,21 +165,10 @@
     </div>
 </footer>
 
-<script src="static/js/sha256.js" th:src="@{/js/sha256.js}"></script>
 <script th:inline="javascript">
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
     });
-
-    $('#save-btn').click(function () {
-        $('[name="published"]').val(false);
-        $('#blog-form').submit();
-    });
-    $('#publish-btn').click(function () {
-        $('[name="published"]').val(true);
-        $('#blog-form').submit();
-    });
-
 
     $('.ui.form').form({
         fields : {

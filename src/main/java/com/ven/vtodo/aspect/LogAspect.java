@@ -17,7 +17,7 @@ public class LogAspect {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Pointcut("execution(* com.ven.vtodo.web.*.*(..))")//按execution规定拦截哪些类的哪些方法
+    @Pointcut("execution(* com.ven.vtodo.web..*(..))")//按execution规定拦截哪些类的哪些方法
     public void log(){}
 
 

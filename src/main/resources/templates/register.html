@@ -11,7 +11,8 @@
 <body>
 <div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
     <div class="ui container">
-        <div class="ui middle aligned center aligned grid">
+        <div class="ui success message me" style="display: none;"></div>
+        <div id="register_form" class="ui middle aligned center aligned grid">
             <div class="column">
                 <h2 class="ui teal image header">
                     <div class="content">
@@ -159,7 +160,8 @@
                 if(responseTxt == "success"){
                     console.log("register successfully!");
                     $('.nagative.message').css('display','none').empty();
-                    $('.success.message').css('display','block');
+                    $('#register_form').css('display','none');
+                    $('.success.message.me').css('display','block');
                     $('#submit_btn').addClass("disabled").text("注册成功");
                     var i=3;
                     $(function(){
@@ -170,7 +172,7 @@
                     });
                     //自动刷新页面上的时间
                     function after(){
-                        $(".success.message").empty().append("注册成功~自动登录中，"+i+"秒后返回登录页面");
+                        $(".success.message.me").empty().append("注册成功~ 自动登录中，"+i+"秒后返回首页~");
                         i=i-1;
                         setTimeout(function(){
                             after();

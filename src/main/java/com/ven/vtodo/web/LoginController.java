@@ -83,4 +83,10 @@ public class LoginController {
         session.removeAttribute("user");
         return "redirect:/";
     }
+
+    @GetMapping("/waiting")//退出登录后的等待界面，3秒返回登陆页。
+    public String logout2(HttpSession session){
+        session.removeAttribute("user");
+        return "/waiting";
+    }
 }

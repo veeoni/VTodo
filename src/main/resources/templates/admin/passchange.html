@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码修改</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
+    <link rel="stylesheet  prefetch" href="../../static/css/me.css" th:href="@{/css/me.css}" />
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="admin/_fragments :: menu(4)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <!--stackable 屏幕小时可堆叠-->
+        <div class="ui inverted stackable secondary menu">
+            <h2 class="ui teal header item">管理后台</h2>
+            <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>博客</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i>标签</a>
+            <div class="right menu">
+                <div class="ui dropdown m-item m-mobile-hide item">
+                    <div class="text">
+                        <img src="../../static/images/myavatar1.jpg" alt="" class="ui avatar image">
+                        王友宁
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle icon black button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a href="#" th:href="@{/admin/info}" class="item">基本资料</a>
+            <a href="#" th:href="@{/admin/selfintro}" class="item">个人介绍</a>
+            <a href="#" th:href="@{/admin/passchange}" class="teal active item">密码修改</a>
+        </div>
+    </div>
+</div>
+
+<!--中间内容-->
+<div class="m-container m-body-container m-padded-tb-big">
+    <div class="ui container">
+        <form id="user-form" action="#" th:object="${user}" th:action="@{/admin/passchange}" method="post" class="ui form">
+            <div class="ui left aligned segment m-padded-large">
+                <div class="field">
+                        <div class="field">
+                            <label>ID</label>
+                            <div class="ui disabled input">
+                                <input name="id" th:value="*{id}" type="text">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>用户名</label>
+                            <div class="ui disabled input">
+                                <input name="username" th:value="*{username}" type="text">
+                            </div>
+                        </div>
+                    <input type="hidden" name="postPassword"><!--加密后通过参数传递，当新密码-->
+                    <input type="hidden" name="password"><!--加密后存到user里，用于登录-->
+                    <div class="field">
+                        <label>原密码</label>
+                        <div class="ui input">
+                            <input name="rawpassword" type="password">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>新密码</label>
+                        <div class="ui input">
+                            <input name="newpassword" type="password">
+                        </div>
+                    </div>
+                        <div class="field">
+                            <label>确认新密码</label>
+                            <div class="ui input">
+                                <input name="passwordverify" type="password">
+                            </div>
+                        </div>
+                        <div class="m-margin-top field">
+                            <div class="ui buttons">
+                                <button id="reset_btn" type="button" onclick="resetForm()" class="ui basic blue button" >重置</button>
+                                <button id="submit_btn" type="button" onclick="checkForm()" class="ui basic teal button" >提交</button>
+                            </div>
+                        </div>
+                </div>
+                <div class="ui mini error message"></div>
+                <div class="ui mini negative message" th:text="${errormessage}" th:style="(${errormessage}!=null and ${errormessage}!='')?'display:block;':'display:none;'"></div>
+                <div class="ui mini success message" th:text="${message}" th:style="(${message}!=null and ${message}!='')?'display:block;':'display:none;'"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--底部footer-->
+<footer th:replace="admin/_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui divided inverted stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/images/wechat.jpg" class=" ui rounded image" alt="" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">用户故事（User Story）</a>
+                    <a href="#" class="item">用户故事（User Story）</a>
+                    <a href="#" class="item">用户故事（User Story）</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Email:514754220@qq.com</a>
+                    <a href="#" class="item">QQ:514754220</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">博客介绍</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">
+                    个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright@......</p>
+    </div>
+</footer>
+
+<script src="static/js/sha256.js" th:src="@{/js/sha256.js}"></script>
+<script th:inline="javascript">
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.form').form({
+        fields : {
+            rawpassword : {
+                identifier: 'rawpassword',
+                rules:[{
+                    type   : 'empty',
+                    prompt : '原密码：不能为空'
+                }]
+            },
+            newpassword : {
+                identifier: 'newpassword',
+                rules:[{
+                    type   : 'regExp[^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$]',
+                    prompt : '新密码：至少8个字符，至少1个大写字母，1个小写字母和1个数字'
+                }]
+            },
+            passwordverify : {
+                identifier: 'passwordverify',
+                rules:[{
+                    type   : 'match[newpassword]',
+                    prompt : '确认密码：两次密码不一致'
+                }]
+            }
+        }
+    });
+
+    var id = [[${user.id}]];
+    var username = [[${user.username}]];
+
+    function resetForm(){
+        $('[name=id]').val(id);
+        $('[name=username]').val(username);
+        $('[name=password]').val("");
+        $('[name=postPassword]').val("");
+        $('[name=rawpassword]').val("");
+        $('[name=newpassword]').val("");
+        $('[name=passwordverify]').val("");
+    }
+    function checkForm() {
+        console.log(id);
+        $('.negative.message').css('display','none').empty();
+        $('.success.message').css('display','none').empty();
+        $('.ui.form').form("validate form");
+        var boo = $('.ui.form').form("is valid");
+        if(boo){
+            console.log("验证成功");
+            postData();
+        }else{
+            console.log("验证失败");
+        }
+    }
+    function postData(){
+        var shapostpassword = sha256_digest($('[name=newpassword]').val());
+        var sharawpassword = sha256_digest($('[name=rawpassword]').val());
+        $('[name=postPassword]').val(shapostpassword);
+        $('[name=password]').val(sharawpassword);
+        $('[name=rawpassword]').val("AbCd123Hi");
+        $('[name=newpassword]').val("AbCd123Hi");
+        $('[name=passwordverify]').val("AbCd123Hi");
+        $('.ui.form').submit();
+    }
+    var message = [[${message}]];
+    if(message == "修改成功"){
+        console.log("Pasword changed successfully!");
+        $('.nagative.message').css('display','none').empty();
+        $('.success.message').css('display','block');
+        $('#submit_btn').addClass("disabled").text("修改成功");
+        window.location.href="/waiting";
+    }
+
+
+</script>
+
+
+</script>
+</body>
+</html>
