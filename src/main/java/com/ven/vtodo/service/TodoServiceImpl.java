@@ -86,6 +86,7 @@ public class TodoServiceImpl implements TodoService {
                     Todo todo2 = this.getTodo(todo.getId());
                     todo.setTotalTimes(todo2.getTotalTimes());
                     todo.setRemainTimes(todo2.getRemainTimes());
+                    todo.setEasinessFactor(todo2.getEasinessFactor());
                     todo.setInterval(todo2.getInterval());
                 } else {
                     logger.info("无此flag");
