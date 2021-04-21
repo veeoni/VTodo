@@ -1,6 +1,7 @@
 package com.ven.vtodo.dao;
 
 import com.ven.vtodo.po.Blog;
+import com.ven.vtodo.po.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,4 +34,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
     //SELECT * FROM t_blog b where date_format(b.update_time, '%Y') = '2016';
     @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 ")
     List<Blog> findByYear(String year);
+
+    @Query("SELECT b from Blog b where b.user = ?1")
+    Page<Blog> findAllByUser(User user, Pageable pageable);
 }

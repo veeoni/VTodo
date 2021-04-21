@@ -48,7 +48,7 @@ public class TypeShowController {
             blog.setTypeId(id);
             page = blogService.listBlogByUser(pageable, blog, user);
         }else{
-            page = blogService.listBlog(pageable);
+            page = blogService.listBlogByUser(pageable, user);
         }
         model.addAttribute("types", types);
         model.addAttribute("page", page);

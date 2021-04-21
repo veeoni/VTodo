@@ -45,7 +45,7 @@ public class TagShowController {
             }
             page = blogService.listBlog(pageable, id);
         }else{
-            page = blogService.listBlog(pageable);
+            page = blogService.listBlogByUser(pageable, user);
         }
         model.addAttribute("tags", tags);
         model.addAttribute("page", page);

@@ -17,7 +17,7 @@ public interface BlogService {
 
     Page<Blog> listBlogByUser(Pageable pageable, BlogQuery blog, User user);
 
-    Page<Blog> listBlog(Pageable pageable);
+    Page<Blog> listBlogByUser(Pageable pageable, User user);
 
     Page<Blog> listBlog(Pageable pageable, Long tagId);
 
