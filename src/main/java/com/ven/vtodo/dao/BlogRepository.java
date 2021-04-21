@@ -31,10 +31,18 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
 //    @Query("select function('data_format', b.updateTime, '%Y') as year from Blog b GROUP BY function('data_format', b.updateTime, '%Y') ORDER BY year DESC")
     List<String> findGroupYears();
 
+    @Query(value = "select date_format(b.update_time, '%Y') as year from t_blog b where b.user_id = ?1 GROUP by year ORDER BY year ASC;",nativeQuery = true)
+    List<String> findGroupYearsAndUser(Long userId);
+
     //SELECT * FROM t_blog b where date_format(b.update_time, '%Y') = '2016';
     @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 ")
-    List<Blog> findByYear(String year);
+    List<Blog> findByYear(String year);    //SELECT * FROM t_blog b where date_format(b.update_time, '%Y') = '2016';
+
+    @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 and b.user = ?2")
+    List<Blog> findByYearAndUser(String year, User user);
 
     @Query("SELECT b from Blog b where b.user = ?1")
     Page<Blog> findAllByUser(User user, Pageable pageable);
+
+    long countBlogsByUser(User user);
 }

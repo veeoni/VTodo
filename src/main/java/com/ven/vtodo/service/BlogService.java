@@ -25,7 +25,9 @@ public interface BlogService {
 
     List<Blog> listRecommendBlogTop(Integer size);
 
-    TreeMap<String, List<Blog>> archiveBlog();//归档所有数据，不需要参数
+    TreeMap<String, List<Blog>> archiveBlogByUser(User user);//归档所有数据
+
+    Long countBlogsByUser(User user);
 
     Long countBlog();
 

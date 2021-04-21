@@ -105,15 +105,20 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public TreeMap<String, List<Blog>> archiveBlog() {
-        List<String> years = blogRepository.findGroupYears();
+    public TreeMap<String, List<Blog>> archiveBlogByUser(User user) {
+        List<String> years = blogRepository.findGroupYearsAndUser(user.getId());
         logger.info(years.toString());
         TreeMap<String, List<Blog>> map = new TreeMap<>();
         for(String year : years){
             logger.info(year);
-            map.put(year, blogRepository.findByYear(year));
+            map.put(year, blogRepository.findByYearAndUser(year, user));
         }
         return map;
+    }
+
+    @Override
+    public Long countBlogsByUser(User user) {
+        return blogRepository.countBlogsByUser(user);
     }
 
     @Override
@@ -147,6 +152,8 @@ public class BlogServiceImpl implements BlogService {
 //        BeanUtils.copyProperties(blog,blog1);
 //        return blogRepository.save(blog1);
 //    }
+
+
 
     @Transactional
     @Override
