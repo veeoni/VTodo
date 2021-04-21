@@ -49,7 +49,7 @@ public class IndexController {
         model.addAttribute("page", blogService.listBlogByUser(pageable, user));
         model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
         model.addAttribute("tags", tagService.listTagTopByUser(10, user));
-        model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
+        model.addAttribute("recommendBlogs", blogService.listRecommendBlogTopByUser(8, user));
         logger.info("----------index--------------");
         return "index";
     }
@@ -76,8 +76,12 @@ public class IndexController {
     }
 
     @GetMapping("/footer/newblog")
-    public String newblogs(Model model){
-        model.addAttribute("newblogs", blogService.listRecommendBlogTop(3));
+    public String newblogs(HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user==null){
+            user = userService.getUserById(1L);
+        }
+        model.addAttribute("newblogs", blogService.listRecommendBlogTopByUser(3, user));
         return "_fragments :: newblogList";
     }
 }

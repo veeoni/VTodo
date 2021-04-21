@@ -51,7 +51,7 @@ public class TodoController {
         }
         model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
         model.addAttribute("tags", tagService.listTagTopByUser(10, user));
-        model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
+        model.addAttribute("recommendBlogs", blogService.listRecommendBlogTopByUser(8, user));
         logger.info("----------index--------------");
         return "todo";
     }

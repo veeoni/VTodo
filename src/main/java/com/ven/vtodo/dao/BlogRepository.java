@@ -16,6 +16,9 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
     @Query("select b from Blog b where b.published = true and b.recommend = true")//只显示发布了的推荐，有些草稿不会查询出来
     List<Blog> findTopRecommend(Pageable pageable);
 
+    @Query("select b from Blog b where b.user = ?1 and b.published = true and b.recommend = true")//只显示发布了的推荐，有些草稿不会查询出来
+    List<Blog> findTopRecommendByUser(User user, Pageable pageable);
+
 //    List<Blog> findBlogsByContentContainsOrTitleContains();
 
     //可以原生sql，select * from t_blog where title like '%内容%' and content like '%内容%' nativeQuery = true

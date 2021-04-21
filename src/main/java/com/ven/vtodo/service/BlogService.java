@@ -23,7 +23,7 @@ public interface BlogService {
 
     Page<Blog> listBlog(Pageable pageable, String query);
 
-    List<Blog> listRecommendBlogTop(Integer size);
+    List<Blog> listRecommendBlogTopByUser(Integer size, User user);
 
     TreeMap<String, List<Blog>> archiveBlogByUser(User user);//归档所有数据
 
