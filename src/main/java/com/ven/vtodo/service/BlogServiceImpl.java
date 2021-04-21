@@ -3,14 +3,13 @@ package com.ven.vtodo.service;
 import com.ven.vtodo.dao.BlogRepository;
 import com.ven.vtodo.handler.NotFoundException;
 import com.ven.vtodo.po.Blog;
+import com.ven.vtodo.po.User;
 import com.ven.vtodo.util.MarkdownUtils;
 import com.ven.vtodo.vo.BlogQuery;
-import com.ven.vtodo.web.TodoController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -70,17 +69,19 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Page<Blog> listBlog(Pageable pageable, BlogQuery blog) {
-//        return blogRepository.findAll((Specification<Blog>) (root, cq, cb) -> null, pageable);
+    public Page<Blog> listBlogByUser(Pageable pageable, BlogQuery blog, User user) {
         return blogRepository.findAll(new Specification<Blog>() {
             @Override//查谁，条件是啥， 设置具体条件的表达式
             public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
+                if(user != null && user.getId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.<Long>get("user").get("id"), user.getId()));
+                }
                 if(blog.getTitle() != null && !"".equals(blog.getTitle())){
                     predicates.add(criteriaBuilder.like(root.<String>get("title"), "%"+blog.getTitle()+"%"));
                 }
                 if(null != blog.getTypeId()){
-                    predicates.add(criteriaBuilder.equal(root.<String>get("type").get("id"), blog.getTypeId()));
+                    predicates.add(criteriaBuilder.equal(root.<Long>get("type").get("id"), blog.getTypeId()));
                 }
                 if(blog.isRecommend()){
                     predicates.add(criteriaBuilder.equal(root.<Boolean>get("recommend"), blog.isRecommend()));

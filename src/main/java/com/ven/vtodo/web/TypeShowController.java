@@ -46,7 +46,7 @@ public class TypeShowController {
                 id = types.get(0).getId();
             }
             blog.setTypeId(id);
-            page = blogService.listBlog(pageable, blog);
+            page = blogService.listBlogByUser(pageable, blog, user);
         }else{
             page = blogService.listBlog(pageable);
         }

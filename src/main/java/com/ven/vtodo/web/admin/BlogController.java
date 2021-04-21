@@ -37,15 +37,16 @@ public class BlogController {
             BlogQuery blog, HttpSession session, Model model){
         User user = (User) session.getAttribute("user");
         model.addAttribute("types", typeService.listTypeByUser(user));
-        model.addAttribute("page", blogService.listBlog(pageable, blog));
+        model.addAttribute("page", blogService.listBlogByUser(pageable, blog, user));
         return "admin/blogs";
     }
 
     @PostMapping("/blogs/search")
     public String search(
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            BlogQuery blog, Model model){
-        model.addAttribute("page", blogService.listBlog(pageable, blog));
+            BlogQuery blog, HttpSession session, Model model){
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("page", blogService.listBlogByUser(pageable, blog, user));
         return "admin/blogs :: blogList";
     }
 
@@ -84,7 +85,6 @@ public class BlogController {
         } else {
             attributes.addFlashAttribute("message", "操作成功");
         }
-
         return "redirect:/admin/blogs";
     }
 

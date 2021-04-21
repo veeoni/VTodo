@@ -1,6 +1,7 @@
 package com.ven.vtodo.service;
 
 import com.ven.vtodo.po.Blog;
+import com.ven.vtodo.po.User;
 import com.ven.vtodo.vo.BlogQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ public interface BlogService {
 
     Blog getAndConvert(Long id);
 
-    Page<Blog> listBlog(Pageable pageable, BlogQuery blog);
+    Page<Blog> listBlogByUser(Pageable pageable, BlogQuery blog, User user);
 
     Page<Blog> listBlog(Pageable pageable);
 
