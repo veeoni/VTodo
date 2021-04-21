@@ -49,7 +49,7 @@ public class TodoController {
             attributes.addFlashAttribute("message","您需要先登录，才能使用日程规划功能");
             return "redirect:/login";
         }
-        model.addAttribute("types", typeService.listTypeTop(6));//可定义在配置文件
+        model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
         model.addAttribute("tags", tagService.listTagTopByUser(10, user));
         model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
         logger.info("----------index--------------");
@@ -79,7 +79,7 @@ public class TodoController {
         User user = (User) session.getAttribute("user");
         model.addAttribute("todos", normalTodos);
         model.addAttribute("finishedTodos", finishedTodos);
-        model.addAttribute("types", typeService.listType());
+        model.addAttribute("types", typeService.listTypeByUser(user));
         model.addAttribute("tags", tagService.listTagByUser(user));
         return "todo :: todoList";
     }
@@ -113,7 +113,7 @@ public class TodoController {
         User user = (User) session.getAttribute("user");
         model.addAttribute("todos", unfinishedTodos);
         model.addAttribute("finishedTodos", finishedTodos);
-        model.addAttribute("types", typeService.listType());
+        model.addAttribute("types", typeService.listTypeByUser(user));
         model.addAttribute("tags", tagService.listTagByUser(user));
         model.addAttribute("queryDate", strDate);
         return "todo :: todoList";

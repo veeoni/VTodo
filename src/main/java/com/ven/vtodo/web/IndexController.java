@@ -47,7 +47,7 @@ public class IndexController {
         }
         //model用于与前端Thymeleaf传递数据，键值对
         model.addAttribute("page", blogService.listBlog(pageable));
-        model.addAttribute("types", typeService.listTypeTop(6));//可定义在配置文件
+        model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
         model.addAttribute("tags", tagService.listTagTopByUser(10, user));
         model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
         logger.info("----------index--------------");

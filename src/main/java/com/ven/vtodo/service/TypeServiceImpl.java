@@ -3,6 +3,7 @@ package com.ven.vtodo.service;
 import com.ven.vtodo.dao.TypeRepository;
 import com.ven.vtodo.handler.NotFoundException;
 import com.ven.vtodo.po.Type;
+import com.ven.vtodo.po.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,25 +33,25 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public Type getTypeByName(String name) {
-        return typeRepository.findByName(name);
+    public Type getTypeByNameAndUser(String name, User user) {
+        return typeRepository.findByNameAndUser(name, user);
     }
 
     @Override
-    public Page<Type> listType(Pageable pageable) {
-        return typeRepository.findAll(pageable);
+    public Page<Type> listType(Pageable pageable, User user) {
+        return typeRepository.findAllByUser(pageable,user);
     }
 
     @Override
-    public List<Type> listTypeTop(Integer size) {
+    public List<Type> listTypeTopByUser(Integer size, User user) {
         Sort sort = Sort.by(Sort.Direction.DESC, "blogs.size");
         Pageable pageable = PageRequest.of(0, size, sort);
-        return typeRepository.findTop(pageable);
+        return typeRepository.findTopByUser(user, pageable);
     }
 
     @Override
-    public List<Type> listType() {
-        return typeRepository.findAll();
+    public List<Type> listTypeByUser(User user) {
+        return typeRepository.findAllByUser(user);
     }
 
     @Transactional

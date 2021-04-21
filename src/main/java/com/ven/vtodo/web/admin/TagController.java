@@ -47,7 +47,7 @@ public class TagController {
 
     //后端消息传到页面
     @PostMapping("/tags")
-    public String post(@Valid Tag tag, HttpSession session, BindingResult result, RedirectAttributes attributes){
+    public String post(@Valid Tag tag, BindingResult result, HttpSession session, RedirectAttributes attributes){
         User user = (User) session.getAttribute("user");
         Tag tag1 = tagService.getTagByNameAndUser(tag.getName(), user);
         if(tag1 != null){

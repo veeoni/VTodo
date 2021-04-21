@@ -1,6 +1,7 @@
 package com.ven.vtodo.service;
 
 import com.ven.vtodo.po.Type;
+import com.ven.vtodo.po.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,13 +13,13 @@ public interface TypeService {
 
     Type getType(Long id);
 
-    Type getTypeByName(String name);
+    Type getTypeByNameAndUser(String name, User user);
 
-    Page<Type> listType(Pageable pageable);
+    Page<Type> listType(Pageable pageable, User user);
 
-    List<Type> listType();
+    List<Type> listTypeByUser(User user);
 
-    List<Type> listTypeTop(Integer size);
+    List<Type> listTypeTopByUser(Integer size, User user);
 
     Type updateType(Long id, Type type);
 

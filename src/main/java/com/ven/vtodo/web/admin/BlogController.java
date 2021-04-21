@@ -34,8 +34,9 @@ public class BlogController {
     @GetMapping("/blogs")
     public String blogs(
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            BlogQuery blog, Model model){
-        model.addAttribute("types", typeService.listType());
+            BlogQuery blog, HttpSession session, Model model){
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("types", typeService.listTypeByUser(user));
         model.addAttribute("page", blogService.listBlog(pageable, blog));
         return "admin/blogs";
     }
@@ -57,7 +58,7 @@ public class BlogController {
     }
 
     private void setTypeAndTag(User user, Model model){
-        model.addAttribute("types", typeService.listType());
+        model.addAttribute("types", typeService.listTypeByUser(user));
         model.addAttribute("tags", tagService.listTagByUser(user));
     }
 
