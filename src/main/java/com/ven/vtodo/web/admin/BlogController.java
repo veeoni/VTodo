@@ -49,20 +49,22 @@ public class BlogController {
     }
 
     @GetMapping("/blogs/input")
-    public String input(Model model){
-        setTypeAndTag(model);
+    public String input( HttpSession session, Model model){
+        User user = (User) session.getAttribute("user");
+        setTypeAndTag(user, model);
         model.addAttribute("blog", new Blog());
         return "admin/blogs-input";
     }
 
-    private void setTypeAndTag(Model model){
+    private void setTypeAndTag(User user, Model model){
         model.addAttribute("types", typeService.listType());
-        model.addAttribute("tags", tagService.listTag());
+        model.addAttribute("tags", tagService.listTagByUser(user));
     }
 
     @GetMapping("/blogs/{id}/input")
-    public String editInput(@PathVariable Long id, Model model){
-        setTypeAndTag(model);
+    public String editInput(@PathVariable Long id, HttpSession session, Model model){
+        User user = (User) session.getAttribute("user");
+        setTypeAndTag(user, model);
         Blog blog = blogService.getBlog(id);
         blog.init();
         model.addAttribute("blog", blog);

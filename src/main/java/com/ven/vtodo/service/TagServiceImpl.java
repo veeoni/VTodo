@@ -4,6 +4,7 @@ import com.ven.vtodo.dao.TagRepository;
 import com.ven.vtodo.handler.NotFoundException;
 import com.ven.vtodo.po.Tag;
 import com.ven.vtodo.po.Todo;
+import com.ven.vtodo.po.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,10 +24,10 @@ public class TagServiceImpl implements TagService {
     private TagRepository tagRepository;
 
     @Override
-    public List<Tag> listTagTop(Integer size) {
+    public List<Tag> listTagTopByUser(Integer size, User user) {
         Sort sort = Sort.by(Sort.Direction.DESC, "blogs.size");
         Pageable pageable = PageRequest.of(0, size, sort);
-        return tagRepository.findTop(pageable);
+        return tagRepository.findTopByUser(user, pageable);
     }
 
     @Transactional
@@ -36,7 +37,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> listTag() {
+    public List<Tag> listTagByUser(User user) {
         return tagRepository.findAll();
     }
 
@@ -62,13 +63,13 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getTagByName(String name) {
-        return tagRepository.findByName(name);
+    public Tag getTagByNameAndUser(String name, User user) {
+        return tagRepository.findByNameAndUser(name, user);
     }
 
     @Override
-    public Page<Tag> listTag(Pageable pageable) {
-        return tagRepository.findAll(pageable);
+    public Page<Tag> listTag(Pageable pageable, User user) {
+        return tagRepository.findAllByUser(pageable, user);
     }
 
     @Override
@@ -84,7 +85,6 @@ public class TagServiceImpl implements TagService {
             throw new NotFoundException("不存在该类型");
         }
         BeanUtils.copyProperties(tag, t);
-
         return tagRepository.save(tag);
     }
 

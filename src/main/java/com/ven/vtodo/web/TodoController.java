@@ -44,19 +44,20 @@ public class TodoController {
 
     @GetMapping("/todo")
     public String todo(HttpSession session,RedirectAttributes attributes, Model model){
-        if(session.getAttribute("user")==null){
+        User user = (User) session.getAttribute("user");
+        if(user == null){
             attributes.addFlashAttribute("message","您需要先登录，才能使用日程规划功能");
             return "redirect:/login";
         }
         model.addAttribute("types", typeService.listTypeTop(6));//可定义在配置文件
-        model.addAttribute("tags", tagService.listTagTop(10));
+        model.addAttribute("tags", tagService.listTagTopByUser(10, user));
         model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
         logger.info("----------index--------------");
         return "todo";
     }
 
     @GetMapping("/alltodos")//用来查整张表的待办
-    public String todos(Model model){
+    public String todos(HttpSession session, Model model){
         // TODO 到时候新增一个方法，类似此方法，但是多一个日期参数（可以用String），放URL或者传对象都行，用日期查询
         // 是未来? 仅按日期当日，仅显示未完成:区分是否遗留
         // 数据库里查
@@ -75,16 +76,16 @@ public class TodoController {
                 finishedTodos.add(todo);
             }
         }
-        //TODO 分类所有todos
+        User user = (User) session.getAttribute("user");
         model.addAttribute("todos", normalTodos);
         model.addAttribute("finishedTodos", finishedTodos);
         model.addAttribute("types", typeService.listType());
-        model.addAttribute("tags", tagService.listTag());
+        model.addAttribute("tags", tagService.listTagByUser(user));
         return "todo :: todoList";
     }
 
     @GetMapping(value = {"/todos/{strDate}", "/todos"})
-    public String todosByDate(@Nullable @PathVariable String strDate, Model model) throws ParseException {
+    public String todosByDate(@Nullable @PathVariable String strDate, HttpSession session, Model model) throws ParseException {
 
         // 是未来? 仅按日期当日，仅显示未完成:区分是否遗留
         // 数据库里查
@@ -109,10 +110,11 @@ public class TodoController {
             logger.info(todo.getTaskDate().toString()+"vs"+sdf.format(date));
             todo.setRemain(todo.getTaskDate().toString().compareTo(sdf.format(date))<0);
         }
+        User user = (User) session.getAttribute("user");
         model.addAttribute("todos", unfinishedTodos);
         model.addAttribute("finishedTodos", finishedTodos);
         model.addAttribute("types", typeService.listType());
-        model.addAttribute("tags", tagService.listTag());
+        model.addAttribute("tags", tagService.listTagByUser(user));
         model.addAttribute("queryDate", strDate);
         return "todo :: todoList";
     }

@@ -1,6 +1,7 @@
 package com.ven.vtodo.web.admin;
 
 import com.ven.vtodo.po.Tag;
+import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -26,8 +28,9 @@ public class TagController {
 
     @GetMapping("/tags")
     public String list(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-                       Model model){
-        model.addAttribute("page", tagService.listTag(pageable));
+                       HttpSession session, Model model){
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("page", tagService.listTag(pageable, user));
         return "admin/tags";
     }
     @GetMapping("/tags/input")
@@ -44,14 +47,16 @@ public class TagController {
 
     //后端消息传到页面
     @PostMapping("/tags")
-    public String post(@Valid Tag tag, BindingResult result, RedirectAttributes attributes){
-        Tag tag1 = tagService.getTagByName(tag.getName());
+    public String post(@Valid Tag tag, HttpSession session, BindingResult result, RedirectAttributes attributes){
+        User user = (User) session.getAttribute("user");
+        Tag tag1 = tagService.getTagByNameAndUser(tag.getName(), user);
         if(tag1 != null){
             result.rejectValue("name", "nameError", "不能添加重复的分类");
         }
         if(result.hasErrors()){
             return "admin/tags-input";
         }
+        tag.setUser(user);
         Tag t = tagService.saveTag(tag);
         if(t == null){
             attributes.addFlashAttribute("message", "操作失败");
@@ -64,14 +69,16 @@ public class TagController {
     //后端消息传到页面
     @PostMapping("/tags/{id}")
     public String editPost(@Valid Tag tag, BindingResult result,/*BindingResult前面一定要是Tag，否则就没有效果了*/
-                           @PathVariable Long id, RedirectAttributes attributes){
-        Tag tag1 = tagService.getTagByName(tag.getName());
+                           @PathVariable Long id, HttpSession session, RedirectAttributes attributes){
+        User user = (User) session.getAttribute("user");
+        Tag tag1 = tagService.getTagByNameAndUser(tag.getName(), user);
         if(tag1 != null){
             result.rejectValue("name", "nameError", "不能添加重复的分类");
         }
         if(result.hasErrors()){
             return "admin/tags-input";
         }
+        tag.setUser(user);
         Tag t = tagService.updateTag(id, tag);
         if(t == null){
             attributes.addFlashAttribute("message", "更新失败");

@@ -1,8 +1,10 @@
 package com.ven.vtodo.web;
 
+import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.BlogService;
 import com.ven.vtodo.service.TagService;
 import com.ven.vtodo.service.TypeService;
+import com.ven.vtodo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
+
 /**
  *
  */
@@ -28,17 +32,23 @@ public class IndexController {
     private TypeService typeService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private UserService userService;
     private static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
 
     @GetMapping("/index")
     public String index(
             @PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            Model model){
+            HttpSession session, Model model){
+        User user = (User) session.getAttribute("user");
+        if(user==null){
+            user = userService.getUserById(1L);
+        }
         //model用于与前端Thymeleaf传递数据，键值对
         model.addAttribute("page", blogService.listBlog(pageable));
         model.addAttribute("types", typeService.listTypeTop(6));//可定义在配置文件
-        model.addAttribute("tags", tagService.listTagTop(10));
+        model.addAttribute("tags", tagService.listTagTopByUser(10, user));
         model.addAttribute("recommendBlogs", blogService.listRecommendBlogTop(8));
         logger.info("----------index--------------");
         return "index";

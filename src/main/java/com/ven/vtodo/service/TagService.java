@@ -2,6 +2,7 @@ package com.ven.vtodo.service;
 
 import com.ven.vtodo.po.Tag;
 import com.ven.vtodo.po.Todo;
+import com.ven.vtodo.po.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,17 +14,17 @@ public interface TagService {
 
     Tag getTag(Long id);
 
-    Tag getTagByName(String name);
+    Tag getTagByNameAndUser(String name, User user);
 
-    Page<Tag> listTag(Pageable pageable);
+    Page<Tag> listTag(Pageable pageable, User user);
 
-    List<Tag> listTag();
+    List<Tag> listTagByUser(User user);
 
     List<Tag> listTagByTodo(Todo todo);
 
     List<Tag> listTag(String id);
 
-    List<Tag> listTagTop(Integer size);
+    List<Tag> listTagTopByUser(Integer size, User user);
 
     Tag updateTag(Long id, Tag tag);
 
