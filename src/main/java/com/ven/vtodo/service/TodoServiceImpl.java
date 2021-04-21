@@ -1,19 +1,14 @@
 package com.ven.vtodo.service;
 
-import com.ven.vtodo.dao.TagRepository;
 import com.ven.vtodo.dao.TodoRepository;
-import com.ven.vtodo.po.Tag;
 import com.ven.vtodo.po.Todo;
-import com.ven.vtodo.util.TodoCopy;
-import com.ven.vtodo.web.TodoController;
+import com.ven.vtodo.po.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,18 +92,18 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<Todo> listUnfinishedTodosByDate(Date date) {
-        return todoRepository.findAllByTaskDateLessThanEqualAndFinishedDateNull(date);
+    public List<Todo> listUnfinishedTodosByDateAndUser(Date date, User user) {
+        return todoRepository.findAllByUserAndTaskDateLessThanEqualAndFinishedDateNull(user, date);
     }
 
     @Override
-    public List<Todo> listFinishedTodosByDate(Date date) {
-        return todoRepository.findAllByFinishedDateEquals(date);
+    public List<Todo> listFinishedTodosByDateAndUser(Date date, User user) {
+        return todoRepository.findAllByUserAndFinishedDateEquals(user, date);
     }
 
     @Override
-    public List<Todo> listUnfinishedTodosByOtherDate(Date date) {
-        return todoRepository.findAllByTaskDateEqualsAndFinishedDateNull(date);
+    public List<Todo> listUnfinishedTodosByOtherDateAndUser(Date date, User user) {
+        return todoRepository.findAllByUserAndTaskDateEqualsAndFinishedDateNull(user, date);
     }
 
     @Override

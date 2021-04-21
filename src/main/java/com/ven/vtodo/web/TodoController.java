@@ -91,6 +91,7 @@ public class TodoController {
         // 数据库里查
         // 1.未finishedDate且taskDate<=指定日期，小于指定日期，isRemain=true，加入todos
         // 2.finishedDate==指定日期，标记为已完成，finished>taskdate的，标记isRemain=true，html改为未按时，加入finishedTodos
+        User user = (User) session.getAttribute("user");
         Date date;
         boolean isToday = false;
         if(strDate==null || strDate.equals("")){
@@ -100,8 +101,8 @@ public class TodoController {
             isToday = true;
         }
         date = sdf.parse(strDate);
-        List<Todo> unfinishedTodos = isToday?todoService.listUnfinishedTodosByDate(date):todoService.listUnfinishedTodosByOtherDate(date);
-        List<Todo> finishedTodos = todoService.listFinishedTodosByDate(date);
+        List<Todo> unfinishedTodos = isToday?todoService.listUnfinishedTodosByDateAndUser(date, user):todoService.listUnfinishedTodosByOtherDateAndUser(date, user);
+        List<Todo> finishedTodos = todoService.listFinishedTodosByDateAndUser(date, user);
         for(Todo todo : unfinishedTodos){
             logger.info(todo.getTaskDate().toString()+"vs"+sdf.format(date));
             todo.setRemain(todo.getTaskDate().toString().compareTo(sdf.format(date))<0);
@@ -110,7 +111,6 @@ public class TodoController {
             logger.info(todo.getTaskDate().toString()+"vs"+sdf.format(date));
             todo.setRemain(todo.getTaskDate().toString().compareTo(sdf.format(date))<0);
         }
-        User user = (User) session.getAttribute("user");
         model.addAttribute("todos", unfinishedTodos);
         model.addAttribute("finishedTodos", finishedTodos);
         model.addAttribute("types", typeService.listTypeByUser(user));

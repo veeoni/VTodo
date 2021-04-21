@@ -1,6 +1,7 @@
 package com.ven.vtodo.service;
 
 import com.ven.vtodo.po.Todo;
+import com.ven.vtodo.po.User;
 
 import java.util.Date;
 import java.util.List;
@@ -15,11 +16,11 @@ public interface TodoService {
 
     List<Todo> listTodo();
 
-    List<Todo> listUnfinishedTodosByDate(Date date);
+    List<Todo> listUnfinishedTodosByDateAndUser(Date date, User user);
 
-    List<Todo> listFinishedTodosByDate(Date date);
+    List<Todo> listFinishedTodosByDateAndUser(Date date, User user);
 
-    List<Todo> listUnfinishedTodosByOtherDate(Date date);
+    List<Todo> listUnfinishedTodosByOtherDateAndUser(Date date, User user);
 
     void deleteTodo(Long id);
 
