@@ -38,7 +38,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> listTagByUser(User user) {
-        return tagRepository.findAll();
+        return tagRepository.findAllByUser(user);
     }
 
     @Override
