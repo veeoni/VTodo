@@ -18,7 +18,7 @@
 <!--导航-->
 <nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
     <div class="ui container">
-        <!--stackable 屏幕小时可堆叠-->
+        <!--stackable 小屏幕时可堆叠-->
         <div class="ui inverted stackable secondary menu">
             <h2 class="ui teal header item">VTodo</h2>
             <a class="m-item item m-mobile-hide" th:classappend="${n==6} ? 'active' " href="#" th:href="@{/todo}"><i class="tasks icon"></i>Todo</a>
@@ -79,7 +79,7 @@
                 </div>
             </div>
             <div class="three wide column">
-                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新博客</h4>
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新推荐</h4>
                 <div id="newblog-container">
                     <div class="ui inverted link list" th:fragment="newblogList">
                         <a class="item" href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}" th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
@@ -98,7 +98,7 @@
                 </div>
             </div>
             <div class="seven wide column">
-                <h4 class="ui inverted header m-text-spaced m-opacity-mini">博客介绍</h4>
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">本站介绍</h4>
                 <p class="m-text-thin m-text-spaced m-opacity-mini" th:text="#{index.introduction}">宁的家~</p>
             </div>
         </div>

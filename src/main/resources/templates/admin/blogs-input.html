@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博客发布</title>
+    <title>笔记发布</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
     <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css" th:href="@{/lib/editormd/css/editormd.min.css}">
@@ -17,7 +17,7 @@
         <!--stackable 屏幕小时可堆叠-->
         <div class="ui inverted stackable secondary menu">
             <h2 class="ui teal header item">管理后台</h2>
-            <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>博客</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>笔记</a>
             <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
             <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i>标签</a>
             <div class="right menu">
@@ -73,7 +73,7 @@
             </div>
             <div class="required field">
                 <div id="md-editormd" style="z-index: 1 !important;">
-                        <textarea name="content" placeholder="请输入博客内容" style="display:none;" th:text="*{content}"></textarea>
+                        <textarea name="content" placeholder="请输入笔记内容" style="display:none;" th:text="*{content}"></textarea>
 
                 </div>
             </div>
@@ -109,13 +109,13 @@
 
             <div class="field">
                 <div class="ui left labeled input">
-                    <label class="ui teal basic label">首图</label>
-                    <input type="text" name="firstPicture" th:value="*{firstPicture}" placeholder="首图引用地址，若不填写，则由系统自动添加默认图片">
+                    <label class="ui teal basic label">封面图</label>
+                    <input type="text" name="firstPicture" th:value="*{firstPicture}" placeholder="封面图引用地址，若不填写，则由系统自动添加默认图片">
                 </div>
             </div>
 
             <div class="required field">
-                <textarea name="description" th:text="*{description}" placeholder="博客描述..." id="" cols="30" rows="10"></textarea>
+                <textarea name="description" th:text="*{description}" placeholder="笔记描述..." id="" cols="30" rows="10"></textarea>
             </div>
 
             <div class="inline fields">
@@ -168,7 +168,7 @@
                 </div>
             </div>
             <div class="three wide column">
-                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新博客</h4>
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新笔记</h4>
                 <div class="ui inverted link list">
                     <a href="#" class="item">用户故事（User Story）</a>
                     <a href="#" class="item">用户故事（User Story）</a>
@@ -183,7 +183,7 @@
                 </div>
             </div>
             <div class="seven wide column">
-                <h4 class="ui inverted header m-text-spaced m-opacity-mini">博客介绍</h4>
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">笔记介绍</h4>
                 <p class="m-text-thin m-text-spaced m-opacity-mini">
                     个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。</p>
             </div>
@@ -233,14 +233,14 @@
                 identifier: 'title',
                 rules:[{
                     type:'empty',
-                    prompt: '标题：请输入博客标题'
+                    prompt: '标题：请输入笔记标题'
                 }]
             },
             content : {
                 identifier: 'content',
                 rules:[{
                     type:'empty',
-                    prompt: '内容：请输入博客内容'
+                    prompt: '内容：请输入笔记内容'
                 }]
             },
             typeId : {
@@ -254,7 +254,7 @@
                 identifier: 'description',
                 rules:[{
                     type:'empty',
-                    prompt: '描述：请输入博客描述'
+                    prompt: '描述：请输入笔记描述'
                 }]
             }
         }
