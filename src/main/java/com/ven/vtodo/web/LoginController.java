@@ -69,7 +69,7 @@ public class LoginController {
         }
     }
     @GetMapping("/login")
-    public String login(HttpSession session){
+    public String getLogin(HttpSession session){
         User user = (User) session.getAttribute("user");
         if(user != null){;
             return "redirect:/todo";
@@ -87,6 +87,6 @@ public class LoginController {
     @GetMapping("/waiting")//退出登录后的等待界面，3秒返回登陆页。
     public String logout2(HttpSession session){
         session.removeAttribute("user");
-        return "/waiting";
+        return "waiting";
     }
 }
