@@ -42,8 +42,8 @@ public class SHA256Util {
 
     public static void main(String[] args) {
         //generate password to save in MySQL
-        String username = "veeoni";
-        String passwrod = "111111";
+        String username = "松卷儿";
+        String passwrod = "Sj980413";
         System.out.println(getSHA256(username+getSHA256(passwrod)));
     }
 }

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
-public class BlogController {
+public class NoteController {
 
     @Autowired
     private BlogService blogService;

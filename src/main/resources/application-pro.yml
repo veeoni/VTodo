@@ -11,14 +11,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none #实体类确定了，布置到生产环境后，改成none
+      ddl-auto: update #实体类确定了，布置到生产环境后，改成none
     show-sql: true #输出sql语句
 
 logging:
   level:
     root: info #高于此级别的日志才会打印
-    com.ven.myblog: info
+    com.ven.vtodo: info
   file:
-    name: log/blog-pro.log
+    name: log/vtodo-pro.log
 server:
   port: 80

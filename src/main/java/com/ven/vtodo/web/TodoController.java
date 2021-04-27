@@ -49,9 +49,9 @@ public class TodoController {
             attributes.addFlashAttribute("message","您需要先登录，才能使用日程规划功能");
             return "redirect:/login";
         }
-        model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
-        model.addAttribute("tags", tagService.listTagTopByUser(10, user));
-        model.addAttribute("recommendBlogs", blogService.listRecommendBlogTopByUser(8, user));
+//        model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
+//        model.addAttribute("tags", tagService.listTagTopByUser(10, user));
+//        model.addAttribute("recommendBlogs", blogService.listRecommendBlogTopByUser(8, user));
         logger.info("----------index--------------");
         return "todo";
     }
@@ -216,7 +216,8 @@ public class TodoController {
         if(user != null){// FIXME 后期这里必须登录才能用，否则不通过
             todo.setUser(user);
         } else {
-            todo.setUser(userService.getUserById(1L));
+//            todo.setUser(userService.getUserById(1L));
+            return "redirect:/login";
         }
         if(todo.getId()==null){
             logger.info("-------------------新增");
