@@ -39,13 +39,13 @@
     <div class="ui container">
         <!-- container有响应式效果，根据屏幕不同的尺寸达到适应的效果-->
         <div class="ui stackable grid">
-            <!--左边博客列表-->
+            <!--左边笔记列表-->
             <div class="eleven wide column">
                 <!--header 用attached将两块segment连接，像是拼图，两个segment都得有-->
                 <div class="ui top attached segment">
                     <div class="ui middle aligned two column grid">
                         <div class="column">
-                            <h3 class="ui teal header">博客</h3>
+                            <h3 class="ui teal header">笔记</h3>
                         </div>
                         <div class="right aligned column">
                             <!--h是block元素，所以会直接换行,这里自定义m-inline-block-->
@@ -443,7 +443,7 @@
                     </div>
                 </div>
                 <div class="three wide column">
-                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新博客</h4>
+                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新笔记</h4>
                     <div id="newblog-container">
                         <div class="ui inverted link list" th:fragment="newblogList">
                             <a class="item" href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}" th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
@@ -462,7 +462,7 @@
                     </div>
                 </div>
                 <div class="seven wide column">
-                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">博客介绍</h4>
+                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">本站介绍</h4>
                     <p class="m-text-thin m-text-spaced m-opacity-mini" th:text="#{index.introduction}">宁的家~</p>
                 </div>
             </div>
