@@ -1,9 +1,9 @@
 package com.ven.vtodo.web;
 
-import com.ven.vtodo.po.Blog;
+import com.ven.vtodo.po.Note;
 import com.ven.vtodo.po.Tag;
 import com.ven.vtodo.po.User;
-import com.ven.vtodo.service.BlogService;
+import com.ven.vtodo.service.NoteService;
 import com.ven.vtodo.service.TagService;
 import com.ven.vtodo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class TagShowController {
     @Autowired
     private TagService tagService;
     @Autowired
-    private BlogService blogService;
+    private NoteService noteService;
     @Autowired
     private UserService userService;
 
@@ -38,14 +38,14 @@ public class TagShowController {
             user = userService.getUserById(1L);
         }
         List<Tag> tags = tagService.listTagTopByUser(10000, user);
-        Page<Blog> page = null;
+        Page<Note> page = null;
         if(tags.size()>0){
             if(id==-1){
                 id = tags.get(0).getId();
             }
-            page = blogService.listBlog(pageable, id, true);
+            page = noteService.listNote(pageable, id, true);
         }else{
-            page = blogService.listBlogByUser(pageable, user);
+            page = noteService.listNoteByUser(pageable, user);
         }
         model.addAttribute("tags", tags);
         model.addAttribute("page", page);

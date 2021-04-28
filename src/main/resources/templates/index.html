@@ -15,7 +15,7 @@
     <div class="ui container">
         <!--stackable 屏幕小时可堆叠-->
         <div class="ui inverted stackable secondary menu">
-            <h2 class="ui teal header item">Blog</h2>
+            <h2 class="ui teal header item">VTodo</h2>
             <a class="active m-item item m-mobile-hide" href="#"><i class="home icon"></i>首页</a>
             <a class="m-item item m-mobile-hide" href="#"><i class="idea icon"></i>分类</a>
             <a class="m-item item m-mobile-hide" href="#"><i class="tags icon"></i>标签</a>
@@ -55,41 +55,41 @@
                 </div>
                 <!--content-->
                 <div class="ui attached segment">
-                    <!--遍历，拿到blog对象进行渲染-->
+                    <!--遍历，拿到note对象进行渲染-->
                     <div class="ui segment" th:if="${page.getTotalPages()}==0">
                         <p>我定睛一看，嚯，这里啥都没有~</p>
                     </div>
-                    <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.content}">
+                    <div class="ui padded vertical segment m-padded-tb-large" th:each="note : ${page.content}">
                         <div class="ui middle aligned mobile reversed stackable grid">
                             <div class="ui eleven wide column">
-                                <h3 class="ui header"><a href="#" class="m-black" th:text="${blog.title}" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}">保佑我初试380</a></h3>
+                                <h3 class="ui header"><a href="#" class="m-black" th:text="${note.title}" target="_blank" th:href="@{/note/{id}(id=${note.id})}">保佑我初试380</a></h3>
                                <!--|...|用于连接字符串-->
-                                <p class="m-text" th:text="|${blog.description}...|">给老师打工三年都没事，只要给我上岸！！！</p>
+                                <p class="m-text" th:text="|${note.description}...|">给老师打工三年都没事，只要给我上岸！！！</p>
                                 <div class="ui grid">
                                     <div class="eleven wide column">
                                         <div class="ui horizontal link list">
                                             <div class="item">
                                                 <img alt="" class="ui avatar image"
-                                                     src="https://picsum.photos/100/100?image=1005" th:src="@{${blog.user.avatar}}">
-                                                <div class="content"><a class="header" href="#" th:href="@{/about}" th:text="${blog.user.nickname}">王友宁</a></div>
+                                                     src="https://picsum.photos/100/100?image=1005" th:src="@{${note.user.avatar}}">
+                                                <div class="content"><a class="header" href="#" th:href="@{/about}" th:text="${note.user.nickname}">王友宁</a></div>
                                             </div>
                                             <div class="item">
-                                                <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}">2017-10-01</span>
+                                                <i class="calendar icon"></i><span th:text="${#dates.format(note.updateTime, 'yyyy-MM-dd')}">2017-10-01</span>
                                             </div>
                                             <div class="item">
-                                                <i class="eye icon" th:text="${blog.views}">232</i>
+                                                <i class="eye icon" th:text="${note.views}">232</i>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="right aligned five wide column">
                                         <a class="ui teal basic label m-padded-mini m-text-thin" href="#"
-                                           target="_blank" th:href="@{/types/{id}(id=${blog.type.id})}" th:text="${blog.type.name}">认知升级</a>
+                                           target="_blank" th:href="@{/types/{id}(id=${note.type.id})}" th:text="${note.type.name}">认知升级</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="ui five wide column">
-                                <a href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}">
-                                    <img alt="" class="ui rounded image" src="https://picsum.photos/800/450?image=1005" th:src="@{${blog.firstPicture}}">
+                                <a href="#" target="_blank" th:href="@{/note/{id}(id=${note.id})}">
+                                    <img alt="" class="ui rounded image" src="https://picsum.photos/800/450?image=1005" th:src="@{${note.firstPicture}}">
                                 </a>
                             </div>
                         </div>
@@ -300,7 +300,7 @@
                             <a class="item" target="_blank" href="#" th:href="@{/types/{id}(id=${type.id})}" th:each="type : ${types}">
                                 <span th:text="${type.name}">学习日志</span>
                                 <!--#arrays.length集合长度-->
-                                <div class="ui teal basic left pointing label" th:text="${#arrays.length(type.blogs)}">13</div>
+                                <div class="ui teal basic left pointing label" th:text="${#arrays.length(type.notes)}">13</div>
                             </a>
                             <!--/*-->
                             <a class="item" href="#">
@@ -343,7 +343,7 @@
                         <a class="ui teal basic left pointing label m-margin-tb-tiny" href="#" target="_blank" th:href="@{/tags/{id}(id=${tag.id})}"  th:each="tag : ${tags}">
                             <span th:text="${tag.name}">方法论</span>
                             <!--挖坑，老师用的是#arrays.length()，我试试能不能直接size-->
-                            <div class="detail" th:text="${tag.blogs.size}">13</div>
+                            <div class="detail" th:text="${tag.notes.size}">13</div>
                         </a>
                         <!--/*-->
                         <a class="ui teal basic left pointing label m-margin-tb-tiny" href="#" target="_blank">
@@ -392,9 +392,9 @@
                     <div class="ui secondary segment">
                         <i class="tags icon"></i>最新推荐
                     </div>
-                    <div class="ui segment" th:each="blog : ${recommendBlogs}">
-                        <a class="m-black m-text-thin" href="#" target="_blank" th:text="${blog.title}"
-                           th:href="@{/blog/{id}(id=${blog.id})}">用户故事 (User Story)</a>
+                    <div class="ui segment" th:each="note : ${recommendBlogs}">
+                        <a class="m-black m-text-thin" href="#" target="_blank" th:text="${note.title}"
+                           th:href="@{/note/{id}(id=${note.id})}">用户故事 (User Story)</a>
                     </div>
                     <!--/*-->
                     <div class="ui segment">
@@ -444,9 +444,9 @@
                 </div>
                 <div class="three wide column">
                     <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新笔记</h4>
-                    <div id="newblog-container">
-                        <div class="ui inverted link list" th:fragment="newblogList">
-                            <a class="item" href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}" th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
+                    <div id="newnote-container">
+                        <div class="ui inverted link list" th:fragment="newnoteList">
+                            <a class="item" href="#" target="_blank" th:href="@{/note/{id}(id=${note.id})}" th:each="note : ${newnotes}" th:text="${note.title}">用户故事（User Story）</a>
                             <!--/*-->
                             <a class="item" href="#">用户故事（User Story）</a>
                             <a class="item" href="#">用户故事（User Story）</a>
@@ -475,7 +475,7 @@
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script>
     $('.ui.dropdown').dropdown();
-    $('#newblog-container').load(/*/footer/newblog*/"/footer/newblog");
+    $('#newnote-container').load(/*/footer/newnote*/"/footer/newnote");
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
     })

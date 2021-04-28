@@ -80,9 +80,9 @@
             </div>
             <div class="three wide column">
                 <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新推荐</h4>
-                <div id="newblog-container">
-                    <div class="ui inverted link list" th:fragment="newblogList">
-                        <a class="item" href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}" th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
+                <div id="newnote-container">
+                    <div class="ui inverted link list" th:fragment="newnoteList">
+                        <a class="item" href="#" target="_blank" th:href="@{/note/{id}(id=${note.id})}" th:each="note : ${newnotes}" th:text="${note.title}">用户故事（User Story）</a>
                         <!--/*-->
                         <a class="item" href="#">用户故事（User Story）</a>
                         <a class="item" href="#">用户故事（User Story）</a>
@@ -111,7 +111,7 @@
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script>
     $('.ui.dropdown').dropdown();
-    $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
+    $('#newnote-container').load(/*[[@{/footer/newnote}]]*/"/footer/newnote");
 </script>
 </th:block>
 </body>

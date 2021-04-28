@@ -1,13 +1,13 @@
 package com.ven.vtodo.vo;
 
 
-public class BlogQuery {
+public class NoteQuery {
 
     public String title;
     public Long typeId;
     public boolean recommend;
 
-    public BlogQuery(){}
+    public NoteQuery(){}
 
     public String getTitle() {
         return title;

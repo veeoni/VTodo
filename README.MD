@@ -13,10 +13,10 @@
 ### 参考资料：
 1. 
 ### *TODO*
-1. ~~blog.html的目录切换
+1. ~~note.html的目录切换
 点击右下角“目录”按钮后，若弹出不了，则显示在去除js中的自定义toc容器~~
-2. 设置功能中添加，使用editormd渲染或者commonmark渲染（将所有@{/blog/{id}}的链接替换为/blogs）
-有个取巧的方法，提前把所有/blog成/{blog}(blog=#{配置在messages.properties的blog/blogs})
+2. 设置功能中添加，使用editormd渲染或者commonmark渲染（将所有@{/note/{id}}的链接替换为/notes）
+有个取巧的方法，提前把所有/blog成/{note}(note=#{配置在messages.properties的blog/notes})
 用这种方法的话，可以写3个原型页面，第一个commonmark 第二个editor自定义TOC容器 第三个editor取消自定义容器。
 3. 更改所有图片、头像为自己选的，放到图床上。
 
@@ -120,7 +120,7 @@
                 - 同时增加一个完成次数数据项（每次获取这个项，代表完成次数，去除remainTimes）
 19. 增加所有字段最大长度、最小长度的限制和提示
 20. 保存的文章也会被展示到首页，这就不对了。
-21. 暂时解决不了的BUG，使用JPA通过TAG/TYPE查询blog时，标签下有多少个blog，需要用到tag.blogs.size。此时所查的blogs.size没有published=true的限制，因此会虚高
+21. 暂时解决不了的BUG，使用JPA通过TAG/TYPE查询blog时，标签下有多少个blog，需要用到tag.notes.size。此时所查的blogs.size没有published=true的限制，因此会虚高
     - 暂时想到的解决方法：在Thymeleaf中获取了blog之后，遍历，或者在Controller中对获取到的Tag进行进一步的操作。
 
 

@@ -44,7 +44,7 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public List<Type> listTypeTopByUser(Integer size, User user) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "blogs.size");
+        Sort sort = Sort.by(Sort.Direction.DESC, "notes.size");
         Pageable pageable = PageRequest.of(0, size, sort);
         return typeRepository.findTopByUser(user, pageable);
     }

@@ -15,7 +15,7 @@
     <div class="ui container">
         <!--stackable 屏幕小时可堆叠-->
         <div class="ui inverted stackable secondary menu">
-            <h2 class="ui teal header item">Blog</h2>
+            <h2 class="ui teal header item">VTodo</h2>
             <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>首页</a>
             <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
             <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i>标签</a>
@@ -45,23 +45,23 @@
                 </div>
                 <div class="right aligned column">
                     <!--h是block元素，所以会直接换行-->
-                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${blogCount}"> 114 </h2> 篇笔记
+                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${noteCount}"> 114 </h2> 篇笔记
                 </div>
             </div>
         </div>
 
-        <div class="ui segment m-margin-top-large" th:if="${blogCount}==0">
+        <div class="ui segment m-margin-top-large" th:if="${noteCount}==0">
             <p>这里空空如也~</p>
         </div>
         <th:block th:each="item : ${archiveMap}">
             <h2 class="ui center aligned header" th:text="${item.key}">2017</h2>
             <div class="ui vertical fluid menu">
-            <a href="#" target="_blank" class="item" th:each="blog : ${item.value}" th:href="@{/blog/{id}(id=${blog.id})}">
+            <a href="#" target="_blank" class="item" th:each="note : ${item.value}" th:href="@{/note/{id}(id=${note.id})}">
                 <span>
-                    <i class="teal circle icon"></i><span th:text="${blog.title}">关于刻意练习的清单</span>
-                    <div class="ui teal basic left pointing label m-padded-mini" th:text="${#dates.format(blog.updateTime, 'MMMdd')}">9月03日</div>
+                    <i class="teal circle icon"></i><span th:text="${note.title}">关于刻意练习的清单</span>
+                    <div class="ui teal basic left pointing label m-padded-mini" th:text="${#dates.format(note.updateTime, 'MMMdd')}">9月03日</div>
                 </span>
-                <div class="ui orange basic left pointing label m-padded-mini" th:text="${blog.flag}">原创</div>
+                <div class="ui orange basic left pointing label m-padded-mini" th:text="${note.flag}">原创</div>
             </a>
             <!--/*-->
             <a href="#" target="_blank" class="item">

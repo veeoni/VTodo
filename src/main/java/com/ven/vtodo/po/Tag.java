@@ -16,7 +16,7 @@ public class Tag {
     private String name;
 
     @ManyToMany(mappedBy = "tags")
-    private List<Blog> blogs = new ArrayList<>();
+    private List<Note> notes = new ArrayList<>();
     @ManyToMany(mappedBy = "tags")
     private List<Todo> todos = new ArrayList<>();
     @ManyToOne
@@ -38,12 +38,12 @@ public class Tag {
         this.todos = todos;
     }
 
-    public List<Blog> getBlogs() {
-        return blogs;
+    public List<Note> getNotes() {
+        return notes;
     }
 
-    public void setBlogs(List<Blog> blogs) {
-        this.blogs = blogs;
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
     public Tag() {
     }
@@ -69,7 +69,7 @@ public class Tag {
         return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", blogs[0]Id=" + (blogs!=null&&blogs.size()>0?blogs.get(0).getId():"null") +
+                ", notes[0]Id=" + (notes !=null&& notes.size()>0? notes.get(0).getId():"null") +
                 ", todos[0]Id=" + (todos!=null&&todos.size()>0?todos.get(0).getId():"null") +
                 ", userId=" + (user!=null?user.getId():"null") +
                 '}';

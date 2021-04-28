@@ -2,7 +2,7 @@ package com.ven.vtodo.web;
 
 import com.ven.vtodo.po.Comment;
 import com.ven.vtodo.po.User;
-import com.ven.vtodo.service.BlogService;
+import com.ven.vtodo.service.NoteService;
 import com.ven.vtodo.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,21 +20,21 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
     @Autowired
-    private BlogService blogService;
+    private NoteService noteService;
     @Value("${comment.avatar}")
     private String avatar;
 
-    @GetMapping("/comments/{blogId}")
-    public String comments(@PathVariable Long blogId, Model model){
-        model.addAttribute("comments", commentService.listCommentByBlogId(blogId));
-        return "blog :: commentList";
+    @GetMapping("/comments/{noteId}")
+    public String comments(@PathVariable Long noteId, Model model){
+        model.addAttribute("comments", commentService.listCommentByNoteId(noteId));
+        return "note :: commentList";
     }
 
     @PostMapping("/comments")
     public String post(Comment comment, HttpSession session){
-        //传blogId，就建立了blog和comment的关系
-        Long blogId = comment.getBlog().getId();
-        comment.setBlog(blogService.getBlog(blogId));
+        //传noteId，就建立了note和comment的关系
+        Long noteId = comment.getNote().getId();
+        comment.setNote(noteService.getNote(noteId));
         User user = (User) session.getAttribute("user");
         if(user != null){
             comment.setAvatar(user.getAvatar());
@@ -43,6 +43,6 @@ public class CommentController {
         } else{
             comment.setAvatar(avatar);
         }commentService.saveComment(comment);
-        return "redirect:/comments/"+blogId;
+        return "redirect:/comments/"+noteId;
     }
 }

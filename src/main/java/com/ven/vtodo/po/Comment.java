@@ -19,7 +19,7 @@ public class Comment {
     private Date createTime;
 
     @ManyToOne
-    private Blog blog;
+    private Note note;
     @ManyToOne
     private User user;
     @OneToMany(mappedBy = "parentComment")
@@ -96,12 +96,12 @@ public class Comment {
         this.createTime = createTime;
     }
 
-    public Blog getBlog() {
-        return blog;
+    public Note getNote() {
+        return note;
     }
 
-    public void setBlog(Blog blog) {
-        this.blog = blog;
+    public void setNote(Note note) {
+        this.note = note;
     }
 
     public List<Comment> getReplyComments() {
@@ -129,7 +129,7 @@ public class Comment {
                 ", content='" + content + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", createTime=" + createTime +
-                ", blogId=" + (blog!=null?blog.getId():"null") +
+                ", noteId=" + (note !=null? note.getId():"null") +
                 ", replyComments[0]Id=" + (replyComments!=null&&replyComments.size()>0?replyComments.get(0).getId():"null") +
                 ", parentCommentId=" + (parentComment!=null?parentComment.getId():"null") +
                 ", isAdminComment=" + adminComment +

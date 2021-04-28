@@ -19,9 +19,9 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
 
     @Override
-    public List<Comment> listCommentByBlogId(Long blogId) {
+    public List<Comment> listCommentByNoteId(Long noteId) {
         Sort sort = Sort.by("createTime");
-        List<Comment> commentList = commentRepository.findByBlogIdAndParentCommentNull(blogId, sort);
+        List<Comment> commentList = commentRepository.findByNoteIdAndParentCommentNull(noteId, sort);
         return eachComment(commentList);
     }
 
@@ -59,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * @param comments root根节点，blog不为空的对象集合
+     * @param comments root根节点，note不为空的对象集合
      * @return
      */
     private void combineChildren(List<Comment> comments) {

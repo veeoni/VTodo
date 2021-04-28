@@ -1,7 +1,7 @@
 package com.ven.vtodo.web;
 
 import com.ven.vtodo.po.User;
-import com.ven.vtodo.service.BlogService;
+import com.ven.vtodo.service.NoteService;
 import com.ven.vtodo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class ArchivesShowController {
 
     @Autowired
-    private BlogService blogService;
+    private NoteService noteService;
     @Autowired
     private UserService userService;
 
@@ -24,8 +24,8 @@ public class ArchivesShowController {
         if(user == null){
             user = userService.getUserById(1L);
         }
-        model.addAttribute("archiveMap", blogService.archiveBlogByUser(user).descendingMap());
-        model.addAttribute("blogCount", blogService.countBlogsByUser(user));
+        model.addAttribute("archiveMap", noteService.archiveNoteByUser(user).descendingMap());
+        model.addAttribute("noteCount", noteService.countNotesByUser(user));
         return "archives";
     }
 }

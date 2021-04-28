@@ -25,7 +25,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> listTagTopByUser(Integer size, User user) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "blogs.size");
+        Sort sort = Sort.by(Sort.Direction.DESC, "notes.size");
         Pageable pageable = PageRequest.of(0, size, sort);
         return tagRepository.findTopByUser(user, pageable);
     }

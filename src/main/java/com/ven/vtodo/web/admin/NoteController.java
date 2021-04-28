@@ -1,11 +1,11 @@
 package com.ven.vtodo.web.admin;
 
-import com.ven.vtodo.po.Blog;
+import com.ven.vtodo.po.Note;
 import com.ven.vtodo.po.User;
-import com.ven.vtodo.service.BlogService;
+import com.ven.vtodo.service.NoteService;
 import com.ven.vtodo.service.TagService;
 import com.ven.vtodo.service.TypeService;
-import com.ven.vtodo.vo.BlogQuery;
+import com.ven.vtodo.vo.NoteQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,39 +26,39 @@ import javax.servlet.http.HttpSession;
 public class NoteController {
 
     @Autowired
-    private BlogService blogService;
+    private NoteService noteService;
     @Autowired
     private TypeService typeService;
     @Autowired
     private TagService tagService;
 
-    @GetMapping("/blogs")
-    public String blogs(
+    @GetMapping("/notes")
+    public String notes(
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            BlogQuery blog, HttpSession session, Model model){
+            NoteQuery note, HttpSession session, Model model){
         User user = (User) session.getAttribute("user");
         model.addAttribute("types", typeService.listTypeByUser(user));
-        Page page = blogService.listBlogByUser(pageable, blog, user);
+        Page page = noteService.listNoteByUser(pageable, note, user);
         System.out.println(page.toString());
         model.addAttribute("page", page);
-        return "admin/blogs";
+        return "admin/notes";
     }
 
-    @PostMapping("/blogs/search")
+    @PostMapping("/notes/search")
     public String search(
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            BlogQuery blog, HttpSession session, Model model){
+            NoteQuery note, HttpSession session, Model model){
         User user = (User) session.getAttribute("user");
-        model.addAttribute("page", blogService.listBlogByUser(pageable, blog, user));
-        return "admin/blogs :: blogList";
+        model.addAttribute("page", noteService.listNoteByUser(pageable, note, user));
+        return "admin/notes :: noteList";
     }
 
-    @GetMapping("/blogs/input")
+    @GetMapping("/notes/input")
     public String input( HttpSession session, Model model){
         User user = (User) session.getAttribute("user");
         setTypeAndTag(user, model);
-        model.addAttribute("blog", new Blog());
-        return "admin/blogs-input";
+        model.addAttribute("note", new Note());
+        return "admin/notes-input";
     }
 
     private void setTypeAndTag(User user, Model model){
@@ -66,35 +66,35 @@ public class NoteController {
         model.addAttribute("tags", tagService.listTagByUser(user));
     }
 
-    @GetMapping("/blogs/{id}/input")
+    @GetMapping("/notes/{id}/input")
     public String editInput(@PathVariable Long id, HttpSession session, Model model){
         User user = (User) session.getAttribute("user");
         setTypeAndTag(user, model);
-        Blog blog = blogService.getBlog(id);
-        blog.init();
-        model.addAttribute("blog", blog);
-        return "admin/blogs-input";
+        Note note = noteService.getNote(id);
+        note.init();
+        model.addAttribute("note", note);
+        return "admin/notes-input";
     }
 
 
-    @PostMapping("/blogs")
-    public String post(Blog blog, RedirectAttributes attributes, HttpSession session){
-        blog.setUser((User) session.getAttribute("user"));
-        blog.setType(typeService.getType(blog.getType().getId()));
-        blog.setTags(tagService.listTag(blog.getTagIds()));
-        Blog b = blogService.saveBlog(blog);
+    @PostMapping("/notes")
+    public String post(Note note, RedirectAttributes attributes, HttpSession session){
+        note.setUser((User) session.getAttribute("user"));
+        note.setType(typeService.getType(note.getType().getId()));
+        note.setTags(tagService.listTag(note.getTagIds()));
+        Note b = noteService.saveNote(note);
         if(b == null){
             attributes.addFlashAttribute("message", "操作失败");
         } else {
             attributes.addFlashAttribute("message", "操作成功");
         }
-        return "redirect:/admin/blogs";
+        return "redirect:/admin/notes";
     }
 
-    @GetMapping("/blogs/{id}/delete")
+    @GetMapping("/notes/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes attributes){
-        blogService.deleteBlog(id);
+        noteService.deleteNote(id);
         attributes.addFlashAttribute("message", "删除成功");
-        return "redirect:/admin/blogs";
+        return "redirect:/admin/notes";
     }
 }

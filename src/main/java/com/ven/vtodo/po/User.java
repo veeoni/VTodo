@@ -24,7 +24,7 @@ public class User {
     private Date updateTime;
 
     @OneToMany(mappedBy = "user")
-    private List<Blog> blogs = new ArrayList<>();
+    private List<Note> notes = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Todo> todos = new ArrayList<>();
     @OneToMany(mappedBy = "user")
@@ -56,12 +56,12 @@ public class User {
         this.todos = todos;
     }
 
-    public List<Blog> getBlogs() {
-        return blogs;
+    public List<Note> getNotes() {
+        return notes;
     }
 
-    public void setBlogs(List<Blog> blogs) {
-        this.blogs = blogs;
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 
     public User() {
@@ -152,7 +152,7 @@ public class User {
                 ", type=" + type +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", blogs=" + (blogs!=null&&blogs.size()>0?blogs.get(0).getId():"null") +
+                ", notes=" + (notes !=null&& notes.size()>0? notes.get(0).getId():"null") +
                 ", todos=" + (todos!=null&&todos.size()>0?todos.get(0).getId():"null") +
                 ", tags=" + (tags!=null&&tags.size()>0?tags.get(0).getId():"null") +
                 ", types=" + (types!=null&&types.size()>0?types.get(0).getId():"null") +

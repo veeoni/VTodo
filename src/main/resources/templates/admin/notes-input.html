@@ -41,8 +41,8 @@
 <div class="ui attached pointing menu">
     <div class="ui container">
         <div class="right menu">
-            <a href="#" th:href="@{/admin/blogs/input}" class="teal active item">发布</a>
-            <a href="#" th:href="@{/admin/blogs}" class="item">列表</a>
+            <a href="#" th:href="@{/admin/notes/input}" class="teal active item">发布</a>
+            <a href="#" th:href="@{/admin/notes}" class="item">列表</a>
         </div>
     </div>
 </div>
@@ -50,7 +50,7 @@
 <!--中间内容-->
 <div class="m-container m-body-container m-padded-tb-big">
     <div class="ui container">
-        <form id="blog-form" action="#" th:object="${blog}" th:action="@{/admin/blogs}" method="post" class="ui form">
+        <form id="note-form" action="#" th:object="${note}" th:action="@{/admin/notes}" method="post" class="ui form">
             <input type="hidden" name="published" th:value="*{published}">
             <input type="hidden" name="id" th:value="*{id}">
             <input type="hidden" name="createTime" th:value="*{createTime}">
@@ -220,11 +220,11 @@
     $('.ui.dropdown').dropdown();
     $('#save-btn').click(function () {
         $('[name="published"]').val(false);
-        $('#blog-form').submit();
+        $('#note-form').submit();
     });
     $('#publish-btn').click(function () {
         $('[name="published"]').val(true);
-        $('#blog-form').submit();
+        $('#note-form').submit();
     });
 
     $('.ui.form').form({

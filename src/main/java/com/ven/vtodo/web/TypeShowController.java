@@ -1,9 +1,9 @@
 package com.ven.vtodo.web;
 
-import com.ven.vtodo.po.Blog;
+import com.ven.vtodo.po.Note;
 import com.ven.vtodo.po.Type;
 import com.ven.vtodo.po.User;
-import com.ven.vtodo.service.BlogService;
+import com.ven.vtodo.service.NoteService;
 import com.ven.vtodo.service.TypeService;
 import com.ven.vtodo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.List;
 public class TypeShowController {
 
     @Autowired
-    private BlogService blogService;
+    private NoteService noteService;
     @Autowired
     private TypeService typeService;
     @Autowired
@@ -38,14 +38,14 @@ public class TypeShowController {
             user = userService.getUserById(1L);
         }
         List<Type> types = typeService.listTypeTopByUser(10000, user);
-        Page<Blog> page = null;
+        Page<Note> page = null;
         if(types.size()>0){
             if(id==-1){
                 id = types.get(0).getId();
             }
-            page = blogService.listBlog(pageable, id, false);
+            page = noteService.listNote(pageable, id, false);
         }else{
-            page = blogService.listBlogByUser(pageable, user);
+            page = noteService.listNoteByUser(pageable, user);
         }
         model.addAttribute("types", types);
         model.addAttribute("page", page);

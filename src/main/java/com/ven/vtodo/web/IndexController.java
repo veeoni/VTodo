@@ -1,7 +1,7 @@
 package com.ven.vtodo.web;
 
 import com.ven.vtodo.po.User;
-import com.ven.vtodo.service.BlogService;
+import com.ven.vtodo.service.NoteService;
 import com.ven.vtodo.service.TagService;
 import com.ven.vtodo.service.TypeService;
 import com.ven.vtodo.service.UserService;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
 
     @Autowired
-    private BlogService blogService;
+    private NoteService noteService;
     @Autowired
     private TypeService typeService;
     @Autowired
@@ -46,42 +46,42 @@ public class IndexController {
             user = userService.getUserById(1L);
         }
         //model用于与前端Thymeleaf传递数据，键值对
-        model.addAttribute("page", blogService.listBlogByUser(pageable, user));
+        model.addAttribute("page", noteService.listNoteByUser(pageable, user));
         model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
         model.addAttribute("tags", tagService.listTagTopByUser(10, user));
-        model.addAttribute("recommendBlogs", blogService.listRecommendBlogTopByUser(8, user));
+        model.addAttribute("recommendNotes", noteService.listRecommendNoteTopByUser(8, user));
         logger.info("----------index--------------");
         return "index";
     }
-    //通过以下两个方法决定使用commonmark还是editormd显示blog
-    @GetMapping("/blogs/{id}")
-    public String blog(@PathVariable Long id, Model model){
-        model.addAttribute("blog", blogService.getAndConvert(id));
-        return "blog";
+    //通过以下两个方法决定使用commonmark还是editormd显示note
+    @GetMapping("/notes/{id}")
+    public String note(@PathVariable Long id, Model model){
+        model.addAttribute("note", noteService.getAndConvert(id));
+        return "note";
     }
 
-    @GetMapping("/blog/{id}")
-    public String blog2(@PathVariable Long id, Model model){
-        model.addAttribute("blog", blogService.getBlog(id));
-        return "blog_editormd";
+    @GetMapping("/note/{id}")
+    public String note2(@PathVariable Long id, Model model){
+        model.addAttribute("note", noteService.getNote(id));
+        return "note_editormd";
     }
 
     @PostMapping("/search")
     public String search(
             @PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam String query, Model model){//参数加一个表单中定义的name="query"
-        model.addAttribute("page", blogService.listBlog(pageable, "%"+query+"%"));
+        model.addAttribute("page", noteService.listNote(pageable, "%"+query+"%"));
         model.addAttribute("query",query);
         return "search";
     }
 
-    @GetMapping("/footer/newblog")
-    public String newblogs(HttpSession session, Model model){
+    @GetMapping("/footer/newnote")
+    public String newnotes(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
         if(user==null){
             user = userService.getUserById(1L);
         }
-        model.addAttribute("newblogs", blogService.listRecommendBlogTopByUser(3, user));
-        return "_fragments :: newblogList";
+        model.addAttribute("newnotes", noteService.listRecommendNoteTopByUser(3, user));
+        return "_fragments :: newnoteList";
     }
 }

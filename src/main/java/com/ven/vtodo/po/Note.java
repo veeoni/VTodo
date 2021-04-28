@@ -10,8 +10,8 @@ import java.util.List;
 import static com.ven.vtodo.util.ListToStringUtil.tagsToIds;
 
 @Entity
-@Table(name = "t_blog")
-public class Blog {
+@Table(name = "t_note")
+public class Note {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class Blog {
     private List<Tag> tags = new ArrayList<>();
     @ManyToOne
     private User user;
-    @OneToMany(cascade={CascadeType.REMOVE}, mappedBy = "blog")
+    @OneToMany(cascade={CascadeType.REMOVE}, mappedBy = "note")
     private List<Comment> comments = new ArrayList<>();
 
     @Transient//不保存至数据库
@@ -88,7 +88,7 @@ public class Blog {
         this.user = user;
     }
 
-    public Blog() {
+    public Note() {
     }
 
     public Long getId() {
@@ -213,7 +213,7 @@ public class Blog {
 
     @Override
     public String toString() {
-        return "Blog{" +
+        return "Note{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
