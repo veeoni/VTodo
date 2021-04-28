@@ -41,7 +41,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
     @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 and b.published = true ")
     List<Blog> findByYear(String year);    //SELECT * FROM t_blog b where date_format(b.update_time, '%Y') = '2016';
 
-    @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 and b.user = ?2  and b.published = true")
+    @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 and b.user = ?2  and b.published = true order by b.updateTime desc ")
     List<Blog> findByYearAndUser(String year, User user);
 
     @Query("SELECT b from Blog b where b.user = ?1 and b.published = true ")
