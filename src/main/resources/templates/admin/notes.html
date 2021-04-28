@@ -124,7 +124,8 @@
                         <a onclick="page(this)" th:attr="data-page=${page.number}+1" th:unless="${page.last}"  class="item">下一页</a>
                     </div>
                     <span th:text="|第${(page.getTotalPages()==0)?0:(page.number+1)}页/共${page.getTotalPages()}页|"></span>
-                    <a th:href="@{/admin/notes/input}" href="#" class="ui mini right floated teal basic button">新增</a>
+                    <a th:unless="${#lists.isEmpty(types)}" th:href="@{/admin/notes/input}" href="#" class="ui mini right floated teal basic button">新增</a>
+                    <a th:if="${#lists.isEmpty(types)}" href="javascript:alert('请先前往个人中心添加分类!')" class="ui mini right floated teal basic button">新增</a>
                 </th>
             </tr>
             </tfoot>

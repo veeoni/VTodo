@@ -129,17 +129,21 @@
                         });
                         //点击新建待办按钮之后的事件
                         $('#create_todo_btn').on("click", function () {
-                            $('.ui.add.dropdown').dropdown();
-                            var status = document.getElementById("create_todo_form").style.display;
-                            console.log($("#todo_or_review_input").val());
-                            if (status == "none") {
-                                document.getElementById("create_todo_btn").innerText = "放弃新增";
-                                document.getElementById("create_todo_form").style.display = "";
-                                document.getElementById("edit_todo_form").style.display = "none";
-                                $('#taskDate').val(getdate());
-                            } else {
-                                document.getElementById("create_todo_btn").innerText = "新增待办";
-                                document.getElementById("create_todo_form").style.display = "none";
+                            if(/*[[${#lists.isEmpty(types)}]]*/false) {
+                                alert("请先前往个人中心添加分类!");
+                            }else{
+                                $('.ui.add.dropdown').dropdown();
+                                var status = document.getElementById("create_todo_form").style.display;
+                                console.log($("#todo_or_review_input").val());
+                                if (status == "none") {
+                                    document.getElementById("create_todo_btn").innerText = "放弃新增";
+                                    document.getElementById("create_todo_form").style.display = "";
+                                    document.getElementById("edit_todo_form").style.display = "none";
+                                    $('#taskDate').val(getdate());
+                                } else {
+                                    document.getElementById("create_todo_btn").innerText = "新增待办";
+                                    document.getElementById("create_todo_form").style.display = "none";
+                                }
                             }
                         });
                         //多选框“重复”被选中后 TODO 改成switch样式会好看点
