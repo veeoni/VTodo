@@ -22,7 +22,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
 //    List<Blog> findBlogsByContentContainsOrTitleContains();
 
     //可以原生sql，select * from t_blog where title like '%内容%' and content like '%内容%' nativeQuery = true
-    @Query("select b from Blog b where b.title like ?1 or b.content like ?1")//因为两个地方都按query，所以占位符都一样，否则，可用?1 ?2...
+    @Query("select b from Blog b where (b.title like ?1 or b.content like ?1) and b.published = true ")//因为两个地方都按query，所以占位符都一样，否则，可用?1 ?2...
     Page<Blog> findByQuery(String query, Pageable pageable);//此处并不会为我们加好%%进行匹配，所以要我们自己处理好
 
     @Transactional
@@ -30,22 +30,23 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
     @Query("update Blog b set b.views = b.views+1 where b.id = ?1")
     int updateViews(Long id);
 
-    @Query(value = "select date_format(b.update_time, '%Y') as year from t_blog b GROUP by year ORDER BY year ASC;",nativeQuery = true)
+    @Query(value = "select date_format(b.update_time, '%Y') as year from t_blog b where b.published = true GROUP by year ORDER BY year ASC;",nativeQuery = true)
 //    @Query("select function('data_format', b.updateTime, '%Y') as year from Blog b GROUP BY function('data_format', b.updateTime, '%Y') ORDER BY year DESC")
     List<String> findGroupYears();
 
-    @Query(value = "select date_format(b.update_time, '%Y') as year from t_blog b where b.user_id = ?1 GROUP by year ORDER BY year ASC;",nativeQuery = true)
+    @Query(value = "select date_format(b.update_time, '%Y') as year from t_blog b where b.user_id = ?1 and b.published = true GROUP by year ORDER BY year ASC;",nativeQuery = true)
     List<String> findGroupYearsAndUser(Long userId);
 
     //SELECT * FROM t_blog b where date_format(b.update_time, '%Y') = '2016';
-    @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 ")
+    @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 and b.published = true ")
     List<Blog> findByYear(String year);    //SELECT * FROM t_blog b where date_format(b.update_time, '%Y') = '2016';
 
-    @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 and b.user = ?2")
+    @Query("SELECT b from Blog b where function('date_format', b.updateTime, '%Y') = ?1 and b.user = ?2  and b.published = true")
     List<Blog> findByYearAndUser(String year, User user);
 
-    @Query("SELECT b from Blog b where b.user = ?1")
+    @Query("SELECT b from Blog b where b.user = ?1 and b.published = true ")
     Page<Blog> findAllByUser(User user, Pageable pageable);
 
+    @Query("SELECT count(b) from Blog b where b.user = ?1 and b.published = true ")
     long countBlogsByUser(User user);
 }

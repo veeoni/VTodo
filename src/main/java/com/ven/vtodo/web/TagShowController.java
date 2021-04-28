@@ -43,7 +43,7 @@ public class TagShowController {
             if(id==-1){
                 id = tags.get(0).getId();
             }
-            page = blogService.listBlog(pageable, id);
+            page = blogService.listBlog(pageable, id, true);
         }else{
             page = blogService.listBlogByUser(pageable, user);
         }

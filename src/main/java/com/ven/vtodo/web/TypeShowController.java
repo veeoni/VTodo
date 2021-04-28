@@ -6,7 +6,6 @@ import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.BlogService;
 import com.ven.vtodo.service.TypeService;
 import com.ven.vtodo.service.UserService;
-import com.ven.vtodo.vo.BlogQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,14 +38,12 @@ public class TypeShowController {
             user = userService.getUserById(1L);
         }
         List<Type> types = typeService.listTypeTopByUser(10000, user);
-        BlogQuery blog = new BlogQuery();
         Page<Blog> page = null;
         if(types.size()>0){
             if(id==-1){
                 id = types.get(0).getId();
             }
-            blog.setTypeId(id);
-            page = blogService.listBlogByUser(pageable, blog, user);
+            page = blogService.listBlog(pageable, id, false);
         }else{
             page = blogService.listBlogByUser(pageable, user);
         }

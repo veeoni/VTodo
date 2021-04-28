@@ -53,12 +53,21 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Page<Blog> listBlog(Pageable pageable, Long tagId) {
+    public Page<Blog> listBlog(Pageable pageable, Long id, boolean isTag) {
         return blogRepository.findAll(new Specification<Blog>() {
             @Override//查谁，条件是啥， 设置具体条件的表达式
             public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                Join join = root.join("tags");
-                return criteriaBuilder.equal(join.get("id"), tagId);
+                Join join;
+                if(isTag) {
+                    join = root.join("tags");
+                }else{
+                    join = root.join("type");
+                }
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(criteriaBuilder.isTrue(root.get("published")));
+                predicates.add(criteriaBuilder.equal(join.get("id"), id));
+                criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+                return null;
             }
         }, pageable);
     }
@@ -68,7 +77,7 @@ public class BlogServiceImpl implements BlogService {
         return blogRepository.findByQuery(query, pageable);
     }
 
-    @Override
+    @Override//管理页查询blog
     public Page<Blog> listBlogByUser(Pageable pageable, BlogQuery blog, User user) {
         return blogRepository.findAll(new Specification<Blog>() {
             @Override//查谁，条件是啥， 设置具体条件的表达式

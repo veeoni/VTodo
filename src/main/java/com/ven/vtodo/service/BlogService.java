@@ -14,12 +14,12 @@ public interface BlogService {
     Blog getBlog(Long id);
 
     Blog getAndConvert(Long id);
-
+    //管理页用
     Page<Blog> listBlogByUser(Pageable pageable, BlogQuery blog, User user);
 
     Page<Blog> listBlogByUser(Pageable pageable, User user);
 
-    Page<Blog> listBlog(Pageable pageable, Long tagId);
+    Page<Blog> listBlog(Pageable pageable, Long Id, boolean isTag);
 
     Page<Blog> listBlog(Pageable pageable, String query);
 

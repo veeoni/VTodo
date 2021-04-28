@@ -7,6 +7,7 @@ import com.ven.vtodo.service.TagService;
 import com.ven.vtodo.service.TypeService;
 import com.ven.vtodo.vo.BlogQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -37,7 +38,9 @@ public class NoteController {
             BlogQuery blog, HttpSession session, Model model){
         User user = (User) session.getAttribute("user");
         model.addAttribute("types", typeService.listTypeByUser(user));
-        model.addAttribute("page", blogService.listBlogByUser(pageable, blog, user));
+        Page page = blogService.listBlogByUser(pageable, blog, user);
+        System.out.println(page.toString());
+        model.addAttribute("page", page);
         return "admin/blogs";
     }
 
