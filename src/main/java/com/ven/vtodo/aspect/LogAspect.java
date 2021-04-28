@@ -1,6 +1,7 @@
 package com.ven.vtodo.aspect;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,24 @@ public class LogAspect {
     @Pointcut("execution(* com.ven.vtodo.web..*(..))")//按execution规定拦截哪些类的哪些方法
     public void log(){}
 
-
+    
+    @Around("log()")
+    public Object around(ProceedingJoinPoint point) throws Throwable {
+        Object returnValue = null;
+        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = sra.getRequest();
+        Long startTime = System.currentTimeMillis();
+        try {
+            returnValue = point.proceed(point.getArgs());
+        } catch (Exception e) {
+            // 请求异常处理
+            throw e;
+        }
+        Long endTime = System.currentTimeMillis();
+        logger.info("------------------doAround---------------------");
+        logger.info("rest  " + request.getRequestURI() + "---used time---" + (endTime - startTime) + "ms");
+        return returnValue;
+    }
     @Before("log()")//只要有请求，都会在方法前执行这个
     public void doBefore(JoinPoint joinPoint){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
