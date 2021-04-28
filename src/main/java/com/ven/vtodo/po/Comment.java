@@ -27,7 +27,7 @@ public class Comment {
     @ManyToOne
     private Comment parentComment;
     //是否为本人的评论，是的话，在头上标“作者”
-    private boolean adminComment;
+    private boolean isAuthor;
 
     public User getUser() {
         return user;
@@ -37,12 +37,12 @@ public class Comment {
         this.user = user;
     }
 
-    public boolean isAdminComment() {
-        return adminComment;
+    public boolean isIsAuthor() {
+        return isAuthor;
     }
 
-    public void setAdminComment(boolean adminComment) {
-        this.adminComment = adminComment;
+    public void setIsAuthor(boolean isAuthor) {
+        this.isAuthor = isAuthor;
     }
 
     public Comment() {
@@ -132,7 +132,7 @@ public class Comment {
                 ", noteId=" + (note !=null? note.getId():"null") +
                 ", replyComments[0]Id=" + (replyComments!=null&&replyComments.size()>0?replyComments.get(0).getId():"null") +
                 ", parentCommentId=" + (parentComment!=null?parentComment.getId():"null") +
-                ", isAdminComment=" + adminComment +
+                ", isAdminComment=" + isAuthor +
                 ", userId=" + (user!=null?user.getId():"null") +
                 '}';
     }

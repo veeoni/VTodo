@@ -27,7 +27,7 @@ public class CommentController {
     @GetMapping("/comments/{noteId}")
     public String comments(@PathVariable Long noteId, Model model){
         model.addAttribute("comments", commentService.listCommentByNoteId(noteId));
-        return "note :: commentList";
+        return "note_editormd :: commentList";
     }
 
     @PostMapping("/comments")
@@ -37,12 +37,15 @@ public class CommentController {
         comment.setNote(noteService.getNote(noteId));
         User user = (User) session.getAttribute("user");
         if(user != null){
+            comment.setIsAuthor(true);
+            comment.setUser(user);
             comment.setAvatar(user.getAvatar());
-            comment.setAdminComment(true);
-//            comment.setNickname(user.getNickname());
+            comment.setEmail(user.getEmail());
+            comment.setNickname(user.getNickname());
         } else{
             comment.setAvatar(avatar);
-        }commentService.saveComment(comment);
+        }
+        commentService.saveComment(comment);
         return "redirect:/comments/"+noteId;
     }
 }

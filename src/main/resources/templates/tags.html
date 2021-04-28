@@ -51,6 +51,9 @@
             </div>
         </div>
         <div class="ui attached segment m-padded-tb-large">
+            <div th:if="${#lists.isEmpty(types)}">
+                <p>我定睛一看，嚯，这里啥都没有~</p>
+            </div>
             <a class="ui basic left pointing large label m-margin-tb-tiny" href="#"
                th:href="@{/tags/{id}(id=${tag.id})}" th:classappend="${tag.id==activeTagId}?'teal'"
                th:each="tag : ${tags}">
@@ -98,7 +101,7 @@
         </div>
         <div class="ui top attached padded segment teal">
             <!--遍历，拿到note对象进行渲染-->
-            <div class="ui segment" th:if="${page.getTotalPages()}==0">
+            <div th:if="${page.getTotalPages()}==0">
                 <p>我定睛一看，嚯，这里啥都没有~</p>
             </div>
             <div class="ui padded vertical segment m-padded-tb-large m-mobile-lr-clear"
@@ -266,6 +269,7 @@
                        th:href="@{/tags/{id}?page={page}(id=${activeTagId},page=${page.number}-1)}"
                        th:unless="${page.first}">上一页</a>
                 </div>
+                <span th:text="|第${(page.getTotalPages()==0)?0:(page.number+1)}页/共${page.getTotalPages()}页|"></span>
                 <div class="right aligned column">
                     <a class="ui mini teal basic button" href="#"
                        th:href="@{/tags/{id}?page={page}(id=${activeTagId},page=${page.number}+1)}"

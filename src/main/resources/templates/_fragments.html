@@ -82,6 +82,10 @@
                 <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新推荐</h4>
                 <div id="newnote-container">
                     <div class="ui inverted link list" th:fragment="newnoteList">
+
+                        <div class="item" th:if="${#lists.isEmpty(newnotes)}">
+                            <p>这里空空如也~</p>
+                        </div>
                         <a class="item" href="#" target="_blank" th:href="@{/note/{id}(id=${note.id})}" th:each="note : ${newnotes}" th:text="${note.title}">用户故事（User Story）</a>
                         <!--/*-->
                         <a class="item" href="#">用户故事（User Story）</a>

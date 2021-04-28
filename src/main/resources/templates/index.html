@@ -274,6 +274,7 @@
                         <div class="column">
                             <a class="ui mini teal basic button" href="#" th:href="@{/index/(page=${page.number}-1)}" th:unless="${page.first}">上一页</a>
                         </div>
+                        <span th:text="|第${(page.number=0)?0:page.number+1}页/共${page.getTotalPages()}页|"></span>
                         <div class="right aligned column">
                             <a class="ui mini teal basic button" href="#" th:href="@{/index/(page=${page.number}+1)}" th:unless="${page.last}">下一页</a>
                         </div>
@@ -297,6 +298,9 @@
                     <div class="ui teal segment">
                         <!--未填充满，加fluid-->
                         <div class="ui fluid vertical menu">
+                            <div th:if="${#lists.isEmpty(types)}">
+                                <p>我定睛一看，嚯，这里啥都没有~</p>
+                            </div>
                             <a class="item" target="_blank" href="#" th:href="@{/types/{id}(id=${type.id})}" th:each="type : ${types}">
                                 <span th:text="${type.name}">学习日志</span>
                                 <!--#arrays.length集合长度-->
@@ -340,6 +344,9 @@
                         </div>
                     </div>
                     <div class="ui teal segment">
+                        <div th:if="${#lists.isEmpty(tags)}">
+                            <p>我定睛一看，嚯，这里啥都没有~</p>
+                        </div>
                         <a class="ui teal basic left pointing label m-margin-tb-tiny" href="#" target="_blank" th:href="@{/tags/{id}(id=${tag.id})}"  th:each="tag : ${tags}">
                             <span th:text="${tag.name}">方法论</span>
                             <!--挖坑，老师用的是#arrays.length()，我试试能不能直接size-->
@@ -391,6 +398,9 @@
 
                     <div class="ui secondary segment">
                         <i class="tags icon"></i>最新推荐
+                    </div>
+                    <div class="ui segment" th:if="${#lists.isEmpty(recommendBlogs)}">
+                        <p>我定睛一看，嚯，这里啥都没有~</p>
                     </div>
                     <div class="ui segment" th:each="note : ${recommendBlogs}">
                         <a class="m-black m-text-thin" href="#" target="_blank" th:text="${note.title}"

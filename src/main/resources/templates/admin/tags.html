@@ -62,6 +62,11 @@
                 </tr>
             </thead>
             <tbody>
+            <tr th:if="${page.getTotalPages()==0}">
+                <td></td>
+                <td>这里空空如也~</td>
+                <td></td>
+            </tr>
             <tr th:each="tag,iterStat : ${page.content}">
                 <td th:text="${iterStat.count}">1</td>
                 <!--<td th:text="${type.id}">1</td>-->
@@ -79,6 +84,7 @@
                         <a th:href="@{/admin/tags(page=${page.number}-1)}" th:unless="${page.first}" href="#" class="item">上一页</a>
                         <a th:href="@{/admin/tags(page=${page.number}+1)}" th:unless="${page.last}" href="#" class="item">下一页</a>
                     </div>
+                    <span th:text="|第${(page.getTotalPages()==0)?0:(page.number+1)}页/共${page.getTotalPages()}页|"></span>
                     <a th:href="@{/admin/tags/input}" href="#" class="ui mini right floated teal basic button">新增</a>
                 </th>
             </tr>

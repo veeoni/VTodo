@@ -97,6 +97,11 @@
                 </tr>
             </thead>
             <tbody>
+            <tr th:if="${page.getTotalPages()==0}">
+                <td></td>
+                <td>这里空空如也~</td>
+                <td></td>
+            </tr>
             <tr th:each="note,iterStat : ${page.content}">
                 <td th:text="${iterStat.count}">1</td>
                 <td th:text="${note.title}">刻意练习清单</td>
@@ -118,7 +123,7 @@
                         <a onclick="page(this)" th:attr="data-page=${page.number}-1" th:unless="${page.first}"  class="item">上一页</a>
                         <a onclick="page(this)" th:attr="data-page=${page.number}+1" th:unless="${page.last}"  class="item">下一页</a>
                     </div>
-                    <span th:text="|第${page.number+1}页/共${page.getTotalPages()}页|"></span>
+                    <span th:text="|第${(page.getTotalPages()==0)?0:(page.number+1)}页/共${page.getTotalPages()}页|"></span>
                     <a th:href="@{/admin/notes/input}" href="#" class="ui mini right floated teal basic button">新增</a>
                 </th>
             </tr>

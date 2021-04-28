@@ -50,6 +50,9 @@
             </div>
         </div>
         <div class="ui attached segment m-padded-tb-large">
+            <div th:if="${#lists.isEmpty(types)}">
+                <p>我定睛一看，嚯，这里啥都没有~</p>
+            </div>
             <div class="ui labeled button m-margin-tb-tiny" th:each="type : ${types}">
                 <a href="#" class="ui basic button" th:text="${type.name}" th:href="@{/types/{id}(id=${type.id})}" th:classappend="${type.id==activeTypeId}? 'teal' : '' ">思考与感悟</a>
                 <a class="ui basic left pointing label" th:text="${type.notes.size}" th:href="@{/types/{id}(id=${type.id})}" th:classappend="(${type.id}==${activeTypeId})? 'teal' : '' ">24</a>
@@ -83,7 +86,7 @@
         </div>
         <div class="ui top attached padded segment teal">
             <!--遍历，拿到note对象进行渲染-->
-            <div class="ui segment" th:if="${page.getTotalPages()}==0">
+            <div th:if="${page.getTotalPages()}==0">
                 <p>我定睛一看，嚯，这里啥都没有~</p>
             </div>
             <div class="ui padded vertical segment m-padded-tb-large m-mobile-lr-clear" th:each="note : ${page.content}">
@@ -234,6 +237,7 @@
                 <div class="column">
                     <a class="ui mini teal basic button" href="#" th:href="@{/types/{id}?page={page}(id=${activeTypeId},page=${page.number}-1)}" th:unless="${page.first}">上一页</a>
                 </div>
+                <span th:text="|第${(page.getTotalPages()==0)?0:(page.number+1)}页/共${page.getTotalPages()}页|"></span>
                 <div class="right aligned column">
                     <a class="ui mini teal basic button" href="#" th:href="@{/types/{id}?page={page}(id=${activeTypeId},page=${page.number}+1)}" th:unless="${page.last}">下一页</a>
                 </div>
