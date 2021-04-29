@@ -1031,6 +1031,9 @@
                             }, 1000);  //反复执行函数本身
                         </script>
                         <div class="ui fluid vertical menu">
+                            <a class="item" href="/admin/countdowns" th:if="${countdowns}==null or ${countdowns.size}==0">
+                                好像没有可以显示的倒计时呢~点我管理倒计时哦~
+                            </a>
                             <a class="item" th:each="countdown : ${countdowns}" th:id="|countdown${countdown.id}|" th:href="@{/admin/countdowns/{id}/input(id=${countdown.id})}">
                                 <span>距离<h2 class="ui orange header m-inline-block m-text-thin" th:text="${countdown.name}">毕业答辩</h2>只剩</span><br>
                                 <span>

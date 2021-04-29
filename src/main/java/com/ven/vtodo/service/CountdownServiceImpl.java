@@ -28,7 +28,7 @@ public class CountdownServiceImpl implements CountdownService {
 
     @Override
     public List<Countdown> listCountdownByUser(User user) {
-        return countdownRepository.findAllByUser(user);
+        return countdownRepository.findAllByUserAndIsShowTrue(user);
     }
 
     @Override

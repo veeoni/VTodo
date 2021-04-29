@@ -52,9 +52,9 @@
     <div class="ui container">
         <br><br><br><br><br>
         <form action="#" method="post"  th:object="${countdown}" th:action="*{id}==null ? @{/admin/countdowns} : @{/admin/countdowns/{id}(id=*{id})} "  class="ui form">
-            <input type="text" name="id" th:value="*{id}">
-            <input type="text" name="countTime" th:value="*{#dates.format(countTime, 'yyyy-MM-dd HH:mm:ss')}">
-            <input type="text" name="createTime" th:value="*{createTime}">
+            <input type="hidden" name="id" th:value="*{id}">
+            <input type="hidden" name="countTime" th:value="*{#dates.format(countTime, 'yyyy-MM-dd HH:mm:ss')}">
+            <input type="hidden" name="createTime" th:value="*{createTime}">
             <div class="required field">
                 <div class="ui left labeled input">
                     <label class="ui teal basic label">名称</label>

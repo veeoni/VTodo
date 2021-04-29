@@ -12,10 +12,10 @@ import java.util.List;
 public interface CountdownRepository extends JpaRepository<Countdown,Long>  {
     Countdown findByNameAndUser(String name, User user);
 
-    @Query("select t from Countdown t LEFT JOIN t.user u where u = ?1")
+    @Query("select c from Countdown c LEFT JOIN c.user u where u = ?1")
     List<Countdown> findTopByUser(User user, Pageable pageable);
 
     Page<Countdown> findAllByUser(Pageable pageable, User user);
 
-    List<Countdown> findAllByUser(User user);
+    List<Countdown> findAllByUserAndIsShowTrue(User user);
 }
