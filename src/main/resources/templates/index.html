@@ -297,10 +297,10 @@
                     </div>
                     <div class="ui teal segment">
                         <!--未填充满，加fluid-->
-                        <div class="ui fluid vertical menu">
-                            <div th:if="${#lists.isEmpty(types)}">
-                                <p>我定睛一看，嚯，这里啥都没有~</p>
-                            </div>
+                        <div th:if="${#lists.isEmpty(types)}">
+                            <p>我定睛一看，嚯，这里啥都没有~</p>
+                        </div>
+                        <div class="ui fluid vertical menu" th:unless="${#lists.isEmpty(types)}">
                             <a class="item" target="_blank" href="#" th:href="@{/types/{id}(id=${type.id})}" th:each="type : ${types}">
                                 <span th:text="${type.name}">学习日志</span>
                                 <!--#arrays.length集合长度-->
@@ -429,11 +429,6 @@
                         <a class="m-black m-text-thin" href="#" target="_blank">用户故事 (User Story)</a>
                     </div>
                     <!--*/-->
-                </div>
-                <!--二维码-->
-                <div class="ui horizontal divider header m-margin-top-large">扫码关注我</div>
-                <div class="ui centered card" style="width: 11em">
-                    <img alt="" class="ui rounded image" th:src="@{/images/wechat.jpg}" >
                 </div>
             </div>
         </div>

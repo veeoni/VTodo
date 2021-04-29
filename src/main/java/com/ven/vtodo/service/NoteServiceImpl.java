@@ -35,11 +35,32 @@ public class NoteServiceImpl implements NoteService {
         return noteRepository.getOne(id);
     }
 
+    @Override
+    public Note getPublishedNote(Long id) {
+        noteRepository.updateViews(id);
+        return noteRepository.getNoteByIdAndPublishedTrue(id);
+    }
+
+    @Override
+    public Note getAndConvertPublished(Long id) {
+        Note note = noteRepository.getNoteByIdAndPublishedTrue(id);
+        if(note == null){
+            throw new NotFoundException("该博客不存在！");
+        }
+        Note b = new Note();
+        BeanUtils.copyProperties(note, b);
+        String content = b.getContent();
+        //todo 弹幕说，要注意设置password为空？？
+        b.setContent(MarkdownUtils.markdownToHtmlExtensions(content));//note.set方法会修改数据库（hibernateSession），这就出错了，所以此处有问题
+        noteRepository.updateViews(id);
+        return b;
+    }
+
     @Transactional
     @Override
     public Note getAndConvert(Long id) {
         Note note = noteRepository.getOne(id);
-        if(note == null){
+        if(note.getId() == null){
             throw new NotFoundException("该博客不存在！");
         }
         Note b = new Note();

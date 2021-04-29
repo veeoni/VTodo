@@ -21,6 +21,8 @@ public interface NoteRepository extends JpaRepository<Note, Long>, JpaSpecificat
 
 //    List<Note> findNotesByContentContainsOrTitleContains();
 
+    Note getNoteByIdAndPublishedTrue(Long id);
+
     //可以原生sql，select * from t_note where title like '%内容%' and content like '%内容%' nativeQuery = true
     @Query("select b from Note b where (b.title like ?1 or b.content like ?1) and b.published = true ")//因为两个地方都按query，所以占位符都一样，否则，可用?1 ?2...
     Page<Note> findByQuery(String query, Pageable pageable);//此处并不会为我们加好%%进行匹配，所以要我们自己处理好
@@ -28,13 +30,13 @@ public interface NoteRepository extends JpaRepository<Note, Long>, JpaSpecificat
     @Transactional
     @Modifying
     @Query("update Note b set b.views = b.views+1 where b.id = ?1")
-    int updateViews(Long id);
+    void updateViews(Long id);
 
-    @Query(value = "select date_format(b.update_time, '%Y') as year from t_note b where b.published = true GROUP by year ORDER BY year ASC;",nativeQuery = true)
+    @Query(value = "select date_format(b.update_time, '%Y') as year from t_note b where b.published = true GROUP by year ORDER BY year;",nativeQuery = true)
 //    @Query("select function('data_format', b.updateTime, '%Y') as year from Note b GROUP BY function('data_format', b.updateTime, '%Y') ORDER BY year DESC")
     List<String> findGroupYears();
 
-    @Query(value = "select date_format(b.update_time, '%Y') as year from t_note b where b.user_id = ?1 and b.published = true GROUP by year ORDER BY year ASC;",nativeQuery = true)
+    @Query(value = "select date_format(b.update_time, '%Y') as year from t_note b where b.user_id = ?1 and b.published = true GROUP by year ORDER BY year;",nativeQuery = true)
     List<String> findGroupYearsAndUser(Long userId);
 
     //SELECT * FROM t_note b where date_format(b.update_time, '%Y') = '2016';

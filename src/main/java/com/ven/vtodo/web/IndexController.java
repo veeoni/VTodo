@@ -1,5 +1,6 @@
 package com.ven.vtodo.web;
 
+import com.ven.vtodo.po.Note;
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.NoteService;
 import com.ven.vtodo.service.TagService;
@@ -56,13 +57,21 @@ public class IndexController {
     //通过以下两个方法决定使用commonmark还是editormd显示note
     @GetMapping("/notes/{id}")
     public String note(@PathVariable Long id, Model model){
-        model.addAttribute("note", noteService.getAndConvert(id));
+        Note note = noteService.getAndConvertPublished(id);
+        if(note == null){
+            return "cannot-access";
+        }
+        model.addAttribute("note", note);
         return "note";
     }
 
     @GetMapping("/note/{id}")
     public String note2(@PathVariable Long id, Model model){
-        model.addAttribute("note", noteService.getNote(id));
+        Note note = noteService.getPublishedNote(id);
+        if(note == null){
+            return "cannot-access";
+        }
+        model.addAttribute("note", note);
         return "note_editormd";
     }
 
