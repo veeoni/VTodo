@@ -45,7 +45,7 @@ public class NoteServiceImpl implements NoteService {
     public Note getAndConvertPublished(Long id) {
         Note note = noteRepository.getNoteByIdAndPublishedTrue(id);
         if(note == null){
-            throw new NotFoundException("该博客不存在！");
+            throw new NotFoundException("该笔记不存在！");
         }
         Note b = new Note();
         BeanUtils.copyProperties(note, b);
@@ -61,7 +61,7 @@ public class NoteServiceImpl implements NoteService {
     public Note getAndConvert(Long id) {
         Note note = noteRepository.getOne(id);
         if(note.getId() == null){
-            throw new NotFoundException("该博客不存在！");
+            throw new NotFoundException("该笔记不存在！");
         }
         Note b = new Note();
 //        note.setViews(note.getViews()+1);
@@ -87,7 +87,7 @@ public class NoteServiceImpl implements NoteService {
                 List<Predicate> predicates = new ArrayList<>();
                 predicates.add(criteriaBuilder.isTrue(root.get("published")));
                 predicates.add(criteriaBuilder.equal(join.get("id"), id));
-                criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+                criteriaQuery.where(predicates.toArray(new Predicate[0]));
                 return null;
             }
         }, pageable);
