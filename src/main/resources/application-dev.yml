@@ -5,7 +5,7 @@ spring:
 #    username: root
 #    password: 123456
 #    url: jdbc:mysql://1.15.89.54:3306/blog?useUnicode=true&characterEncoding=utf-8
-    url: jdbc:mysql://1.15.89.54:3306/vtodo_v1?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://1.15.89.54:3306/vtodo_v1?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=Asia/Shanghai
     username: root
     password: mysql5.7VEN
   jpa:
