@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>倒计时管理</title>
+    <title>目标新增</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
-    <link rel="stylesheet  prefetch" href="../../static/css/me.css" th:href="@{/css/me.css}"/>
+    <link rel="stylesheet  prefetch" href="../../static/css/me.css" th:href="@{/css/me.css}" />
 </head>
 <body>
 
 <!--导航-->
-<nav th:replace="admin/_fragments :: menu(5)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+<nav th:replace="admin/_fragments :: menu(6)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
     <div class="ui container">
         <!--stackable 屏幕小时可堆叠-->
         <div class="ui inverted stackable secondary menu">
@@ -40,64 +40,47 @@
 <div class="ui attached pointing menu">
     <div class="ui container">
         <div class="right menu">
-            <a th:href="@{/admin/countdowns}" class="active teal item">列表</a>
-            <a th:href="@{/admin/countdowns/input}" class="teal item">新增</a>
+            <a th:href="@{/admin/targets}" class="teal item">列表</a>
+            <a th:href="@{/admin/targets/input}" class="active teal item">新增</a>
         </div>
     </div>
 </div>
-    <!--中间内容-->
+
+<!--中间内容-->
+
 <div class="m-container-small m-body-container m-padded-tb-big">
     <div class="ui container">
-        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
-            <i class="close icon"></i>
-            <div class="header">提示</div>
-            <p  th:text="${message}">操作成功！</p>
-        </div>
-        <table class="ui table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>名称</th>
-                    <th>时间</th>
-                    <th>主页显示</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${page.getTotalPages()==0}">
-                <td></td>
-                <td>这里空空如也~</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr th:each="countdown,iterStat : ${page.content}">
-                <td th:text="${iterStat.count}">1</td>
-                <!--<td th:text="${type.id}">1</td>-->
-                <td th:text="${countdown.name}">刻意练习清单</td>
-                <td th:text="${#dates.format(countdown.countTime, 'yyyy-MM-dd HH:mm:ss')}">2021-04-29 14:17:20</td>
-                <td th:text="${countdown.isShow}?'是':'否'">是</td>
-                <td>
-                    <a href="#" th:href="@{/admin/countdowns/{id}/input(id=${countdown.id})}" class="ui mini teal basic button">编辑</a>
-                    <a href="#" th:href="@{/admin/countdowns/{id}/delete(id=${countdown.id})}" class="ui mini red basic button">删除</a>
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <th colspan="6">
-                    <div class="ui mini pagination menu"  th:if="${page.totalPages}>1">
-                        <a th:href="@{/admin/countdowns(page=${page.number}-1)}" th:unless="${page.first}" href="#" class="item">上一页</a>
-                        <a th:href="@{/admin/countdowns(page=${page.number}+1)}" th:unless="${page.last}" href="#" class="item">下一页</a>
-                    </div>
-                    <span th:text="|第${(page.getTotalPages()==0)?0:(page.number+1)}页/共${page.getTotalPages()}页|"></span>
-                    <a th:href="@{/admin/countdowns/input}" href="#" class="ui mini right floated teal basic button">新增</a>
-                </th>
-            </tr>
-            </tfoot>
-        </table>
+        <br><br><br><br><br>
+        <form action="#" method="post"  th:object="${target}" th:action="*{id}==null ? @{/admin/targets} : @{/admin/targets/{id}(id=*{id})} "  class="ui form">
+            <input type="hidden" name="id" th:value="*{id}">
+            <input type="hidden" name="createTime" th:value="*{createTime}">
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <label class="ui teal basic label">名称</label>
+                    <input type="text" name="name" placeholder="目标名称" th:value="*{name}" autofocus="autofocus">
+                </div>
+            </div>
+            <div class="ui right aligned toggle checkbox">
+                <input id="isShow" type="checkbox" name="isShow" class="hidden" th:checked="*{isShow==null}?'false':*{isShow}" th:value="*{isShow==null}?'true':*{isShow}">
+                <label for="isShow">主页显示</label>
+            </div>
+            <div class="ui error message"></div>
+            <!--/*/
+                <div class="ui negative message" th:if="${#fields.hasErrors('name')}"  >
+                  <i class="close icon"></i>
+                  <div class="header">验证失败</div>
+                  <p th:errors="*{name}">提交信息不符合规则</p>
+                </div>
+             /*/-->
+            <div class="ui right aligned container">
+                <!--若不指定type=button，则默认为submit-->
+                <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+                <button class="ui teal submit button">提交</button>
+            </div>
+        </form>
     </div>
 </div>
+
 <!--底部footer-->
 <footer th:replace="admin/_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
     <div class="ui center aligned container">
@@ -134,13 +117,29 @@
         <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright@......</p>
     </div>
 </footer>
-<script>
+
+<script th:inline="javascript">
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
     });
 
-    $('.ui.dropdown').dropdown()
+    $('.ui.dropdown').dropdown();
 
+    $('.ui.form').form({
+        fields : {
+            name : {
+                identifier: 'name',
+                rules:[{
+                    type:'empty',
+                    prompt: '请输入目标名称'
+                }]
+            }
+        }
+    });
+    var showcheckbox = $('#isShow')
+    showcheckbox.change(function () {
+        showcheckbox.val(showcheckbox.prop("checked"))
+    })
     //消息提示关闭初始化
     $('.message .close')
         .on('click', function () {
@@ -148,7 +147,6 @@
                 .closest('.message')
                 .transition('fade');
         });
-
 </script>
 </body>
 </html>

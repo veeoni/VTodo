@@ -19,8 +19,6 @@ public interface CountdownService {
 
     List<Countdown> listCountdownByUser(User user);
 
-    List<Countdown> listCountdown(String id);
-
     Countdown updateCountdown(Long id, Countdown countdown);
 
     void deleteCountdown(Long id);

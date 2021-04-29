@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div class="ui right aligned toggle checkbox">
-                <input id="isShow" type="checkbox" name="isShow" class="hidden" checked th:checked="*{isShow}" th:value="*{isShow}">
+                <input id="isShow" type="checkbox" name="isShow" class="hidden" th:checked="*{isShow==null}?'false':*{isShow}" th:value="*{isShow==null}?'true':*{isShow}">
                 <label for="isShow">主页显示</label>
             </div>
             <div class="ui error message"></div>

@@ -956,27 +956,26 @@
                                 <i class="idea icon"></i>目标
                             </div>
                             <div class="right aligned column">
-                                <a href="javascript:;" target="_blank" th:href="@{/types/-1}">more <i
-                                        class=" icon angle double right"></i></a>
+                                <a href="javascript:;" target="_blank" th:href="@{/admin/targets}">more
+                                    <i class=" icon angle double right"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment">
                         <!--未填充满，加fluid-->
                         <div class="ui fluid vertical menu">
-<!--                            <a class="item" target="_blank" href="javascript:;" th:href="@{/types/{id}(id=${type.id})}"-->
-<!--                               th:each="type : ${types}">-->
-<!--                                <span th:text="${type.name}">好好学习</span>-->
-<!--                            </a>-->
-                            <a class="item" href="javascript:;">
+                            <a class="item" href="/admin/targets" th:if="${targets}==null or ${targets.size}==0">
+                                好像没有可以显示的目标呢~点我管理目标哦~
+                            </a>
+                            <a class="item" th:each="target : ${targets}" th:href="@{/admin/targets/{id}/input(id=${target.id})}" th:text="${target.name}">
                                 Just for Fun
                             </a>
-                            <a class="item" href="javascript:;">
-                                要么孤独，要么庸俗
-                            </a>
-                            <a class="item" href="javascript:;">
-                                加油啊，研究生三年好好冲一把，读个985博士！
-                            </a>
+<!--                            <a class="item" href="javascript:;">-->
+<!--                                要么孤独，要么庸俗-->
+<!--                            </a>-->
+<!--                            <a class="item" href="javascript:;">-->
+<!--                                加油啊，研究生三年好好冲一把，读个985博士！-->
+<!--                            </a>-->
                         </div>
                     </div>
                 </div>

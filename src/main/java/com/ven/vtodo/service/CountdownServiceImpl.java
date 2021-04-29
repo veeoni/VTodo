@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,22 +28,6 @@ public class CountdownServiceImpl implements CountdownService {
     @Override
     public List<Countdown> listCountdownByUser(User user) {
         return countdownRepository.findAllByUserAndIsShowTrue(user);
-    }
-
-    @Override
-    public List<Countdown> listCountdown(String id) {
-        return countdownRepository.findAllById(convertToList(id));
-    }
-
-    private List<Long> convertToList(String ids){
-        List<Long> list = new ArrayList<>();
-        if(!"".equals(ids) && ids != null){
-            String[] idArray = ids.split(",");
-            for (String s : idArray) {
-                list.add(Long.valueOf(s));
-            }
-        }
-        return list;
     }
 
     @Override
@@ -66,7 +49,7 @@ public class CountdownServiceImpl implements CountdownService {
     @Override
     public Countdown updateCountdown(Long id, Countdown countdown) {
         Countdown t = countdownRepository.getOne(id);
-        if(t == null){
+        if(t.getId() == null){
             throw new NotFoundException("不存在该倒计时");
         }
         BeanUtils.copyProperties(countdown, t);

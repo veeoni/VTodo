@@ -36,7 +36,7 @@ public class TodoController {
     @Autowired
     private TodoService todoService;
     @Autowired
-    private UserService userService;
+    private TargetService targetService;
     private Date date;
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
     private Calendar calendar = Calendar.getInstance();
@@ -49,9 +49,7 @@ public class TodoController {
             attributes.addFlashAttribute("message","您需要先登录，才能使用日程规划功能");
             return "redirect:/login";
         }
-//        model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
-//        model.addAttribute("tags", tagService.listTagTopByUser(10, user));
-//        model.addAttribute("recommendNotes", noteService.listRecommendNoteTopByUser(8, user));
+        model.addAttribute("targets", targetService.listTargetByUser(user));
         model.addAttribute("countdowns", countdownService.listCountdownByUser(user));
         logger.info("----------index--------------");
         return "todo";
