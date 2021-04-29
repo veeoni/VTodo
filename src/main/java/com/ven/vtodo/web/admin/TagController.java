@@ -73,7 +73,7 @@ public class TagController {
         User user = (User) session.getAttribute("user");
         Tag tag1 = tagService.getTagByNameAndUser(tag.getName(), user);
         if(tag1 != null){
-            result.rejectValue("name", "nameError", "不能添加重复的分类");
+            result.rejectValue("name", "nameError", "不能添加重复的标签");
         }
         if(result.hasErrors()){
             return "admin/tags-input";

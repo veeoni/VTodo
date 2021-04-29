@@ -82,7 +82,7 @@ public class TagServiceImpl implements TagService {
     public Tag updateTag(Long id, Tag tag) {
         Tag t = tagRepository.getOne(id);
         if(t == null){
-            throw new NotFoundException("不存在该类型");
+            throw new NotFoundException("不存在该标签");
         }
         BeanUtils.copyProperties(tag, t);
         return tagRepository.save(tag);
