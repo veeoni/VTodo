@@ -50,13 +50,29 @@
 
 <div class="m-container-small m-body-container m-padded-tb-big">
     <div class="ui container">
-        <br><br><br><br><br><br><br>
+        <br><br><br><br><br>
         <form action="#" method="post"  th:object="${countdown}" th:action="*{id}==null ? @{/admin/countdowns} : @{/admin/countdowns/{id}(id=*{id})} "  class="ui form">
-            <input type="hidden" name="id" th:value="*{id}">
+            <input type="text" name="id" th:value="*{id}">
+            <input type="text" name="countTime" th:value="*{#dates.format(countTime, 'yyyy-MM-dd HH:mm:ss')}">
+            <input type="text" name="createTime" th:value="*{createTime}">
             <div class="required field">
                 <div class="ui left labeled input">
                     <label class="ui teal basic label">名称</label>
-                    <input type="text" name="name" placeholder="标签名称" th:value="*{name}" autofocus="autofocus">
+                    <input type="text" name="name" placeholder="倒计时名称" th:value="*{name}" autofocus="autofocus">
+                </div>
+            </div>
+            <div class="two fields">
+                <div class="required field">
+                    <div class="ui left labeled input">
+                        <div class="ui teal basic center aligned label">日期</div>
+                        <input class="ui date" name="datetime" id="datetime" th:value="|*{#dates.format(countTime, 'yyyy-MM-dd')}T*{#dates.format(countTime, 'HH:mm')}|" type="datetime-local">
+                    </div>
+                </div>
+                <div class="required field">
+                    <div class="ui left labeled input">
+                        <input class="ui date" name="second" id="second" type="number" th:value="*{#dates.format(countTime, 'ss')}" placeholder="00~59">
+                        <div class="ui basic center aligned label">秒</div>
+                    </div>
                 </div>
             </div>
             <div class="ui error message"></div>
@@ -113,7 +129,7 @@
     </div>
 </footer>
 
-<script>
+<script th:inline="javascript">
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
     });
@@ -122,16 +138,45 @@
 
     $('.ui.form').form({
         fields : {
-            name1 : {
+            name : {
                 identifier: 'name',
                 rules:[{
                     type:'empty',
-                    prompt: '请输入分类名称'
+                    prompt: '请输入倒计时名称'
                 }]
+            },
+            second: {
+                identifier  : 'second',
+                rules: [
+                    {
+                        type   : 'integer[0..59]',
+                        prompt : '只能输入0~59秒'
+                    }
+                ]
             }
         }
     });
 
+    Date.prototype.format = function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt)) {
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        for(var k in o) {
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
+    }
     //消息提示关闭初始化
     $('.message .close')
         .on('click', function () {
@@ -139,6 +184,45 @@
                 .closest('.message')
                 .transition('fade');
         });
+
+    //获取当前日期
+    function getdatetime() {
+        var time = new Date();
+        var minute = ("0" + time.getMinutes()).slice(-2);
+        var hour = ("0" + time.getHours()).slice(-2);
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day) + "T" + (hour) + ":" + (minute);
+        return today;
+    }
+
+    var datetimeinput = $('#datetime');
+    var secondinput = $('#second');
+    var counttimeinput = $('[name=countTime]');
+    function setdatetime(date){
+        datetimeinput.val(date);
+
+    }
+    if(/*[[${countdown.countTime}==null]]*/false){
+        datetimeinput.val(getdatetime());
+        counttimeinput.val(new Date().format("yyyy-MM-dd hh:mm:00"))
+        secondinput.val(0)
+    }
+    datetimeinput.change(function () {
+        let thisdate = new Date(datetimeinput.val());
+        counttimeinput.val(thisdate.format('yyyy-MM-dd')+ " " + thisdate.format("hh:mm:")+secondinput.val())
+        console.log(datetimeinput.val());
+    });
+    secondinput.change(function () {
+        if(secondinput.val()<0){
+            secondinput.val(59)
+        }else if(secondinput.val()>59){
+            secondinput.val(0)
+        }
+        let thisdate = new Date(datetimeinput.val());
+        counttimeinput.val(thisdate.format('yyyy-MM-dd')+ " " + thisdate.format("hh:mm:")+secondinput.val())
+        console.log(datetimeinput.val());
+    });
 </script>
 </body>
 </html>

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/admin")
@@ -50,13 +51,12 @@ public class CountdownController {
     public String post(@Valid Countdown countdown, BindingResult result, HttpSession session, RedirectAttributes attributes){
         User user = (User) session.getAttribute("user");
         Countdown countdown1 = countdownService.getCountdownByNameAndUser(countdown.getName(), user);
+        countdown.setCreateTime(new Date());
+        countdown.setUser(user);
         if(countdown1 != null){
-            result.rejectValue("name", "nameError", "不能添加重复的分类");
-        }
-        if(result.hasErrors()){
+            result.rejectValue("name", "nameError", "已有同名倒计时");
             return "admin/countdowns-input";
         }
-        countdown.setUser(user);
         Countdown t = countdownService.saveCountdown(countdown);
         if(t == null){
             attributes.addFlashAttribute("message", "操作失败");
@@ -71,13 +71,6 @@ public class CountdownController {
     public String editPost(@Valid Countdown countdown, BindingResult result,/*BindingResult前面一定要是Countdown，否则就没有效果了*/
                            @PathVariable Long id, HttpSession session, RedirectAttributes attributes){
         User user = (User) session.getAttribute("user");
-        Countdown countdown1 = countdownService.getCountdownByNameAndUser(countdown.getName(), user);
-        if(countdown1 != null){
-            result.rejectValue("name", "nameError", "不能添加重复的分类");
-        }
-        if(result.hasErrors()){
-            return "admin/countdowns-input";
-        }
         countdown.setUser(user);
         Countdown t = countdownService.updateCountdown(id, countdown);
         if(t == null){

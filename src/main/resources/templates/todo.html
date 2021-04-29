@@ -42,7 +42,6 @@
             <!--左边待办列表-->
             <div id="todo_container" class="eleven wide column">
                 <!--todo_container加载，fragment获取返回的值-->
-
                 <div name="todo_container" th:fragment="todoList">
                     <!--一定要先jquery，再Semantic！！！！！
     放这儿是因为，这部分的页面要动态加载，但是，动态加载过后，在js里绑定的事件就用不了了，索性直接塞里面
@@ -996,19 +995,22 @@
                     </div>
                     <div class="ui teal segment">
                         <!--未填充满，加fluid-->
-                        <script language="JavaScript">
+                        <script language="JavaScript" th:inline="javascript">
                             var showtime = function (endtime, comp, countName) {
                                 var nowtime = new Date();  //获取当前时间
-                                var lefttime = endtime.getTime() - nowtime.getTime();  //距离结束时间的毫秒数
+                                var lefttime = endtime.getTime() - nowtime.getTime(),  //距离结束时间的毫秒数
+                                    leftd = Math.floor(lefttime/(1000*60*60*24));
                                 if(lefttime<0) {
+                                    leftd = -leftd
                                     comp.innerHTML =
-                                        '<span><h2 class="ui orange header m-inline-block m-text-thin">'+countName+'</h2>已截止于</span><br>' +
+                                        '<span><h2 class="ui orange header m-inline-block m-text-thin">'+countName+'</h2>已过' +
+                                        '<h2 class="ui orange header m-inline-block m-text-thin">'+ (leftd-1) +'</h2>' +
+                                        '天，截止于</span>' +
                                         '<span>'+
                                         '<h3 class="ui blue header m-inline-block m-text-thin">' + endtime.format("yyyy-MM-dd hh:mm:ss") +'</h3></span>'
                                     return
                                 }
-                                var leftd = Math.floor(lefttime/(1000*60*60*24)),  //计算天数
-                                    lefth = Math.floor(lefttime/(1000*60*60)%24),  //计算小时数
+                                var lefth = Math.floor(lefttime/(1000*60*60)%24),  //计算小时数
                                     leftm = Math.floor(lefttime/(1000*60)%60),  //计算分钟数
                                     lefts = Math.floor(lefttime/1000%60);  //计算秒数
                                 comp.innerHTML =
@@ -1021,33 +1023,21 @@
                                     '</span>'
                             }
                             setInterval (function () {
-                                showtime(new Date("2021-4-29 11:00:00"), document.getElementById("showtime"), "空间站发射");
-                                showtime(new Date("2021-6-30 8:00"), document.getElementById("showtime2"), "毕业");
+                                /*<![CDATA[*/
+                                /*[# th:each="countdown : ${countdowns}"]*/
+                                showtime(new Date(/*[[${countdown.countTime}]]*/"2021-6-30 8:00"), document.getElementById(/*[[|countdown${countdown.id}|]]*/""), /*[[${countdown.name}]]*/"");
+                                /*[/]*/
+                                /*]]>*/
                             }, 1000);  //反复执行函数本身
                         </script>
                         <div class="ui fluid vertical menu">
-<!--                            <a class="item" target="_blank" href="javascript:;" th:href="@{/types/{id}(id=${type.id})}"-->
-<!--                               th:each="type : ${types}">-->
-<!--                                <span th:text="${type.name}">距离毕业答辩只剩</span>-->
-<!--                                <span th:text="${type.name}">XX Days xx Hs xx mins xx s</span>-->
-<!--                            </a>-->
-
-                            <a class="item" id="showtime" href="javascript:;">
-                                <span>距离<h2 class="ui orange header m-inline-block m-text-thin">毕业答辩</h2>只剩</span><br>
+                            <a class="item" th:each="countdown : ${countdowns}" th:id="|countdown${countdown.id}|" href="javascript:;">
+                                <span>距离<h2 class="ui orange header m-inline-block m-text-thin" th:text="${countdown.name}">毕业答辩</h2>只剩</span><br>
                                 <span>
-                                    <h2 class="ui orange header m-inline-block m-text-thin">19</h2> Days
-                                    <h2 class="ui orange header m-inline-block m-text-thin">02</h2> Hs
-                                    <h2 class="ui orange header m-inline-block m-text-thin">15</h2> mins
-                                    <h2 class="ui orange header m-inline-block m-text-thin">03</h2> s
-                                </span>
-                            </a>
-                            <a class="item" id="showtime2" href="javascript:;">
-                                <span>距离<h2 class="ui orange header m-inline-block m-text-thin">毕业</h2>只剩</span><br>
-                                <span>
-                                    <h2 class="ui orange header m-inline-block m-text-thin">64</h2> Days
-                                    <h2 class="ui orange header m-inline-block m-text-thin">08</h2> Hs
-                                    <h2 class="ui orange header m-inline-block m-text-thin">15</h2> mins
-                                    <h2 class="ui orange header m-inline-block m-text-thin">03</h2> s
+                                    <h2 class="ui orange header m-inline-block m-text-thin">--</h2> Days
+                                    <h2 class="ui orange header m-inline-block m-text-thin">--</h2> Hs
+                                    <h2 class="ui orange header m-inline-block m-text-thin">--</h2> mins
+                                    <h2 class="ui orange header m-inline-block m-text-thin">--</h2> s
                                 </span>
                             </a>
                         </div>

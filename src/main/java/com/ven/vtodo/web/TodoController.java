@@ -28,7 +28,7 @@ import java.util.List;
 @Controller
 public class TodoController {
     @Autowired
-    private NoteService noteService;
+    private CountdownService countdownService;
     @Autowired
     private TagService tagService;
     @Autowired
@@ -52,6 +52,7 @@ public class TodoController {
 //        model.addAttribute("types", typeService.listTypeTopByUser(6, user));//可定义在配置文件
 //        model.addAttribute("tags", tagService.listTagTopByUser(10, user));
 //        model.addAttribute("recommendNotes", noteService.listRecommendNoteTopByUser(8, user));
+        model.addAttribute("countdowns", countdownService.listCountdownByUser(user));
         logger.info("----------index--------------");
         return "todo";
     }
