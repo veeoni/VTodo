@@ -399,10 +399,10 @@
                     <div class="ui secondary segment">
                         <i class="tags icon"></i>最新推荐
                     </div>
-                    <div class="ui segment" th:if="${#lists.isEmpty(recommendBlogs)}">
+                    <div class="ui segment" th:if="${#lists.isEmpty(recommendNotes)}">
                         <p>我定睛一看，嚯，这里啥都没有~</p>
                     </div>
-                    <div class="ui segment" th:each="note : ${recommendBlogs}">
+                    <div class="ui segment" th:each="note : ${recommendNotes}">
                         <a class="m-black m-text-thin" href="#" target="_blank" th:text="${note.title}"
                            th:href="@{/note/{id}(id=${note.id})}">用户故事 (User Story)</a>
                     </div>
