@@ -21,9 +21,22 @@ public class Countdown {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//th传值时，需要的是String，此处是Date，类型不匹配，所以要转换
     private Date createTime;
-
+    private boolean isShow;
     @ManyToOne
     private User user;
+
+    public Boolean getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(Boolean show) {
+        isShow = show;
+    }
+
+    public void setIsShow(boolean show) {
+        isShow = show;
+    }
+
 
     public Date getCountTime() {
         return countTime;
@@ -75,6 +88,7 @@ public class Countdown {
                 ", name='" + name + '\'' +
                 ", countTime=" + countTime +
                 ", createTime=" + createTime +
+                ", isShow=" + isShow +
                 ", userId=" + (user!=null?user.getId():"null") +
                 '}';
     }

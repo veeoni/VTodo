@@ -59,6 +59,7 @@
                     <th></th>
                     <th>名称</th>
                     <th>时间</th>
+                    <th>主页显示</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -68,12 +69,14 @@
                 <td>这里空空如也~</td>
                 <td></td>
                 <td></td>
+                <td></td>
             </tr>
             <tr th:each="countdown,iterStat : ${page.content}">
                 <td th:text="${iterStat.count}">1</td>
                 <!--<td th:text="${type.id}">1</td>-->
                 <td th:text="${countdown.name}">刻意练习清单</td>
                 <td th:text="${#dates.format(countdown.countTime, 'yyyy-MM-dd HH:mm:ss')}">2021-04-29 14:17:20</td>
+                <td th:text="${countdown.isShow}?'是':'否'">是</td>
                 <td>
                     <a href="#" th:href="@{/admin/countdowns/{id}/input(id=${countdown.id})}" class="ui mini teal basic button">编辑</a>
                     <a href="#" th:href="@{/admin/countdowns/{id}/delete(id=${countdown.id})}" class="ui mini red basic button">删除</a>

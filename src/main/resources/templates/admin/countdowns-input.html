@@ -75,6 +75,10 @@
                     </div>
                 </div>
             </div>
+            <div class="ui right aligned toggle checkbox">
+                <input id="isShow" type="checkbox" name="isShow" class="hidden" checked th:checked="*{isShow}" th:value="*{isShow}">
+                <label for="isShow">主页显示</label>
+            </div>
             <div class="ui error message"></div>
             <!--/*/
                 <div class="ui negative message" th:if="${#fields.hasErrors('name')}"  >
@@ -156,7 +160,10 @@
             }
         }
     });
-
+    var showcheckbox = $('#isShow')
+    showcheckbox.change(function () {
+        showcheckbox.val(showcheckbox.prop("checked"))
+    })
     Date.prototype.format = function(fmt) {
         var o = {
             "M+" : this.getMonth()+1,                 //月份
