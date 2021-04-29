@@ -140,6 +140,9 @@
     showcheckbox.change(function () {
         showcheckbox.val(showcheckbox.prop("checked"))
     })
+    if(/*[[${target.id}==null]]*/false){
+        showcheckbox.prop("checked",true).val('true')
+    }
     //消息提示关闭初始化
     $('.message .close')
         .on('click', function () {

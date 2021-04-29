@@ -214,6 +214,7 @@
         datetimeinput.val(getdatetime());
         counttimeinput.val(new Date().format("yyyy-MM-dd hh:mm:00"))
         secondinput.val(0)
+        showcheckbox.prop("checked",true).val('true')
     }
     datetimeinput.change(function () {
         let thisdate = new Date(datetimeinput.val());
