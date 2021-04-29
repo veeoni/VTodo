@@ -51,7 +51,7 @@
 <div class="m-container-small m-body-container m-padded-tb-big">
     <div class="ui container">
         <br><br><br><br><br><br><br>
-        <form action="#" method="post"  th:object="${tag}" th:action="*{id}==null ? @{/admin/tags} : @{/admin/tags/{id}(id=*{id})} "  class="ui form">
+        <form action="#" method="post"  th:object="${countdown}" th:action="*{id}==null ? @{/admin/countdowns} : @{/admin/countdowns/{id}(id=*{id})} "  class="ui form">
             <input type="hidden" name="id" th:value="*{id}">
             <div class="required field">
                 <div class="ui left labeled input">
