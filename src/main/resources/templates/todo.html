@@ -1031,7 +1031,7 @@
                             }, 1000);  //反复执行函数本身
                         </script>
                         <div class="ui fluid vertical menu">
-                            <a class="item" th:each="countdown : ${countdowns}" th:id="|countdown${countdown.id}|" href="javascript:;">
+                            <a class="item" th:each="countdown : ${countdowns}" th:id="|countdown${countdown.id}|" th:href="@{/admin/countdowns/{id}/input(id=${countdown.id})}">
                                 <span>距离<h2 class="ui orange header m-inline-block m-text-thin" th:text="${countdown.name}">毕业答辩</h2>只剩</span><br>
                                 <span>
                                     <h2 class="ui orange header m-inline-block m-text-thin">--</h2> Days
