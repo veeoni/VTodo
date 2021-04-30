@@ -1,5 +1,6 @@
 package com.ven.vtodo.web;
 
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.UserService;
 import com.ven.vtodo.util.SHA256Util;
@@ -11,7 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 
 @Controller
 public class LoginController {
@@ -56,7 +63,12 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password,
-                        HttpSession session, RedirectAttributes attributes) {
+                        @RequestParam String kaptcha, HttpSession session, RedirectAttributes attributes) {
+        String verifyCode = (String) session.getAttribute("verifyCode");
+        if(!kaptcha.equals(verifyCode)){
+            attributes.addFlashAttribute("message", "验证码错误");
+            return "redirect:/login";
+        }
         User user = userService.checkUser(username, password);
         if (user != null) {
             user.setPassword(null);//不能把密码传过去，很不安全
@@ -89,5 +101,33 @@ public class LoginController {
     public String logout2(HttpSession session) {
         session.removeAttribute("user");
         return "waiting";
+    }
+
+    @Autowired
+    private DefaultKaptcha captchaProducer;
+
+    @GetMapping("/kaptcha")
+    public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
+        byte[] captchaOutputStream = null;
+        ByteArrayOutputStream imgOutputStream = new ByteArrayOutputStream();
+        try {
+            //生产验证码字符串并保存到session中
+            String verifyCode = captchaProducer.createText();
+            httpServletRequest.getSession().setAttribute("verifyCode", verifyCode);
+            BufferedImage challenge = captchaProducer.createImage(verifyCode);
+            ImageIO.write(challenge, "jpg", imgOutputStream);
+        } catch (IllegalArgumentException e) {
+            httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        captchaOutputStream = imgOutputStream.toByteArray();
+        httpServletResponse.setHeader("Cache-Control", "no-store");
+        httpServletResponse.setHeader("Pragma", "no-cache");
+        httpServletResponse.setDateHeader("Expires", 0);
+        httpServletResponse.setContentType("image/jpeg");
+        ServletOutputStream responseOutputStream = httpServletResponse.getOutputStream();
+        responseOutputStream.write(captchaOutputStream);
+        responseOutputStream.flush();
+        responseOutputStream.close();
     }
 }

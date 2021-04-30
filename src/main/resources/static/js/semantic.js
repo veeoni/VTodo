@@ -1711,7 +1711,7 @@ $.fn.form.settings = {
 
   fields            : false,
 
-  keyboardShortcuts : true,
+  keyboardShortcuts : false,
   on                : 'submit',
   inline            : false,
 
