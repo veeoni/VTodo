@@ -34,19 +34,19 @@ public class TagShowController {
     @GetMapping("/tags/{id}")
     public String tags(
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable Long id, HttpSession session, Model model){
+            @PathVariable Long id, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-        if(user==null){
+        if (user == null) {
             user = userService.getUserById(1L);
         }
         List<Tag> tags = tagService.listTagTopByUser(10000, user);
         Page<Note> page = null;
-        if(tags.size()>0){
-            if(id==-1){
+        if (tags.size() > 0) {
+            if (id == -1) {
                 id = tags.get(0).getId();
             }
             page = noteService.listNote(pageable, id, true);
-        }else{
+        } else {
             page = new Page<Note>() {
                 @Override
                 public int getTotalPages() {

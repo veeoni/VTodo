@@ -12,7 +12,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nickname;
-    @Column(unique=true)
+    @Column(unique = true)
     private String username;
     private String password;
     private String email;
@@ -152,10 +152,10 @@ public class User {
                 ", type=" + type +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", notes=" + (notes !=null&& notes.size()>0? notes.get(0).getId():"null") +
-                ", todos=" + (todos!=null&&todos.size()>0?todos.get(0).getId():"null") +
-                ", tags=" + (tags!=null&&tags.size()>0?tags.get(0).getId():"null") +
-                ", types=" + (types!=null&&types.size()>0?types.get(0).getId():"null") +
+                ", notes=" + (notes != null && notes.size() > 0 ? notes.get(0).getId() : "null") +
+                ", todos=" + (todos != null && todos.size() > 0 ? todos.get(0).getId() : "null") +
+                ", tags=" + (tags != null && tags.size() > 0 ? tags.get(0).getId() : "null") +
+                ", types=" + (types != null && types.size() > 0 ? types.get(0).getId() : "null") +
                 '}';
     }
 }

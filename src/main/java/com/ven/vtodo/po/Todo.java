@@ -24,10 +24,10 @@ public class Todo {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//th传值时，需要的是String，此处是Date，类型不匹配，所以要转换
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date finishedDate;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date taskDate;
     @Column(name = "m_interval")
@@ -187,10 +187,10 @@ public class Todo {
     }
 
     public Boolean getRepeat() {
-        if(this.flag.equals("复习")){
+        if (this.flag.equals("复习")) {
             return false;
         }
-        if(this.repeat==null){
+        if (this.repeat == null) {
             this.repeat = this.totalTimes != 1;
         }
         return repeat;
@@ -214,7 +214,7 @@ public class Todo {
     }
 
     private String tagsToIds(List<Tag> tags) {
-        if (tags!=null && !tags.isEmpty()) {
+        if (tags != null && !tags.isEmpty()) {
             StringBuffer ids = new StringBuffer();
             boolean flag = false;
             for (Tag tag : tags) {
@@ -248,8 +248,8 @@ public class Todo {
                 ", easinessFactor=" + easinessFactor +
                 ", tagIds='" + tagIds + '\'' +
                 ", repeat=" + repeat +
-                ", user=" + (user!=null?user.getId():"null") +
-                ", type=" + (type!=null?type.getId():"null") +
+                ", user=" + (user != null ? user.getId() : "null") +
+                ", type=" + (type != null ? type.getId() : "null") +
                 ", tags=" + tagsToIds(tags) +
                 '}';
 

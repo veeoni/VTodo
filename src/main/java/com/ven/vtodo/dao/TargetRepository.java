@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface TargetRepository extends JpaRepository<Target,Long>  {
+public interface TargetRepository extends JpaRepository<Target, Long> {
     Target findByNameAndUser(String name, User user);
 
     @Query("select t from Target t LEFT JOIN t.user u where u = ?1")

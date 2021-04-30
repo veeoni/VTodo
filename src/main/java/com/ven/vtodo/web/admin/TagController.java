@@ -28,37 +28,38 @@ public class TagController {
 
     @GetMapping("/tags")
     public String list(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-                       HttpSession session, Model model){
+                       HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("page", tagService.listTag(pageable, user));
         return "admin/tags";
     }
+
     @GetMapping("/tags/input")
-    public String input(Model model){
+    public String input(Model model) {
         model.addAttribute("tag", new Tag());
         return "admin/tags-input";
     }
 
     @GetMapping("/tags/{id}/input")
-    public String editInput(@PathVariable/*保证路径id与此id一致*/ Long id, Model model){
+    public String editInput(@PathVariable/*保证路径id与此id一致*/ Long id, Model model) {
         model.addAttribute("tag", tagService.getTag(id));
         return "admin/tags-input";
     }
 
     //后端消息传到页面
     @PostMapping("/tags")
-    public String post(@Valid Tag tag, BindingResult result, HttpSession session, RedirectAttributes attributes){
+    public String post(@Valid Tag tag, BindingResult result, HttpSession session, RedirectAttributes attributes) {
         User user = (User) session.getAttribute("user");
         Tag tag1 = tagService.getTagByNameAndUser(tag.getName(), user);
-        if(tag1 != null){
+        if (tag1 != null) {
             result.rejectValue("name", "nameError", "不能添加重复的分类");
         }
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             return "admin/tags-input";
         }
         tag.setUser(user);
         Tag t = tagService.saveTag(tag);
-        if(t == null){
+        if (t == null) {
             attributes.addFlashAttribute("message", "操作失败");
         } else {
             attributes.addFlashAttribute("message", "操作成功");
@@ -69,18 +70,18 @@ public class TagController {
     //后端消息传到页面
     @PostMapping("/tags/{id}")
     public String editPost(@Valid Tag tag, BindingResult result,/*BindingResult前面一定要是Tag，否则就没有效果了*/
-                           @PathVariable Long id, HttpSession session, RedirectAttributes attributes){
+                           @PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
         User user = (User) session.getAttribute("user");
         Tag tag1 = tagService.getTagByNameAndUser(tag.getName(), user);
-        if(tag1 != null){
+        if (tag1 != null) {
             result.rejectValue("name", "nameError", "不能添加重复的标签");
         }
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             return "admin/tags-input";
         }
         tag.setUser(user);
         Tag t = tagService.updateTag(id, tag);
-        if(t == null){
+        if (t == null) {
             attributes.addFlashAttribute("message", "更新失败");
         } else {
             attributes.addFlashAttribute("message", "更新成功");
@@ -89,7 +90,7 @@ public class TagController {
     }
 
     @GetMapping("/tags/{id}/delete")
-    public String  delete(@PathVariable Long id, RedirectAttributes attributes){
+    public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         tagService.deleteTag(id);
         attributes.addFlashAttribute("message", "删除成功");
         return "redirect:/admin/tags";

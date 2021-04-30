@@ -40,7 +40,7 @@ public class Note {
     private List<Tag> tags = new ArrayList<>();
     @ManyToOne
     private User user;
-    @OneToMany(cascade={CascadeType.REMOVE}, mappedBy = "note")
+    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "note")
     private List<Comment> comments = new ArrayList<>();
 
     @Transient//不保存至数据库
@@ -205,7 +205,7 @@ public class Note {
 
     public void init() {
         String tagIds = tagsToIds(this.getTags());
-        if(!tagIds.equals("")){
+        if (!tagIds.equals("")) {
             this.tagIds = tagIds;
         }
     }
@@ -229,8 +229,8 @@ public class Note {
                 ", updateTime=" + updateTime +
                 ", type=" + type +
                 ", tagsId=" + tagsToIds(tags) +
-                ", userId=" + (user!=null?user.getId():"null") +
-                ", comments[0]Id=" + (comments!=null&&comments.size()>0?comments.get(0).getId():"null") +
+                ", userId=" + (user != null ? user.getId() : "null") +
+                ", comments[0]Id=" + (comments != null && comments.size() > 0 ? comments.get(0).getId() : "null") +
                 ", tagIds='" + tagIds + '\'' +
                 ", description='" + description + '\'' +
                 '}';

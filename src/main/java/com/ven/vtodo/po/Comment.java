@@ -129,11 +129,11 @@ public class Comment {
                 ", content='" + content + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", createTime=" + createTime +
-                ", noteId=" + (note !=null? note.getId():"null") +
-                ", replyComments[0]Id=" + (replyComments!=null&&replyComments.size()>0?replyComments.get(0).getId():"null") +
-                ", parentCommentId=" + (parentComment!=null?parentComment.getId():"null") +
+                ", noteId=" + (note != null ? note.getId() : "null") +
+                ", replyComments[0]Id=" + (replyComments != null && replyComments.size() > 0 ? replyComments.get(0).getId() : "null") +
+                ", parentCommentId=" + (parentComment != null ? parentComment.getId() : "null") +
                 ", isAdminComment=" + isAuthor +
-                ", userId=" + (user!=null?user.getId():"null") +
+                ", userId=" + (user != null ? user.getId() : "null") +
                 '}';
     }
 }

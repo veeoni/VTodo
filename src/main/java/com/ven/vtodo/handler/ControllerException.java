@@ -17,9 +17,9 @@ public class ControllerException {
 
     @ExceptionHandler(Exception.class)
     public ModelAndView exceptionHandler(HttpServletRequest request, Exception e) throws Exception {
-        logger.error("Request URL: {}, Exception: {}" , request.getRequestURL(), e);
+        logger.error("Request URL: {}, Exception: {}", request.getRequestURL(), e);
         //如果定义了错误处理的类，就让那个类处理，否则调用此处的处理
-        if(AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null){
+        if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
             throw e;
         }
         ModelAndView mv = new ModelAndView();

@@ -19,34 +19,32 @@ public class LogAspect {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Pointcut("execution(* com.ven.vtodo.web..*(..))")//按execution规定拦截哪些类的哪些方法
-    public void log(){}
+    public void log() {
+    }
 
-    
     @Around("log()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object returnValue = null;
-        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = sra.getRequest();
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        assert attributes != null;
+        HttpServletRequest request = attributes.getRequest();
         Long startTime = System.currentTimeMillis();
-        try {
-            returnValue = point.proceed(point.getArgs());
-        } catch (Exception e) {
-            // 请求异常处理
-            throw e;
-        }
+        returnValue = point.proceed(point.getArgs());
         Long endTime = System.currentTimeMillis();
         logger.info("------------------doAround---------------------");
         logger.info("rest  " + request.getRequestURI() + "---used time---" + (endTime - startTime) + "ms");
         return returnValue;
     }
+
     @Before("log()")//只要有请求，都会在方法前执行这个
-    public void doBefore(JoinPoint joinPoint){
+    public void doBefore(JoinPoint joinPoint) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        assert attributes != null;
         HttpServletRequest request = attributes.getRequest();
         String url = request.getRequestURL().toString();
         String ip = request.getRemoteAddr();
         //获取类名和方法名需要用AOP
-        String classMethod = joinPoint.getSignature().getName()+"."+joinPoint.getSignature().getName();
+        String classMethod = joinPoint.getSignature().getName() + "." + joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
         RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
         logger.info("-----------------doBefore---------------------");
@@ -54,20 +52,20 @@ public class LogAspect {
     }
 
     @After("log()")
-    public void doAfter(){
+    public void doAfter() {
         logger.info("------------------doAfter---------------------");
     }
 
     @AfterReturning(returning = "result", pointcut = "log()")
-    public void doAfterReturn(Object result){
+    public void doAfterReturn(Object result) {
         logger.info("Result: {}", result);
     }
 
-    private class RequestLog {
-        private String url;
-        private String ip;
-        private String classMethod;
-        private Object[] args;
+    private static class RequestLog {
+        private final String url;
+        private final String ip;
+        private final String classMethod;
+        private final Object[] args;
 
         public RequestLog(String url, String ip, String classMethod, Object[] args) {
             this.url = url;

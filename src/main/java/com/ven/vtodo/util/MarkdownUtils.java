@@ -19,10 +19,11 @@ import java.util.*;
 
 public class MarkdownUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(MarkdownUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(MarkdownUtils.class);
 
     /**
      * markdown格式转换成HTML格式
+     *
      * @param markdown
      * @return
      */
@@ -36,6 +37,7 @@ public class MarkdownUtils {
     /**
      * 增加扩展[标题锚点，表格生成]
      * Markdown转换成HTML
+     *
      * @param markdown
      * @return
      */
@@ -43,7 +45,7 @@ public class MarkdownUtils {
         //h标题生成id
         Set<Extension> headingAnchorExtensions = Collections.singleton(HeadingAnchorExtension.create());
         //转换table的HTML
-        List<Extension> tableExtension = Arrays.asList(TablesExtension.create());
+        List<Extension> tableExtension = Collections.singletonList(TablesExtension.create());
         Parser parser = Parser.builder()
                 .extensions(tableExtension)
                 .build();

@@ -76,7 +76,7 @@ public class Target {
                 ", name='" + name + '\'' +
                 ", createTime=" + createTime +
                 ", isShow=" + isShow +
-                ", userId=" + (user!=null?user.getId():"null") +
+                ", userId=" + (user != null ? user.getId() : "null") +
                 '}';
     }
 }

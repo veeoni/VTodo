@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface CountdownRepository extends JpaRepository<Countdown,Long>  {
+public interface CountdownRepository extends JpaRepository<Countdown, Long> {
     Countdown findByNameAndUser(String name, User user);
 
     @Query("select c from Countdown c LEFT JOIN c.user u where u = ?1")

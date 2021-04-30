@@ -26,7 +26,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Autowired
     NoteRepository noteRepository;
-    private static Logger logger = LoggerFactory.getLogger(NoteServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(NoteServiceImpl.class);
 
     @Transactional
     @Override
@@ -44,7 +44,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note getAndConvertPublished(Long id) {
         Note note = noteRepository.getNoteByIdAndPublishedTrue(id);
-        if(note == null){
+        if (note == null) {
             throw new NotFoundException("该笔记不存在！");
         }
         Note b = new Note();
@@ -60,7 +60,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note getAndConvert(Long id) {
         Note note = noteRepository.getOne(id);
-        if(note.getId() == null){
+        if (note.getId() == null) {
             throw new NotFoundException("该笔记不存在！");
         }
         Note b = new Note();
@@ -79,9 +79,9 @@ public class NoteServiceImpl implements NoteService {
             @Override//查谁，条件是啥， 设置具体条件的表达式
             public Predicate toPredicate(Root<Note> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 Join join;
-                if(isTag) {
+                if (isTag) {
                     join = root.join("tags");
-                }else{
+                } else {
                     join = root.join("type");
                 }
                 List<Predicate> predicates = new ArrayList<>();
@@ -104,16 +104,16 @@ public class NoteServiceImpl implements NoteService {
             @Override//查谁，条件是啥， 设置具体条件的表达式
             public Predicate toPredicate(Root<Note> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
-                if(user != null && user.getId() != null) {
+                if (user != null && user.getId() != null) {
                     predicates.add(criteriaBuilder.equal(root.<Long>get("user").get("id"), user.getId()));
                 }
-                if(note.getTitle() != null && !"".equals(note.getTitle())){
-                    predicates.add(criteriaBuilder.like(root.<String>get("title"), "%"+note.getTitle()+"%"));
+                if (note.getTitle() != null && !"".equals(note.getTitle())) {
+                    predicates.add(criteriaBuilder.like(root.<String>get("title"), "%" + note.getTitle() + "%"));
                 }
-                if(null != note.getTypeId()){
+                if (null != note.getTypeId()) {
                     predicates.add(criteriaBuilder.equal(root.<Long>get("type").get("id"), note.getTypeId()));
                 }
-                if(note.isRecommend()){
+                if (note.isRecommend()) {
                     predicates.add(criteriaBuilder.equal(root.<Boolean>get("recommend"), note.isRecommend()));
                 }
                 criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
@@ -139,7 +139,7 @@ public class NoteServiceImpl implements NoteService {
         List<String> years = noteRepository.findGroupYearsAndUser(user.getId());
         logger.info(years.toString());
         TreeMap<String, List<Note>> map = new TreeMap<>();
-        for(String year : years){
+        for (String year : years) {
             logger.info(year);
             map.put(year, noteRepository.findByYearAndUser(year, user));
         }
@@ -166,7 +166,7 @@ public class NoteServiceImpl implements NoteService {
         } else {
             note.setUpdateTime(new Date());
         }
-        if(note.getFirstPicture()==null || note.getFirstPicture().equals("")){
+        if (note.getFirstPicture() == null || note.getFirstPicture().equals("")) {
             note.setFirstPicture("/images/meteor.jpeg");
         }
         return noteRepository.save(note);
@@ -177,12 +177,11 @@ public class NoteServiceImpl implements NoteService {
 //    public Note updateNote(Long id, Note note) {
 //        Note note1 = noteRepository.getOne(id);
 //        if(note1 == null){
-//            throw new NotFoundException("该博客不存在");
+//            throw new NotFoundException("该不存笔记在");
 //        }
 //        BeanUtils.copyProperties(note,note1);
 //        return noteRepository.save(note1);
 //    }
-
 
 
     @Transactional

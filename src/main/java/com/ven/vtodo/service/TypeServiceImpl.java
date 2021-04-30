@@ -23,7 +23,7 @@ public class TypeServiceImpl implements TypeService {
 
     @Transactional
     @Override
-    public Type saveType(Type type){
+    public Type saveType(Type type) {
         return typeRepository.save(type);
     }
 
@@ -39,7 +39,7 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public Page<Type> listType(Pageable pageable, User user) {
-        return typeRepository.findAllByUser(pageable,user);
+        return typeRepository.findAllByUser(pageable, user);
     }
 
     @Override
@@ -58,11 +58,10 @@ public class TypeServiceImpl implements TypeService {
     @Override
     public Type updateType(Long id, Type type) {
         Type t = typeRepository.getOne(id);
-        if(t == null){
+        if (t.getId() == null) {
             throw new NotFoundException("不存在该分类");
         }
         BeanUtils.copyProperties(type, t);
-
         return typeRepository.save(type);
     }
 

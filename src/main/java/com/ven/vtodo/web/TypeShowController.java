@@ -34,19 +34,19 @@ public class TypeShowController {
     @GetMapping("/types/{id}")
     public String types(
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable Long id, HttpSession session, Model model){
+            @PathVariable Long id, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-        if(user == null){
+        if (user == null) {
             user = userService.getUserById(1L);
         }
         List<Type> types = typeService.listTypeTopByUser(10000, user);
         Page<Note> page = null;
-        if(types.size()>0){
-            if(id==-1){
+        if (types.size() > 0) {
+            if (id == -1) {
                 id = types.get(0).getId();
             }
             page = noteService.listNote(pageable, id, false);
-        }else{
+        } else {
             page = new Page<Note>() {
                 @Override
                 public int getTotalPages() {

@@ -21,7 +21,7 @@ public class TargetServiceImpl implements TargetService {
 
     @Transactional
     @Override
-    public Target saveTarget(Target target){
+    public Target saveTarget(Target target) {
         return targetRepository.save(target);
     }
 
@@ -49,7 +49,7 @@ public class TargetServiceImpl implements TargetService {
     @Override
     public Target updateTarget(Long id, Target target) {
         Target t = targetRepository.getOne(id);
-        if(t.getId() == null){
+        if (t.getId() == null) {
             throw new NotFoundException("不存在该目标");
         }
         BeanUtils.copyProperties(target, t);

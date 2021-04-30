@@ -32,7 +32,7 @@ public class TagServiceImpl implements TagService {
 
     @Transactional
     @Override
-    public Tag saveTag(Tag tag){
+    public Tag saveTag(Tag tag) {
         return tagRepository.save(tag);
     }
 
@@ -46,9 +46,9 @@ public class TagServiceImpl implements TagService {
         return tagRepository.findAllById(convertToList(id));
     }
 
-    private List<Long> convertToList(String ids){
+    private List<Long> convertToList(String ids) {
         List<Long> list = new ArrayList<>();
-        if(!"".equals(ids) && ids != null){
+        if (!"".equals(ids) && ids != null) {
             String[] idArray = ids.split(",");
             for (String s : idArray) {
                 list.add(Long.valueOf(s));
@@ -81,7 +81,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag updateTag(Long id, Tag tag) {
         Tag t = tagRepository.getOne(id);
-        if(t == null){
+        if (t.getId() == null) {
             throw new NotFoundException("不存在该标签");
         }
         BeanUtils.copyProperties(tag, t);

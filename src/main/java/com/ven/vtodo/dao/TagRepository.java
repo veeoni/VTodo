@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface TagRepository extends JpaRepository<Tag,Long>  {
+public interface TagRepository extends JpaRepository<Tag, Long> {
     Tag findByNameAndUser(String name, User user);
 
     @Query("select t from Tag t LEFT JOIN t.user u where u = ?1")

@@ -21,7 +21,7 @@ public class CountdownServiceImpl implements CountdownService {
 
     @Transactional
     @Override
-    public Countdown saveCountdown(Countdown countdown){
+    public Countdown saveCountdown(Countdown countdown) {
         return countdownRepository.save(countdown);
     }
 
@@ -49,7 +49,7 @@ public class CountdownServiceImpl implements CountdownService {
     @Override
     public Countdown updateCountdown(Long id, Countdown countdown) {
         Countdown t = countdownRepository.getOne(id);
-        if(t.getId() == null){
+        if (t.getId() == null) {
             throw new NotFoundException("不存在该倒计时");
         }
         BeanUtils.copyProperties(countdown, t);

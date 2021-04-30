@@ -71,9 +71,9 @@ public class Type {
         return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", notes[0]Id=" + (notes !=null&& notes.size()>0? notes.get(0).getId():"null") +
-                ", todos[0]Id=" + (todos!=null&&todos.size()>0?todos.get(0).getId():"null") +
-                ", userId=" + (user!=null?user.getId():"null") +
+                ", notes[0]Id=" + (notes != null && notes.size() > 0 ? notes.get(0).getId() : "null") +
+                ", todos[0]Id=" + (todos != null && todos.size() > 0 ? todos.get(0).getId() : "null") +
+                ", userId=" + (user != null ? user.getId() : "null") +
                 '}';
     }
 }

@@ -20,9 +20,9 @@ public class InfoController {
     private UserService userService;
 
     @GetMapping("/info")//未使用任何参数时，默认全局的路径,当前为/admin
-    public String infoPage(HttpSession session, Model model){
+    public String infoPage(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-        if(user != null){;
+        if (user != null) {
             User user2 = userService.getUserById(user.getId());
             user2.setPassword(null);
             session.setAttribute("user", user2);
@@ -34,18 +34,20 @@ public class InfoController {
     }
 
     @PostMapping("/info")
-    public String postInfo(User user, HttpSession session, RedirectAttributes attributes){
+    public String postInfo(User user, HttpSession session, RedirectAttributes attributes) {
         User user1 = (User) session.getAttribute("user");
-        if(user.getId() != user1.getId()){
-                attributes.addFlashAttribute("errormessage", "禁止更改他人的信息");
-        }else{
+        if (!user.getId().equals(user1.getId())) {
+            attributes.addFlashAttribute("errormessage", "禁止更改他人的信息");
+        } else if (!user.getUsername().equals(user1.getUsername())) {
+            attributes.addFlashAttribute("errormessage", "禁止更改用户名");
+        } else {
             User oldUser = userService.getUserById(user.getId());
-            UpdateUtil.copyNullProperties(user,oldUser);
+            UpdateUtil.copyNullProperties(user, oldUser);
             oldUser.setUpdateTime(new Date());
             User user2 = userService.updateUserInfo(oldUser);
-            if(user!=null){
+            if (user2 != null) {
                 attributes.addFlashAttribute("message", "修改成功");
-            }else{
+            } else {
                 attributes.addFlashAttribute("errormessage", "修改信息失败");
             }
         }
@@ -53,15 +55,15 @@ public class InfoController {
     }
 
     @GetMapping("/passchange")//未使用任何参数时，默认全局的路径,当前为/admin
-    public String passchangePage(HttpSession session, Model model, RedirectAttributes attributes){
+    public String passchangePage(HttpSession session, Model model, RedirectAttributes attributes) {
         User user = (User) session.getAttribute("user");
-        if(user != null){
+        if (user != null) {
             User user2 = userService.getUserById(user.getId());
             user2.setPassword(null);
             session.setAttribute("user", user2);
             model.addAttribute("user", user2);
             return "admin/passchange";
-        } else if((boolean)session.getAttribute("relogin")){
+        } else if ((boolean) session.getAttribute("relogin")) {
             return "redirect:/admin/passchange";
         } else {
             return "redirect:/login";
@@ -69,29 +71,25 @@ public class InfoController {
     }
 
     @PostMapping("/passchange")
-//    @ResponseBody
-    public String postPasschange(User user, @RequestParam String postPassword, HttpSession session, RedirectAttributes attributes){
+    public String postPasschange(User user, @RequestParam String postPassword, HttpSession session, RedirectAttributes attributes) {
         User user1 = (User) session.getAttribute("user");
-//        String message;
-        if(user.getId() != user1.getId()){
+        if (!user.getId().equals(user1.getId())) {
             attributes.addFlashAttribute("errormessage", "禁止更改他人的信息");
-//            message = "禁止更改他人的信息";
-        }else{
+        } else if (!user.getUsername().equals(user1.getUsername())) {
+            attributes.addFlashAttribute("errormessage", "禁止更改用户名");
+        } else {
             User oldUser = userService.checkUser(user.getUsername(), user.getPassword());
-            if(oldUser == null || oldUser.getId() != user.getId()){
+            if (oldUser == null || !oldUser.getId().equals(user.getId())) {
                 attributes.addFlashAttribute("errormessage", "原密码错误");
-//                message = "原密码错误";
-            }else{
-                oldUser.setPassword(SHA256Util.getSHA256(oldUser.getUsername()+postPassword));
+            } else {
+                oldUser.setPassword(SHA256Util.getSHA256(oldUser.getUsername() + postPassword));
                 oldUser.setUpdateTime(new Date());
                 User user2 = userService.updateUserInfo(oldUser);
-                if(user!=null){
-//                    message = "修改成功";
+                if (user2 != null) {
                     attributes.addFlashAttribute("message", "修改成功");
 //                    session.removeAttribute("user");//不需要在这里登出，去页面倒计时登出
-                    session.setAttribute("relogin",true);
-                }else{
-//                    message = "修改信息失败";
+                    session.setAttribute("relogin", true);
+                } else {
                     attributes.addFlashAttribute("errormessage", "修改信息失败");
                 }
             }

@@ -89,7 +89,7 @@ public class Countdown {
                 ", countTime=" + countTime +
                 ", createTime=" + createTime +
                 ", isShow=" + isShow +
-                ", userId=" + (user!=null?user.getId():"null") +
+                ", userId=" + (user != null ? user.getId() : "null") +
                 '}';
     }
 }

@@ -35,7 +35,7 @@ public class NoteController {
     @GetMapping("/notes")
     public String notes(
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            NoteQuery note, HttpSession session, Model model){
+            NoteQuery note, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("types", typeService.listTypeByUser(user));
         Page page = noteService.listNoteByUser(pageable, note, user);
@@ -47,27 +47,27 @@ public class NoteController {
     @PostMapping("/notes/search")
     public String search(
             @PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            NoteQuery note, HttpSession session, Model model){
+            NoteQuery note, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("page", noteService.listNoteByUser(pageable, note, user));
         return "admin/notes :: noteList";
     }
 
     @GetMapping("/notes/input")
-    public String input( HttpSession session, Model model){
+    public String input(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         setTypeAndTag(user, model);
         model.addAttribute("note", new Note());
         return "admin/notes-input";
     }
 
-    private void setTypeAndTag(User user, Model model){
+    private void setTypeAndTag(User user, Model model) {
         model.addAttribute("types", typeService.listTypeByUser(user));
         model.addAttribute("tags", tagService.listTagByUser(user));
     }
 
     @GetMapping("/notes/{id}/input")
-    public String editInput(@PathVariable Long id, HttpSession session, Model model){
+    public String editInput(@PathVariable Long id, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         setTypeAndTag(user, model);
         Note note = noteService.getNote(id);
@@ -78,12 +78,12 @@ public class NoteController {
 
 
     @PostMapping("/notes")
-    public String post(Note note, RedirectAttributes attributes, HttpSession session){
+    public String post(Note note, RedirectAttributes attributes, HttpSession session) {
         note.setUser((User) session.getAttribute("user"));
         note.setType(typeService.getType(note.getType().getId()));
         note.setTags(tagService.listTag(note.getTagIds()));
         Note b = noteService.saveNote(note);
-        if(b == null){
+        if (b == null) {
             attributes.addFlashAttribute("message", "操作失败");
         } else {
             attributes.addFlashAttribute("message", "操作成功");
@@ -92,7 +92,7 @@ public class NoteController {
     }
 
     @GetMapping("/notes/{id}/delete")
-    public String delete(@PathVariable Long id, RedirectAttributes attributes){
+    public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         noteService.deleteNote(id);
         attributes.addFlashAttribute("message", "删除成功");
         return "redirect:/admin/notes";

@@ -17,8 +17,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User checkUser(String username, String password) {
-        User user = userRepository.findByUsernameAndPassword(username, SHA256Util.getSHA256(username+password));
-        return user;
+        return userRepository.findByUsernameAndPassword(username, SHA256Util.getSHA256(username + password));
     }
 
     @Override
@@ -34,11 +33,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveUser(User user) {
         Date date = new Date();
-        if(user.getId()==null){
+        if (user.getId() == null) {
             user.setCreateTime(date);
             user.setUpdateTime(date);
             user.setType(0);//默认为非管理员
-        }else{
+        } else {
             user.setUpdateTime(date);
         }
         return userRepository.save(user);

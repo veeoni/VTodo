@@ -18,6 +18,7 @@ public interface NoteService {
     Note getAndConvert(Long id);
 
     Note getAndConvertPublished(Long id);
+
     //管理页用
     Page<Note> listNoteByUser(Pageable pageable, NoteQuery note, User user);
 

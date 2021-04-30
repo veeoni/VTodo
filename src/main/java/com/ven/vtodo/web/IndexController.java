@@ -35,15 +35,15 @@ public class IndexController {
     private TagService tagService;
     @Autowired
     private UserService userService;
-    private static Logger logger = LoggerFactory.getLogger(IndexController.class);
+    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
 
     @GetMapping("/index")
     public String index(
             @PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            HttpSession session, Model model){
+            HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-        if(user==null){
+        if (user == null) {
             user = userService.getUserById(1L);
         }
         //model用于与前端Thymeleaf传递数据，键值对
@@ -54,11 +54,12 @@ public class IndexController {
         logger.info("----------index--------------");
         return "index";
     }
+
     //通过以下两个方法决定使用commonmark还是editormd显示note
     @GetMapping("/notes/{id}")
-    public String note(@PathVariable Long id, Model model){
+    public String note(@PathVariable Long id, Model model) {
         Note note = noteService.getAndConvertPublished(id);
-        if(note == null){
+        if (note == null) {
             return "cannot-access";
         }
         model.addAttribute("note", note);
@@ -66,9 +67,9 @@ public class IndexController {
     }
 
     @GetMapping("/note/{id}")
-    public String note2(@PathVariable Long id, Model model){
+    public String note2(@PathVariable Long id, Model model) {
         Note note = noteService.getPublishedNote(id);
-        if(note == null){
+        if (note == null) {
             return "cannot-access";
         }
         model.addAttribute("note", note);
@@ -78,16 +79,16 @@ public class IndexController {
     @PostMapping("/search")
     public String search(
             @PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam String query, Model model){//参数加一个表单中定义的name="query"
-        model.addAttribute("page", noteService.listNote(pageable, "%"+query+"%"));
-        model.addAttribute("query",query);
+            @RequestParam String query, Model model) {//参数加一个表单中定义的name="query"
+        model.addAttribute("page", noteService.listNote(pageable, "%" + query + "%"));
+        model.addAttribute("query", query);
         return "search";
     }
 
     @GetMapping("/footer/newnote")
-    public String newnotes(HttpSession session, Model model){
-        User user = (User)session.getAttribute("user");
-        if(user==null){
+    public String newnotes(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
             user = userService.getUserById(1L);
         }
         model.addAttribute("newnotes", noteService.listRecommendNoteTopByUser(3, user));

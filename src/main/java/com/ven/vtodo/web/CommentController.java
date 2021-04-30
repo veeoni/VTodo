@@ -25,27 +25,27 @@ public class CommentController {
     private String avatar;
 
     @GetMapping("/comments/{noteId}")
-    public String comments(@PathVariable Long noteId, Model model){
+    public String comments(@PathVariable Long noteId, Model model) {
         model.addAttribute("comments", commentService.listCommentByNoteId(noteId));
         return "note_editormd :: commentList";
     }
 
     @PostMapping("/comments")
-    public String post(Comment comment, HttpSession session){
+    public String post(Comment comment, HttpSession session) {
         //传noteId，就建立了note和comment的关系
         Long noteId = comment.getNote().getId();
         comment.setNote(noteService.getNote(noteId));
         User user = (User) session.getAttribute("user");
-        if(user != null){
+        if (user != null) {
             comment.setIsAuthor(true);
             comment.setUser(user);
             comment.setAvatar(user.getAvatar());
             comment.setEmail(user.getEmail());
             comment.setNickname(user.getNickname());
-        } else{
+        } else {
             comment.setAvatar(avatar);
         }
         commentService.saveComment(comment);
-        return "redirect:/comments/"+noteId;
+        return "redirect:/comments/" + noteId;
     }
 }

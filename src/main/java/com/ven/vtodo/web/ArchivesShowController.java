@@ -19,9 +19,9 @@ public class ArchivesShowController {
     private UserService userService;
 
     @GetMapping("/archives")
-    public String archives(HttpSession session, Model model){
+    public String archives(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-        if(user == null){
+        if (user == null) {
             user = userService.getUserById(1L);
         }
         model.addAttribute("archiveMap", noteService.archiveNoteByUser(user).descendingMap());

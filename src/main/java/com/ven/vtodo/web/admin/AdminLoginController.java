@@ -19,9 +19,9 @@ public class AdminLoginController {
     private UserService userService;
 
     @GetMapping//未使用任何参数时，默认全局的路径,当前为/admin
-    public String loginPage(HttpSession session){
+    public String loginPage(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if(user != null){;
+        if (user != null) {
             return "admin/index";
         } else {
             return "/login";
@@ -30,9 +30,9 @@ public class AdminLoginController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password,
-                        HttpSession session, RedirectAttributes attributes){
+                        HttpSession session, RedirectAttributes attributes) {
         User user = userService.checkUser(username, password);
-        if(user != null){
+        if (user != null) {
             user.setPassword(null);//不能把密码传过去，很不安全
             session.setAttribute("user", user);
             return "admin/index";
@@ -42,13 +42,14 @@ public class AdminLoginController {
             return "redirect:/admin";//加个redirect
         }
     }
+
     @GetMapping("/login")
-    public String relogin(HttpSession session){
+    public String relogin(HttpSession session) {
         return loginPage(session);//加个redirect
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute("user");
         return "redirect:/admin";
     }

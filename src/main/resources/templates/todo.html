@@ -995,18 +995,18 @@
                     <div class="ui teal segment">
                         <!--未填充满，加fluid-->
                         <script language="JavaScript" th:inline="javascript">
-                            var showtime = function (endtime, comp, countName) {
+                            var showtime = function (endtime, comp, countName, formatEndtime) {
                                 var nowtime = new Date();  //获取当前时间
                                 var lefttime = endtime.getTime() - nowtime.getTime(),  //距离结束时间的毫秒数
                                     leftd = Math.floor(lefttime/(1000*60*60*24));
                                 if(lefttime<0) {
                                     leftd = -leftd
                                     comp.innerHTML =
-                                        '<span><h2 class="ui orange header m-inline-block m-text-thin">'+countName+'</h2>已过' +
-                                        '<h2 class="ui orange header m-inline-block m-text-thin">'+ (leftd-1) +'</h2>' +
-                                        '天，截止于</span>' +
+                                        '<span><h2 class="ui orange header m-inline-block m-text-thin">'+countName+'</h2>' +
+                                        (leftd==1?'刚过':'已过<h2 class="ui orange header m-inline-block m-text-thin">'+ (leftd-1) +'</h2>天') +
+                                        '，截止于</span>' +
                                         '<span>'+
-                                        '<h3 class="ui blue header m-inline-block m-text-thin">' + endtime.format("yyyy-MM-dd hh:mm:ss") +'</h3></span>'
+                                        '<h3 class="ui blue header m-inline-block m-text-thin">' + formatEndtime +'</h3></span>'
                                     return
                                 }
                                 var lefth = Math.floor(lefttime/(1000*60*60)%24),  //计算小时数
@@ -1024,7 +1024,7 @@
                             setInterval (function () {
                                 /*<![CDATA[*/
                                 /*[# th:each="countdown : ${countdowns}"]*/
-                                showtime(new Date(/*[[${countdown.countTime}]]*/"2021-6-30 8:00"), document.getElementById(/*[[|countdown${countdown.id}|]]*/""), /*[[${countdown.name}]]*/"");
+                                showtime(new Date(/*[[${countdown.countTime}]]*/"2021-6-30 8:00"), document.getElementById(/*[[|countdown${countdown.id}|]]*/""), /*[[${countdown.name}]]*/"", /*[[${#dates.format(countdown.countTime, 'yyyy-MM-dd HH:mm:ss')}]]*/"");
                                 /*[/]*/
                                 /*]]>*/
                             }, 1000);  //反复执行函数本身

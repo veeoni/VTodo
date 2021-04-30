@@ -1,6 +1,5 @@
 package com.ven.vtodo.dao;
 
-import com.ven.vtodo.po.Tag;
 import com.ven.vtodo.po.Type;
 import com.ven.vtodo.po.User;
 import org.springframework.data.domain.Page;
@@ -10,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface TypeRepository extends JpaRepository<Type,Long>  {
+public interface TypeRepository extends JpaRepository<Type, Long> {
     Type findByNameAndUser(String name, User user);
 
     //JpaRepository未提供的方法，可以自己按照restful风格创建。

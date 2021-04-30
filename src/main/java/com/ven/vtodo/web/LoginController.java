@@ -19,9 +19,9 @@ public class LoginController {
     private UserService userService;
 
     @GetMapping//未使用任何参数时，默认全局的路径,当前为/
-    public String home(HttpSession session){
+    public String home(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if(user != null){;
+        if (user != null) {
             return "redirect:/todo";
         } else {
             return "redirect:/index";
@@ -29,9 +29,9 @@ public class LoginController {
     }
 
     @GetMapping("/register")
-    public String getRegister(HttpSession session){
+    public String getRegister(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if(user != null){
+        if (user != null) {
             return "redirect:/login";
         }
         return "register";
@@ -39,15 +39,15 @@ public class LoginController {
 
     @PostMapping("/register")
     @ResponseBody
-    public String postRegister(User user, HttpSession session){
+    public String postRegister(User user, HttpSession session) {
         User user1 = userService.getUserByUsername(user.getUsername());
-        if(user1!=null){
+        if (user1 != null) {
             return "用户名已存在";
         }
-        user.setPassword(SHA256Util.getSHA256(user.getUsername()+user.getPassword()));
-        System.out.println(user.getAvatar()+" "+user.getUsername());
+        user.setPassword(SHA256Util.getSHA256(user.getUsername() + user.getPassword()));
+        System.out.println(user.getAvatar() + " " + user.getUsername());
         User user2 = userService.saveUser(user);
-        if(user2!=null){
+        if (user2 != null) {
             user2.setPassword(null);
             session.setAttribute("user", user2);
         }
@@ -56,9 +56,9 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password,
-                        HttpSession session, RedirectAttributes attributes){
+                        HttpSession session, RedirectAttributes attributes) {
         User user = userService.checkUser(username, password);
-        if(user != null){
+        if (user != null) {
             user.setPassword(null);//不能把密码传过去，很不安全
             session.setAttribute("user", user);
             return "redirect:/todo";
@@ -68,10 +68,11 @@ public class LoginController {
             return "redirect:/login";//加个redirect
         }
     }
+
     @GetMapping("/login")
-    public String getLogin(HttpSession session){
+    public String getLogin(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if(user != null){;
+        if (user != null) {
             return "redirect:/todo";
         } else {
             return "login";
@@ -79,13 +80,13 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute("user");
         return "redirect:/";
     }
 
     @GetMapping("/waiting")//退出登录后的等待界面，3秒返回登陆页。
-    public String logout2(HttpSession session){
+    public String logout2(HttpSession session) {
         session.removeAttribute("user");
         return "waiting";
     }

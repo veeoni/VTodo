@@ -13,12 +13,12 @@ public class TodoCopy {
     @Autowired
     private static TagService tagService;
 
-    public static Todo copyTodo(Todo todo){
+    public static Todo copyTodo(Todo todo) {
         Todo todoCpy = new Todo();
         BeanUtils.copyProperties(todo, todoCpy);
         List<Tag> tags = tagService.listTagByTodo(todo);
         List<Tag> newTags = new ArrayList<>(tags.size());
-        tags.forEach(tag -> newTags.add(tag));
+        newTags.addAll(tags);
         todoCpy.setTags(newTags);
         return todoCpy;
     }

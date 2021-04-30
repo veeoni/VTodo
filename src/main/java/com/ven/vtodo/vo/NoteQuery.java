@@ -7,7 +7,8 @@ public class NoteQuery {
     public Long typeId;
     public boolean recommend;
 
-    public NoteQuery(){}
+    public NoteQuery() {
+    }
 
     public String getTitle() {
         return title;
