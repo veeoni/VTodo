@@ -56,11 +56,11 @@ public class TodoController {
 
     @GetMapping("/alltodos")//用来查整张表的待办
     public String todos(HttpSession session, Model model) {
-        // TODO 到时候新增一个方法，类似此方法，但是多一个日期参数（可以用String），放URL或者传对象都行，用日期查询
-        // 是未来? 仅按日期当日，仅显示未完成:区分是否遗留
-        // 数据库里查
-        // 1.未finishedDate且taskDate<=指定日期，小于指定日期，isRemain=true，加入todos
-        // 2.finishedDate==指定日期，标记为已完成，finished>taskdate的，标记isRemain=true，html改为未按时，加入finishedTodos
+        //这是个bug一样的方法哈哈哈哈哈哈哈，可以看到所有用户的todo。所以必须限制只有站长可使用此方法
+        User user = (User) session.getAttribute("user");
+        if(user == null || !user.getId().equals(1L)){
+            return "cannot-access";
+        }
         Date date = new Date();
         List<Todo> todos = todoService.listTodo();
         List<Todo> normalTodos = new ArrayList<>();
@@ -74,7 +74,6 @@ public class TodoController {
                 finishedTodos.add(todo);
             }
         }
-        User user = (User) session.getAttribute("user");
         model.addAttribute("todos", normalTodos);
         model.addAttribute("finishedTodos", finishedTodos);
         model.addAttribute("types", typeService.listTypeByUser(user));
@@ -84,7 +83,6 @@ public class TodoController {
 
     @GetMapping(value = {"/todos/{strDate}", "/todos"})
     public String todosByDate(@Nullable @PathVariable String strDate, HttpSession session, Model model) throws ParseException {
-
         // 是未来? 仅按日期当日，仅显示未完成:区分是否遗留
         // 数据库里查
         // 1.未finishedDate且taskDate<=指定日期，小于指定日期，isRemain=true，加入todos
