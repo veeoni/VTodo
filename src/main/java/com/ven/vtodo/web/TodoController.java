@@ -37,10 +37,9 @@ public class TodoController {
     private TodoService todoService;
     @Autowired
     private TargetService targetService;
-    private Date date;
-    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-    private Calendar calendar = Calendar.getInstance();
-    private static Logger logger = LoggerFactory.getLogger(TodoController.class);
+    private final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+    private final Calendar calendar = Calendar.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
 
     @GetMapping("/todo")
     public String todo(HttpSession session,RedirectAttributes attributes, Model model){
@@ -62,7 +61,7 @@ public class TodoController {
         // 数据库里查
         // 1.未finishedDate且taskDate<=指定日期，小于指定日期，isRemain=true，加入todos
         // 2.finishedDate==指定日期，标记为已完成，finished>taskdate的，标记isRemain=true，html改为未按时，加入finishedTodos
-        date = new Date();
+        Date date = new Date();
         List<Todo> todos = todoService.listTodo();
         List<Todo> normalTodos = new ArrayList<>();
         List<Todo> finishedTodos = new ArrayList<>();
@@ -142,7 +141,7 @@ public class TodoController {
             todoService.saveFinishedTodo(todoCpy);
             // 这里有点考究，如果推迟完成了，那是按原规定出现，还是以完成日期为基础推进？暂定后者，
             // TODO 自主选择原规定还是完成日记推进
-            calendar.setTime(todo.getTaskDate()); //需要将date数据转移到Calender对象中操作
+            calendar.setTime(new Date()); //需要将date数据转移到Calender对象中操作
             calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
             todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推n天的结果
         }
@@ -195,7 +194,7 @@ public class TodoController {
             todo.setInterval(interval*EF);
         }
         logger.info("现EF="+EF+",现Interval="+interval);
-        calendar.setTime(todo.getTaskDate()); //需要将date数据转移到Calender对象中操作
+        calendar.setTime(new Date()); //需要将date数据转移到Calender对象中操作
         calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
         todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推一天的结果
         todoService.saveFinishedTodo(todo);
