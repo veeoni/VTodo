@@ -102,8 +102,9 @@
         let isvalid = loginForm.form('is valid');
         if(isvalid){
             $('#password').val(sha256_digest(pass_input.val()));
-            loginForm.submit();
             pass_input.val('');
+            loginForm.form('remove fields', 'password');
+            loginForm.submit();
         }
     }
     $('#pass_input').bind('keydown', function(event) {
