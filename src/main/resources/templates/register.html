@@ -75,6 +75,15 @@
                             <label>邮箱</label>
                             <input name="email" type="email">
                         </div>
+                        <div class="two fields">
+                            <div class="field">
+                                <input id="kaptcha" type="text" name="kaptcha" placeholder="请输入验证码">
+                            </div>
+                            <div class="field">
+                                <img alt="单击图片刷新！" class="ui kaptcha image" th:src="@{/kaptcha}"
+                                     onclick="this.src='/kaptcha?d='+new Date()*1">
+                            </div>
+                        </div>
                         <div class="ui mini error message"></div>
                         <div class="ui mini negative message" style="display: none;"></div>
                         <div class="ui mini success message" style="display: none;"></div>
@@ -128,6 +137,13 @@
                     type:'email',
                     prompt: '邮箱:请输入正确的邮箱地址'
                 }]
+            },
+            kaptcha : {
+                identifier: 'kaptcha',
+                rules:[{
+                    type   : 'exactLength[4]',
+                    prompt : '请输入4位验证码'
+                }]
             }
         }
     });
@@ -150,7 +166,8 @@
             'username': $("[name='username']").val(),
             'password': cryppassword,
             'email': $("[name='email']").val(),
-            'avatar': $('#input_avatar').val()
+            'avatar': $('#input_avatar').val(),
+            'kaptcha': $('#kaptcha').val()
         }, function (responseTxt, statusTxt, xhr) {
             //callback 回调方法
             console.log(responseTxt);
@@ -180,6 +197,8 @@
                     }
                 }else{
                     $('.negative.message').css('display','block').text(responseTxt);
+                    $('#kaptcha').val('');
+                    $('.ui.kaptcha.image').attr("src",'/kaptcha?d='+new Date()*1);
                 }
             }
             if (statusTxt == "error"){

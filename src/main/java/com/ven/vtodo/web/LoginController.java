@@ -46,7 +46,11 @@ public class LoginController {
 
     @PostMapping("/register")
     @ResponseBody
-    public String postRegister(User user, HttpSession session) {
+    public String postRegister(User user, @RequestParam String kaptcha, HttpSession session) {
+        String verifyCode = (String) session.getAttribute("verifyCode");
+        if(!kaptcha.equals(verifyCode)){
+            return "验证码错误";
+        }
         User user1 = userService.getUserByUsername(user.getUsername());
         if (user1 != null) {
             return "用户名已存在";
