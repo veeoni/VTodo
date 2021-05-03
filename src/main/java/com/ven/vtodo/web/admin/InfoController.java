@@ -63,8 +63,6 @@ public class InfoController {
             session.setAttribute("user", user2);
             model.addAttribute("user", user2);
             return "admin/passchange";
-        } else if ((boolean) session.getAttribute("relogin")) {
-            return "redirect:/admin/passchange";
         } else {
             return "redirect:/login";
         }
@@ -88,7 +86,6 @@ public class InfoController {
                 if (user2 != null) {
                     attributes.addFlashAttribute("message", "修改成功");
 //                    session.removeAttribute("user");//不需要在这里登出，去页面倒计时登出
-                    session.setAttribute("relogin", true);
                 } else {
                     attributes.addFlashAttribute("errormessage", "修改信息失败");
                 }

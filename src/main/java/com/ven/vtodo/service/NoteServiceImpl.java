@@ -45,7 +45,7 @@ public class NoteServiceImpl implements NoteService {
     public Note getAndConvertPublished(Long id) {
         Note note = noteRepository.getNoteByIdAndPublishedTrue(id);
         if (note == null) {
-            throw new NotFoundException("该笔记不存在！");
+            return null;
         }
         Note b = new Note();
         BeanUtils.copyProperties(note, b);

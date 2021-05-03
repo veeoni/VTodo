@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class ControllerException {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ExceptionHandler(Exception.class)
     public ModelAndView exceptionHandler(HttpServletRequest request, Exception e) throws Exception {
