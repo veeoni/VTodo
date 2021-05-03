@@ -50,7 +50,7 @@ public class TodoController {
         }
         model.addAttribute("targets", targetService.listTargetByUser(user));
         model.addAttribute("countdowns", countdownService.listCountdownByUser(user));
-        logger.info("----------index--------------");
+        logger.info("----------todo--------------");
         return "todo";
     }
 
@@ -118,12 +118,18 @@ public class TodoController {
     @GetMapping("/todos/{id}/finish")//完成待办
     public String finished(@PathVariable Long id, RedirectAttributes attributes) {
         Todo todo = todoService.getTodo(id);
-        logger.info("待办,id=" + id);
-
+        logger.info("待办,id=" + id + "remainTimes = " + todo.getRemainTimes());
+        if(todo.getRemainTimes() <= 0){
+            attributes.addFlashAttribute("message", "不可重复完成");
+            logger.info("不可重复完成");
+            return "redirect:/todo";
+        }
         todo.setRemainTimes(todo.getRemainTimes() - 1);
         if (todo.getRemainTimes() == 0) {
             //完成待办
+            logger.info("完成待办");
             todo.setFinishedDate(new Date());
+            logger.info("原待办完成后的信息" + todoService.saveFinishedTodo(todo));
         } else {
             // 为多次待办添加已完成记录的方法，两种解决方案：
             // 1.新增一个完成记录（方法一增加的记录太多了，但是，为了方便未来的查询，还是有必要的）
@@ -136,17 +142,20 @@ public class TodoController {
             Todo todoCpy = copyTodo(todo);
             todoCpy.setFinishedDate(new Date());
             todoCpy.setId(-1L);//-1说明，该todo是暂时完成的多次待办，此处用来存储完成的记录
-            todoService.saveFinishedTodo(todoCpy);
+            Todo saveResultTodo = todoService.saveFinishedTodo(todoCpy);
+            logger.info("暂存待办完成信息" + todoCpy);
+            logger.info("暂存的信息" + saveResultTodo);
             // 这里有点考究，如果推迟完成了，那是按原规定出现，还是以完成日期为基础推进？暂定后者，
             // TODO 自主选择原规定还是完成日记推进
             calendar.setTime(new Date()); //需要将date数据转移到Calender对象中操作
             calendar.add(Calendar.DATE, todo.getInterval().intValue());//把日期往后增加n天.正数往后推,负数往前移动
             todo.setTaskDate(calendar.getTime());//这个时间就是日期往后推n天的结果
+            logger.info("原待办推迟后的信息" + todoService.saveFinishedTodo(todo));
         }
-        todoService.saveFinishedTodo(todo);//此处可以考虑重新写一个save方法，都调用todoRepository的saveTodo就行。
+        //此处可以考虑重新写一个save方法，都调用todoRepository的saveTodo就行。
         logger.info("-------------------------finished" + id);
         attributes.addFlashAttribute("message", "已完成");
-        return "redirect:/";
+        return "redirect:/todo";
     }
 
     private Todo copyTodo(Todo todo) {

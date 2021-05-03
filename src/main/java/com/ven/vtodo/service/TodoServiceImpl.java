@@ -107,9 +107,9 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public void saveFinishedTodo(Todo todo) {
+    public Todo saveFinishedTodo(Todo todo) {
         todo.setUpdateTime(new Date());
-        todoRepository.save(todo);
+        return todoRepository.save(todo);
     }
 
     @Override
