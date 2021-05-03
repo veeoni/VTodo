@@ -142,8 +142,9 @@
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
     });
+    var passchangeForm = $('.ui.form');
 
-    $('.ui.form').form({
+    passchangeForm.form({
         fields : {
             rawpassword : {
                 identifier: 'rawpassword',
@@ -185,8 +186,8 @@
         console.log(id);
         $('.negative.message').css('display','none').empty();
         $('.success.message').css('display','none').empty();
-        $('.ui.form').form("validate form");
-        var boo = $('.ui.form').form("is valid");
+        passchangeForm.form("validate form");
+        var boo = passchangeForm.form("is valid");
         if(boo){
             console.log("验证成功");
             postData();
@@ -199,10 +200,11 @@
         var sharawpassword = sha256_digest($('[name=rawpassword]').val());
         $('[name=postPassword]').val(shapostpassword);
         $('[name=password]').val(sharawpassword);
-        $('[name=rawpassword]').val("AbCd123Hi");
-        $('[name=newpassword]').val("AbCd123Hi");
-        $('[name=passwordverify]').val("AbCd123Hi");
-        $('.ui.form').submit();
+        $('[name=rawpassword]').val("");
+        $('[name=newpassword]').val("");
+        $('[name=passwordverify]').val("");
+        passchangeForm.form('remove fields', ['newpassword','rawpassword','passwordverify']);
+        passchangeForm.submit();
     }
     var message = [[${message}]];
     if(message == "修改成功"){
