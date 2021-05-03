@@ -1,5 +1,9 @@
 package com.ven.vtodo.aspect;
 
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.OperatingSystem;
+import eu.bitwalker.useragentutils.UserAgent;
+import eu.bitwalker.useragentutils.Version;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -43,12 +47,18 @@ public class LogAspect {
         HttpServletRequest request = attributes.getRequest();
         String url = request.getRequestURL().toString();
         String ip = request.getRemoteAddr();
+        String userAgentStr = request.getHeader("User-Agent");
+        UserAgent userAgent = UserAgent.parseUserAgentString(userAgentStr==null?"null":userAgentStr);
+        Browser browser = userAgent.getBrowser();
+        OperatingSystem operatingSystem = userAgent.getOperatingSystem();
+        Version browserVersion = userAgent.getBrowserVersion();
         //获取类名和方法名需要用AOP
         String classMethod = joinPoint.getSignature().getName() + "." + joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
         RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
         logger.info("-----------------doBefore---------------------");
-        logger.info("Request: {}", requestLog);
+        logger.info("Request: {}, Header: {}", requestLog, userAgentStr==null?"null":userAgentStr);
+        logger.info("browserName: {}, operatingSystemName: {}, browserVersion: {}", browser.getName(), operatingSystem.getName(), browserVersion.getVersion());
     }
 
     @After("log()")
