@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>404</title>
+    <title>ERROR</title>
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet">
     <link href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css' rel='stylesheet prefetch'>
     <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}"/>
@@ -34,6 +34,11 @@
 </nav>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <div class="m-container-small m-padded-tb-massive">
     <div class="ui error message">
         <div class="ui container">
@@ -42,7 +47,7 @@
             <div>
                 <!--th:remove="tag"意思是，移除当前标签，-->
                 <div th:utext="'&lt;!--'" th:remove="tag"></div>
-                <div th:utext="'Failed Request URL : ' + ${url}" th:remove="tag"></div>
+                <div th:utext="|Failed Request URL : ${url}|" th:remove="tag"></div>
                 <div th:utext="'Exception message : ' + ${exception.message}" th:remove="tag"></div>
                 <ul th:remove="tag">
                     <li th:each="st : ${exception.stackTrace}" th:remove="tag"><span th:utext="${st}" th:remove="tag"></span></li>
@@ -52,11 +57,17 @@
         </div>
     </div>
 </div>
-
 <br>
 <br>
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <!--底部footer-->
 <footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
     <div class="ui center aligned container">
