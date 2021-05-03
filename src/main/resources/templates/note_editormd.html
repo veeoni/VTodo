@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
     <link rel="stylesheet" href="../static/lib/editormd/css/editormd.min.css" th:href="@{/lib/editormd/css/editormd.min.css}">
-    <link rel='stylesheet prefetch' href='../static/css/typo.css' th:href="@{/css/typo.css}">
     <link rel="stylesheet" href="../static/css/animate.min.css" th:href="@{/css/animate.min.css}"/>
-    <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}"/>
-    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}"/>
     <link rel="stylesheet  prefetch" href="../static/css/me.css" th:href="@{/css/me.css}"/>
 
 </head>
@@ -759,7 +756,7 @@ Andrew->>China: I am good thanks!
         hasInnerContainers: true,
     });
     //todo 生产环境记得改url
-    var serurl = /*[[#{note.serurl}]]*/"http://127.0.0.1:8080";
+    var serurl = /*[[#{note.serurl}]]*/"http://127.0.0.1:80";
     var url = /*[[@{/note/{id}(id=${note.id})}]]*/+"";
     var qrcode = new QRCode(/*让谁生成*/"qrcode", {
         text: serurl+url,

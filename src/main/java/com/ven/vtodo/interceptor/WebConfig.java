@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     //配置拦截器，
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/admin/**", "/todo/**", "/alltodos", "/todos/**")
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/admin/**", "/todo/**", "/alltodos", "/todos/**", "/waiting")
                 .excludePathPatterns("/login", "/register");
     }
 }

@@ -759,8 +759,8 @@ h5,h6{font-size:1em;}
         hasInnerContainers: true,
     });
     //todo 生产环境记得改url
-    var serurl = /*[[#{note.serurl}]]*/"http://127.0.0.1:8080";
-    var url = /*[[@{/note/{id}(id=${note.id})}]]*/+"";
+    var serurl = /*[[#{note.serurl}]]*/"http://127.0.0.1:80";
+    var url = /*[[@{/notes/{id}(id=${note.id})}]]*/+"";
     var qrcode = new QRCode(/*让谁生成*/"qrcode", {
         text: serurl+url,
         width: 128,
