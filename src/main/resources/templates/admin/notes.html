@@ -84,6 +84,11 @@
             </div>
         </div>
         <div id="table-container">
+            <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${message}">恭喜，操作成功！</p>
+            </div>
             <table th:fragment="noteList" class="ui compact table">
             <thead>
                 <tr>
@@ -130,13 +135,6 @@
             </tr>
             </tfoot>
         </table>
-
-            <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
-                <i class="close icon"></i>
-                <div class="header">提示：</div>
-                <p th:text="${message}">恭喜，操作成功！</p>
-            </div>
-
         </div>
     </div>
 </div>
