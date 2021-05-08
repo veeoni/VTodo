@@ -17,7 +17,7 @@ public class User {
     private String password;
     private String email;
     private String avatar;
-    private Integer type;//1管理员 2普通用户
+    private Integer type;//1管理员 0普通用户
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,6 +31,16 @@ public class User {
     private List<Tag> tags = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Type> types = new ArrayList<>();
+    @ManyToOne
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public List<Tag> getTags() {
         return tags;
@@ -156,6 +166,7 @@ public class User {
                 ", todos=" + (todos != null && todos.size() > 0 ? todos.get(0).getId() : "null") +
                 ", tags=" + (tags != null && tags.size() > 0 ? tags.get(0).getId() : "null") +
                 ", types=" + (types != null && types.size() > 0 ? types.get(0).getId() : "null") +
+                ", role=" + (role != null ? role.getId() : "null") +
                 '}';
     }
 }
