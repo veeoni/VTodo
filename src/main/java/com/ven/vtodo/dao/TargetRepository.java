@@ -18,4 +18,6 @@ public interface TargetRepository extends JpaRepository<Target, Long> {
     Page<Target> findAllByUser(Pageable pageable, User user);
 
     List<Target> findAllByUserAndIsShowTrue(User user);
+
+    void deleteAllByUser(User user);
 }

@@ -41,4 +41,7 @@ public interface NoteService {
 //    Note updateNote(Long id, Note note);
 
     void deleteNote(Long id);
+
+    void deleteNoteByUser(User user);
+
 }

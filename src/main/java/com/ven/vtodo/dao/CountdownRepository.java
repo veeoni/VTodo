@@ -18,4 +18,6 @@ public interface CountdownRepository extends JpaRepository<Countdown, Long> {
     Page<Countdown> findAllByUser(Pageable pageable, User user);
 
     List<Countdown> findAllByUserAndIsShowTrueOrderByCountTimeDesc(User user);
+
+    void deleteAllByUser(User user);
 }

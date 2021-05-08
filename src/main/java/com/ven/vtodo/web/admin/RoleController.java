@@ -3,9 +3,7 @@ package com.ven.vtodo.web.admin;
 import com.ven.vtodo.po.Permission;
 import com.ven.vtodo.po.Role;
 import com.ven.vtodo.po.User;
-import com.ven.vtodo.service.PermissionService;
-import com.ven.vtodo.service.RoleService;
-import com.ven.vtodo.service.UserService;
+import com.ven.vtodo.service.*;
 import com.ven.vtodo.util.UpdateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -28,9 +26,22 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class RoleController {
-
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private CountdownService countDownService;
+    @Autowired
+    private TargetService targetService;
+    @Autowired
+    private TodoService todoService;
+    @Autowired
+    private NoteService noteService;
+    @Autowired
+    private TagService tagService;
+    @Autowired
+    private TypeService typeService;
+    @Autowired
+    private CommentService commentService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -53,6 +64,30 @@ public class RoleController {
         } else {
             return "redirect:/login";
         }
+    }
+
+    @GetMapping("/users/{id}/delete")
+    public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
+        User u1 = userService.getUserById(id);
+        User user = (User) session.getAttribute("user");
+        if(u1.getRole().getId() == 1){
+            attributes.addFlashAttribute("errormessage", "禁止删除管理员");
+            return "redirect:/admin/roles";
+        }
+        if(u1.getId().equals(user.getId())){
+            attributes.addFlashAttribute("errormessage", "禁止删除自己");
+            return "redirect:/admin/roles";
+        }
+        countDownService.deleteCountdownByUser(u1);
+        targetService.deleteTargetByUser(u1);
+        commentService.deleteCommentByUser(u1);
+        noteService.deleteNoteByUser(u1);
+        todoService.deleteTodoByUser(u1);
+        typeService.deleteTypeByUser(u1);
+        tagService.deleteTagByUser(u1);
+        userService.deleteById(id);
+        attributes.addFlashAttribute("message", "删除成功");
+        return "redirect:/admin/users";
     }
 
     //进入用户修改页
@@ -170,6 +205,7 @@ public class RoleController {
         attributes.addFlashAttribute("message", "删除成功");
         return "redirect:/admin/roles";
     }
+
     private boolean setDefaultPermission(List<User> users){
         for(User user: users){
             user.setRole(roleService.getRoleByName("普通用户"));

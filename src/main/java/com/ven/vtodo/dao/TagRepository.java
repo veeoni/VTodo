@@ -21,4 +21,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     List<Tag> findAllByUser(User user);
 
     List<Tag> findAllByTodos(Todo todo);
+
+    void deleteAllByUser(User user);
 }

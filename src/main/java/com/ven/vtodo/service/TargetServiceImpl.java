@@ -61,4 +61,10 @@ public class TargetServiceImpl implements TargetService {
     public void deleteTarget(Long id) {
         targetRepository.deleteById(id);
     }
+
+    @Transactional
+    @Override
+    public void deleteTargetByUser(User user) {
+        targetRepository.deleteAllByUser(user);
+    }
 }

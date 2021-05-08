@@ -70,4 +70,10 @@ public class TypeServiceImpl implements TypeService {
     public void deleteType(Long id) {
         typeRepository.deleteById(id);
     }
+
+    @Transactional
+    @Override
+    public void deleteTypeByUser(User user) {
+        typeRepository.deleteAllByUser(user);
+    }
 }

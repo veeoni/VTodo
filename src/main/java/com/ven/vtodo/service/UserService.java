@@ -23,4 +23,6 @@ public interface UserService {
     List<User> listUser();
 
     Page<User> listUser(Pageable pageable);
+
+    void deleteById(Long id);
 }

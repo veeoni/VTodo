@@ -26,4 +26,5 @@ public interface TypeService {
     void deleteType(Long id);
 
 
+    void deleteTypeByUser(User user);
 }

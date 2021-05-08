@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByUsername(username);
     }
 
+    @Transactional
     @Override
     public User saveUser(User user) {
         Date date = new Date();
@@ -64,5 +66,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> listUser(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

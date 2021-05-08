@@ -54,4 +54,6 @@ public interface NoteRepository extends JpaRepository<Note, Long>, JpaSpecificat
 
     @Query("SELECT count(b) from Note b where b.user = ?1 and b.published = true ")
     long countNotesByUser(User user);
+
+    void deleteAllByUser(User user);
 }

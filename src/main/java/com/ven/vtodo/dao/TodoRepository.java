@@ -15,4 +15,6 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, JpaSpecificat
     List<Todo> findAllByUserAndTaskDateEqualsAndFinishedDateNull(User user, Date date);
 
     List<Todo> findAllByUserAndFinishedDateEquals(User user, Date date);
+
+    void deleteAllByUser(User user);
 }

@@ -22,4 +22,6 @@ public interface TargetService {
     Target updateTarget(Long id, Target target);
 
     void deleteTarget(Long id);
+
+    void deleteTargetByUser(User user);
 }

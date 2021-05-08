@@ -35,12 +35,14 @@ public class NoteServiceImpl implements NoteService {
         return noteRepository.getOne(id);
     }
 
+    @Transactional
     @Override
     public Note getPublishedNote(Long id) {
         noteRepository.updateViews(id);
         return noteRepository.getNoteByIdAndPublishedTrue(id);
     }
 
+    @Transactional
     @Override
     public Note getAndConvertPublished(Long id) {
         Note note = noteRepository.getNoteByIdAndPublishedTrue(id);
@@ -188,5 +190,11 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void deleteNote(Long id) {
         noteRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void deleteNoteByUser(User user) {
+        noteRepository.deleteAllByUser(user);
     }
 }

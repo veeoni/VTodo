@@ -61,4 +61,10 @@ public class CountdownServiceImpl implements CountdownService {
     public void deleteCountdown(Long id) {
         countdownRepository.deleteById(id);
     }
+
+    @Transactional
+    @Override
+    public void deleteCountdownByUser(User user) {
+        countdownRepository.deleteAllByUser(user);
+    }
 }

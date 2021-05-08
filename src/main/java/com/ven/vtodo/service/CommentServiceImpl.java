@@ -2,6 +2,7 @@ package com.ven.vtodo.service;
 
 import com.ven.vtodo.dao.CommentRepository;
 import com.ven.vtodo.po.Comment;
+import com.ven.vtodo.po.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -39,6 +40,11 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional
+    @Override
+    public void deleteCommentByUser(User user) {
+        commentRepository.deleteAllByUser(user);
+    }
 
     /**
      * 循环每个顶级的评论节点

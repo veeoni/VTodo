@@ -19,4 +19,6 @@ public interface TypeRepository extends JpaRepository<Type, Long> {
     Page<Type> findAllByUser(Pageable pageable, User user);
 
     List<Type> findAllByUser(User user);
+
+    void deleteAllByUser(User user);
 }

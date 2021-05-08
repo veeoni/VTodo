@@ -106,6 +106,7 @@ public class TodoServiceImpl implements TodoService {
         return todoRepository.findAllByUserAndTaskDateEqualsAndFinishedDateNull(user, date);
     }
 
+    @Transactional
     @Override
     public Todo saveFinishedTodo(Todo todo) {
         todo.setUpdateTime(new Date());
@@ -121,5 +122,11 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void deleteTodo(Long id) {
         todoRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void deleteTodoByUser(User user) {
+        todoRepository.deleteAllByUser(user);
     }
 }

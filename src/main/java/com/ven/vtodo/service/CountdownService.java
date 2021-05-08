@@ -22,4 +22,6 @@ public interface CountdownService {
     Countdown updateCountdown(Long id, Countdown countdown);
 
     void deleteCountdown(Long id);
+
+    void deleteCountdownByUser(User user);
 }
