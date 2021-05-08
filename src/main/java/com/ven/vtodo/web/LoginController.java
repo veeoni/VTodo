@@ -2,6 +2,7 @@ package com.ven.vtodo.web;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.ven.vtodo.po.User;
+import com.ven.vtodo.service.RoleService;
 import com.ven.vtodo.service.UserService;
 import com.ven.vtodo.util.SHA256Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import java.io.ByteArrayOutputStream;
 public class LoginController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
     @GetMapping//未使用任何参数时，默认全局的路径,当前为/
     public String home(HttpSession session) {
@@ -39,7 +42,7 @@ public class LoginController {
     public String getRegister(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
-            return "redirect:/login";
+            return "redirect:/index";
         }
         return "register";
     }
@@ -56,6 +59,7 @@ public class LoginController {
             return "用户名已存在";
         }
         user.setPassword(SHA256Util.getSHA256(user.getUsername() + user.getPassword()));
+        user.setRole(roleService.getRoleByName("普通用户"));
         System.out.println(user.getAvatar() + " " + user.getUsername());
         User user2 = userService.saveUser(user);
         if (user2 != null) {
