@@ -54,7 +54,7 @@ public class RoleController {
         return "admin/roles";
     }
 
-    @GetMapping("/users")
+    @GetMapping(value = {"/users","/setroles"})
     public String users(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
                         HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
@@ -72,11 +72,11 @@ public class RoleController {
         User user = (User) session.getAttribute("user");
         if(u1.getRole().getId() == 1){
             attributes.addFlashAttribute("errormessage", "禁止删除管理员");
-            return "redirect:/admin/roles";
+            return "redirect:/admin/users";
         }
         if(u1.getId().equals(user.getId())){
             attributes.addFlashAttribute("errormessage", "禁止删除自己");
-            return "redirect:/admin/roles";
+            return "redirect:/admin/users";
         }
         countDownService.deleteCountdownByUser(u1);
         targetService.deleteTargetByUser(u1);
