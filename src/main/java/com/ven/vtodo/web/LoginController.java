@@ -2,6 +2,7 @@ package com.ven.vtodo.web;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.ven.vtodo.po.User;
+import com.ven.vtodo.service.PermissionService;
 import com.ven.vtodo.service.RoleService;
 import com.ven.vtodo.service.UserService;
 import com.ven.vtodo.util.SHA256Util;
@@ -27,6 +28,8 @@ public class LoginController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
 
     @GetMapping//未使用任何参数时，默认全局的路径,当前为/
     public String home(HttpSession session) {
@@ -79,6 +82,13 @@ public class LoginController {
         }
         User user = userService.checkUser(username, password);
         if (user != null) {
+            if(user.getRole()==null){
+                user.setRole(roleService.getRoleByName("普通用户"));
+            }
+            if (!user.getRole().getPermissions().contains(permissionService.getPermissionByName("登录"))){
+                attributes.addFlashAttribute("message", "账号已被封禁");
+                return "redirect:/login";
+            }
             user.setPassword(null);//不能把密码传过去，很不安全
             session.setAttribute("user", user);
             return "redirect:/todo";
