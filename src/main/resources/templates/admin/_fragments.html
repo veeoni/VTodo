@@ -26,6 +26,7 @@
             <a href="#" th:href="@{/admin/countdowns}" class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="tags icon"></i>倒计时</a>
             <a href="#" th:href="@{/admin/targets}" class="m-item item m-mobile-hide" th:classappend="${n==6} ? 'active'"><i class="tags icon"></i>目标</a>
             <a href="#" th:href="@{/admin/info}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="info icon"></i>个人信息</a>
+            <a href="#" th:href="@{/admin/permission}" class="m-item item m-mobile-hide" th:classappend="${n==7} ? 'active'"  th:if="${session.user!=null and session.user.getRole().getId()==1}"><i class="exclamation triangle icon"></i>权限管理</a>
             <div class="right menu">
                 <div class="ui dropdown m-item m-mobile-hide item">
                     <div class="text">

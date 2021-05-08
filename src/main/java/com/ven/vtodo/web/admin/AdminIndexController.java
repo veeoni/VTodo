@@ -15,7 +15,7 @@ public class AdminIndexController {
     @Autowired
     private UserService userService;
 
-    @GetMapping//未使用任何参数时，默认全局的路径,当前为/admin
+    @GetMapping(value = {"","/login"})//未使用任何参数时，默认全局的路径,当前为/admin
     public String adminPage(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
@@ -23,11 +23,6 @@ public class AdminIndexController {
         } else {
             return "redirect:/login";
         }
-    }
-
-    @GetMapping("/login")
-    public String relogin(HttpSession session) {
-        return adminPage(session);//加个redirect
     }
 
     @GetMapping("/logout")
