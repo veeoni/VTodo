@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,5 +47,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserInfo(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<User> getUserByRoleId(Long id) {
+        return userRepository.findAllByRoleId(id);
     }
 }

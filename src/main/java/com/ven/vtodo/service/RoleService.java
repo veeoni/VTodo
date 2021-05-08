@@ -1,6 +1,8 @@
 package com.ven.vtodo.service;
 
 import com.ven.vtodo.po.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface RoleService {
 
@@ -13,4 +15,6 @@ public interface RoleService {
     Role updateRole(Long id, Role tole);
 
     void deleteRole(Long id);
+
+    Page<Role> listRole(Pageable pageable);
 }

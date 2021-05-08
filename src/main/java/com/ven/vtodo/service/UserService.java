@@ -2,6 +2,8 @@ package com.ven.vtodo.service;
 
 import com.ven.vtodo.po.User;
 
+import java.util.List;
+
 public interface UserService {
 
     User checkUser(String username, String password);
@@ -13,4 +15,6 @@ public interface UserService {
     User saveUser(User user);
 
     User updateUserInfo(User user);
+
+    List<User> getUserByRoleId(Long id);
 }

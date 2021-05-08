@@ -66,6 +66,11 @@ public class IndexController {
         return "note";
     }
 
+    @GetMapping("/cannotaccess")
+    public String cannotAccess() {
+        return "cannot-access";
+    }
+
     @GetMapping("/note/{id}")
     public String note2(@PathVariable Long id, Model model) {
         Note note = noteService.getPublishedNote(id);

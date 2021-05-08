@@ -1,6 +1,7 @@
 package com.ven.vtodo.web;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.ven.vtodo.po.Permission;
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.PermissionService;
 import com.ven.vtodo.service.RoleService;
@@ -21,6 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.util.List;
+
+import static com.ven.vtodo.util.PermissionUtils.hasPermission;
 
 @Controller
 public class LoginController {
@@ -84,8 +88,11 @@ public class LoginController {
         if (user != null) {
             if(user.getRole()==null){
                 user.setRole(roleService.getRoleByName("普通用户"));
+                userService.saveUser(user);
             }
-            if (!user.getRole().getPermissions().contains(permissionService.getPermissionByName("登录"))){
+            Permission permission = permissionService.getPermissionByName("登录");
+            List<Permission> permissions = user.getRole().getPermissions();
+            if(permission==null || !hasPermission(permissions, permission)){
                 attributes.addFlashAttribute("message", "账号已被封禁");
                 return "redirect:/login";
             }

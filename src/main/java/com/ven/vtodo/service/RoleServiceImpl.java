@@ -5,6 +5,8 @@ import com.ven.vtodo.handler.NotFoundException;
 import com.ven.vtodo.po.Role;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,12 @@ public class RoleServiceImpl implements RoleService {
         BeanUtils.copyProperties(role, t);
         return roleRepository.save(role);
     }
+
+    @Override
+    public Page<Role> listRole(Pageable pageable) {
+        return roleRepository.findAll(pageable);
+    }
+
 
     @Transactional
     @Override
