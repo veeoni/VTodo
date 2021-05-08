@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import static com.ven.vtodo.util.ListToStringUtil.tagsToIds;
+
 @Entity
 @Table(name = "t_todo")
 public class Todo {
@@ -211,24 +213,6 @@ public class Todo {
 
     public void init() {
         this.tagIds = tagsToIds(this.getTags());
-    }
-
-    private String tagsToIds(List<Tag> tags) {
-        if (tags != null && !tags.isEmpty()) {
-            StringBuffer ids = new StringBuffer();
-            boolean flag = false;
-            for (Tag tag : tags) {
-                if (flag) {
-                    ids.append(",");
-                } else {
-                    flag = true;
-                }
-                ids.append(tag.getId());
-            }
-            return ids.toString();
-        } else {
-            return tagIds;
-        }
     }
 
     @Override

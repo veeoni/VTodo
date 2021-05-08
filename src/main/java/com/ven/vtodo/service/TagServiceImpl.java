@@ -14,8 +14,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.ven.vtodo.util.ListToStringUtil.idsToList;
 
 
 @Service
@@ -43,18 +44,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> listTag(String id) {
-        return tagRepository.findAllById(convertToList(id));
-    }
-
-    private List<Long> convertToList(String ids) {
-        List<Long> list = new ArrayList<>();
-        if (!"".equals(ids) && ids != null) {
-            String[] idArray = ids.split(",");
-            for (String s : idArray) {
-                list.add(Long.valueOf(s));
-            }
-        }
-        return list;
+        return tagRepository.findAllById(idsToList(id));
     }
 
     @Override

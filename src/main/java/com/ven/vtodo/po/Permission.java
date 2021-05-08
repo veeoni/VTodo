@@ -16,7 +16,7 @@ public class Permission {
     @NotBlank(message = "权限名称不能为空")
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "permissions")
     private List<Role> roles = new ArrayList<>();
 
     public Permission() {

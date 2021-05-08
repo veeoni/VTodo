@@ -5,6 +5,8 @@ import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ven.vtodo.util.ListToStringUtil.permissionsToIds;
+
 
 @Entity
 @Table(name = "t_role")
@@ -18,10 +20,29 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private List<User> users = new ArrayList<>();
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     private List<Permission> permissions = new ArrayList<>();
 
+    @Transient//不保存至数据库
+    private String permissionIds;
+
     public Role() {
+    }
+
+    public String getPermissionIds() {
+        init();
+        return permissionIds;
+    }
+
+    public void setPermissionIds(String permissionIds) {
+        this.permissionIds = permissionIds;
+    }
+
+    public void init() {
+        String permissionIds = permissionsToIds(this.getPermissions());
+        if (!permissionIds.equals("")) {
+            this.permissionIds = permissionIds;
+        }
     }
 
     public List<User> getUsers() {
@@ -58,11 +79,12 @@ public class Role {
 
     @Override
     public String toString() {
-        return "Tag{" +
+        return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", users[0]Id=" + (users != null && users.size() > 0 ? users.get(0).getId() : "null") +
                 ", permissions[0]Id=" + (permissions != null && permissions.size() > 0 ? permissions.get(0).getId() : "null") +
+                ", permissionIds=" + permissionIds +
                 '}';
     }
 }

@@ -228,7 +228,6 @@ public class Note {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", type=" + type +
-                ", tagsId=" + tagsToIds(tags) +
                 ", userId=" + (user != null ? user.getId() : "null") +
                 ", comments[0]Id=" + (comments != null && comments.size() > 0 ? comments.get(0).getId() : "null") +
                 ", tagIds='" + tagIds + '\'' +

@@ -2,6 +2,7 @@ package com.ven.vtodo.interceptor;
 
 
 import com.ven.vtodo.po.Permission;
+import com.ven.vtodo.po.Role;
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class PermissionInterceptor implements HandlerInterceptor {
             return false;
         }
         Permission permission = permissionService.getPermissionByName("权限管理");
-        List<Permission> permissions = user.getRole().getPermissions();
+        Role role = user.getRole();
+        List<Permission> permissions = permissionService.getPermissionsOfRole(role);
         if(permission!=null && hasPermission(permissions, permission)){
             return true;
         }
