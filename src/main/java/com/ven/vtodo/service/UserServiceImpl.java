@@ -4,6 +4,8 @@ import com.ven.vtodo.dao.UserRepository;
 import com.ven.vtodo.po.User;
 import com.ven.vtodo.util.SHA256Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -52,5 +54,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUserByRoleId(Long id) {
         return userRepository.findAllByRoleId(id);
+    }
+
+    @Override
+    public List<User> listUser() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Page<User> listUser(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }

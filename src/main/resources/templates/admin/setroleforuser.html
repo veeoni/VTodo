@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户角色设置</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/icon.min.css'>
+    <link rel="stylesheet  prefetch" href="../../static/css/me.css" th:href="@{/css/me.css}"/>
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="admin/_fragments :: menu(7)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <!--stackable 屏幕小时可堆叠-->
+        <div class="ui inverted stackable secondary menu">
+            <h2 class="ui teal header item">管理后台</h2>
+            <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>笔记</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i>标签</a>
+            <div class="right menu">
+                <div class="ui dropdown m-item m-mobile-hide item">
+                    <div class="text">
+                        <img src="https://unsplash.it/100/100?image=1005" alt="" class="ui avatar image">
+                        王友宁
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle icon black button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a th:href="@{/admin/roles}" class="teal item">角色列表</a>
+            <a th:href="@{/admin/roles/input}" class="teal item">新增角色</a>
+            <a th:href="@{/admin/users}" class="teal item">用户列表</a>
+            <a th:href="@{/admin/setroles}" class="active teal item">用户角色设置</a>
+        </div>
+    </div>
+</div>
+
+<!--中间内容-->
+<div class="m-container m-body-container m-padded-tb-big">
+    <div class="ui container">
+        <form id="user-form" action="#" th:object="${user}" th:action="@{/admin/setroles}" method="post" class="ui form">
+            <div class="ui left aligned segment m-padded-large">
+                <div class="two fields">
+                    <div class="field">
+                        <label>头像</label>
+                        <div class="ui center aligned stackable  grid">
+                            <div class="row m-padded-tb-mini">
+                                <input id="input_avatar" type="text" name="avatar" placeholder="所选头像" value="/images/avatar/f1.png" th:value="*{avatar}">
+                                <img id="img_avatar"  class="ui small avatar image" src="../static/images/avatar/f1.png" th:src="@{*{avatar}}">
+                            </div>
+                            <div class="row m-padded-tb-mini">
+                                <div class="ui center aligned segment mini images m-margin-lr m-padded-tb-mini">
+                                    <img class="ui image" onclick="changeAvatar('f1')"  th:onclick="changeAvatar('f1')"  src="../static/images/avatar/f1.png"  th:src="@{/images/avatar/f1.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f2')"  th:onclick="changeAvatar('f2')"  src="../static/images/avatar/f2.png"  th:src="@{/images/avatar/f2.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f3')"  th:onclick="changeAvatar('f3')"  src="../static/images/avatar/f3.png"  th:src="@{/images/avatar/f3.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f4')"  th:onclick="changeAvatar('f4')"  src="../static/images/avatar/f4.png"  th:src="@{/images/avatar/f4.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f5')"  th:onclick="changeAvatar('f5')"  src="../static/images/avatar/f5.png"  th:src="@{/images/avatar/f5.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f6')"  th:onclick="changeAvatar('f6')"  src="../static/images/avatar/f6.png"  th:src="@{/images/avatar/f6.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f7')"  th:onclick="changeAvatar('f7')"  src="../static/images/avatar/f7.png"  th:src="@{/images/avatar/f7.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f8')"  th:onclick="changeAvatar('f8')"  src="../static/images/avatar/f8.png"  th:src="@{/images/avatar/f8.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f9')"  th:onclick="changeAvatar('f9')"  src="../static/images/avatar/f9.png"  th:src="@{/images/avatar/f9.png}" >
+                                    <img class="ui image" onclick="changeAvatar('f10')" th:onclick="changeAvatar('f10')" src="../static/images/avatar/f10.png" th:src="@{/images/avatar/f10.png}">
+                                    <img class="ui image" onclick="changeAvatar('f11')" th:onclick="changeAvatar('f11')" src="../static/images/avatar/f11.png" th:src="@{/images/avatar/f11.png}">
+                                    <img class="ui image" onclick="changeAvatar('f12')" th:onclick="changeAvatar('f12')" src="../static/images/avatar/f12.png" th:src="@{/images/avatar/f12.png}">
+                                    <img class="ui image" onclick="changeAvatar('f13')" th:onclick="changeAvatar('f13')" src="../static/images/avatar/f13.png" th:src="@{/images/avatar/f13.png}">
+                                    <img class="ui image" onclick="changeAvatar('f14')" th:onclick="changeAvatar('f14')" src="../static/images/avatar/f14.png" th:src="@{/images/avatar/f14.png}">
+                                    <img class="ui image" onclick="changeAvatar('m1')"  th:onclick="changeAvatar('m1')"  src="../static/images/avatar/m1.png"  th:src="@{/images/avatar/m1.png}" >
+                                    <img class="ui image" onclick="changeAvatar('m2')"  th:onclick="changeAvatar('m2')"  src="../static/images/avatar/m2.png"  th:src="@{/images/avatar/m2.png}" >
+                                    <img class="ui image" onclick="changeAvatar('m3')"  th:onclick="changeAvatar('m3')"  src="../static/images/avatar/m3.png"  th:src="@{/images/avatar/m3.png}" >
+                                    <img class="ui image" onclick="changeAvatar('m4')"  th:onclick="changeAvatar('m4')"  src="../static/images/avatar/m4.png"  th:src="@{/images/avatar/m4.png}" >
+                                    <img class="ui image" onclick="changeAvatar('m5')"  th:onclick="changeAvatar('m5')"  src="../static/images/avatar/m5.png"  th:src="@{/images/avatar/m5.png}" >
+                                    <img class="ui image" onclick="changeAvatar('m6')"  th:onclick="changeAvatar('m6')"  src="../static/images/avatar/m6.png"  th:src="@{/images/avatar/m6.png}" >
+                                    <img class="ui image" onclick="changeAvatar('m7')"  th:onclick="changeAvatar('m7')"  src="../static/images/avatar/m7.png"  th:src="@{/images/avatar/m7.png}" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="field">
+                            <label>ID</label>
+                            <div class="ui disabled input">
+                                <input name="id" th:value="*{id}" type="text">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>用户名</label>
+                            <div class="ui disabled input">
+                                <input name="username" th:value="*{username}" type="text">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>昵称</label>
+                            <div class="ui input">
+                                <input name="nickname" th:value="*{nickname}" type="text">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>邮箱</label>
+                            <div class="ui input">
+                                <input name="email" th:value="*{email}" type="email">
+                            </div>
+                        </div>
+                        <div class="m-margin-top field">
+                            <div class="ui buttons">
+                                <button id="reset_btn" type="button" onclick="resetForm()" class="ui basic blue button" >重置</button>
+                                <button id="submit_btn" type="button" onclick="checkForm()" class="ui basic teal button" >提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui mini error message"></div>
+                <div class="ui mini negative message" th:text="${errormessage}" th:style="(${errormessage}!=null and ${errormessage}!='')?'display:block;':'display:none;'"></div>
+                <div class="ui mini success message" th:text="${message}" th:style="(${message}!=null and ${message}!='')?'display:block;':'display:none;'"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--底部footer-->
+<footer th:replace="admin/_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui divided inverted stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/images/wechat.jpg" class=" ui rounded image" alt="" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新笔记</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">用户故事（User Story）</a>
+                    <a href="#" class="item">用户故事（User Story）</a>
+                    <a href="#" class="item">用户故事（User Story）</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Email:514754220@qq.com</a>
+                    <a href="#" class="item">QQ:514754220</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">本站介绍</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">
+                    个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。个人介绍。。</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright@......</p>
+    </div>
+</footer>
+
+<script th:inline="javascript">
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.form').form({
+        fields : {
+            nickname : {
+                identifier: 'nickname',
+                rules:[{
+                    type:'empty',
+                    prompt: '请输入昵称'
+                }]
+            },
+            email : {
+                identifier: 'email',
+                rules:[{
+                    type:'email',
+                    prompt: '邮箱:请输入正确的邮箱地址'
+                }]
+            }
+        }
+    });
+
+    var id = [[${user.id}]];
+    var avatar = [[${user.avatar}]];
+    var username = [[${user.username}]];
+    var nickname = [[${user.nickname}]];
+    var email = [[${user.email}]];
+
+    function resetForm(){
+        $('[name=id]').val(id);
+        $('#img_avatar').attr("src",avatar);
+        $('#input_avatar').val(avatar);
+        $('[name=username]').val(username);
+        $('[name=nickname]').val(nickname);
+        $('[name=email]').val(email);
+    }
+    function checkForm() {
+        console.log(id);
+        $('.negative.message').css('display','none').empty();
+        $('.success.message').css('display','none').empty();
+        $('.ui.form').form("validate form");
+        var boo = $('.ui.form').form("is valid");
+        if(boo){
+            console.log("验证成功");
+            postData();
+        }else{
+            console.log("验证失败");
+        }
+    }
+
+    function postData(){
+        if( $('[name=id]').val()==id &&
+            $('#img_avatar').attr("src")==avatar &&
+            $('#input_avatar').val() == avatar&&
+            $('[name=username]').val() ==username &&
+            $('[name=nickname]').val()==nickname&&
+            $('[name=email]').val()==email ){
+            $('.negative.message').css('display','block').text("未做任何更改");
+            $('.success.message').css('display','none');
+                console.log("未做任何更改");
+        }else{
+            $('.ui.form').submit();
+        }
+    }
+
+    function changeAvatar(name){
+        var url = "/images/avatar/"+name+".png";
+        console.log(url);
+        $('#input_avatar').val(url);
+        $('#img_avatar').attr("src",url);
+    }
+</script>
+</body>
+</html>

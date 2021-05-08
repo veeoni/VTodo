@@ -6,6 +6,7 @@ import com.ven.vtodo.po.User;
 import com.ven.vtodo.service.PermissionService;
 import com.ven.vtodo.service.RoleService;
 import com.ven.vtodo.service.UserService;
+import com.ven.vtodo.util.UpdateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -39,6 +41,50 @@ public class RoleController {
                         Model model) {
         model.addAttribute("page", roleService.listRole(pageable));
         return "admin/roles";
+    }
+
+    @GetMapping("/users")
+    public String users(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                        HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("page", userService.listUser(pageable));
+            return "admin/users";
+        } else {
+            return "redirect:/login";
+        }
+    }
+
+    //进入用户修改页
+    @GetMapping("/setroles/{id}/input")
+    public String setRoles(@PathVariable Long id, HttpSession session, Model model, RedirectAttributes attributes) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            User u = userService.getUserById(id);
+            if(u==null){
+                attributes.addFlashAttribute("errormessage", "无此用户");
+                return "redirect:/admin/users";
+            }
+            model.addAttribute("user", u);
+            model.addAttribute("roles", roleService.listRole());
+            return "admin/setroleforuser";
+        } else {
+            return "redirect:/login";
+        }
+    }
+    //修改其他用户的信息
+    @PostMapping("/setroles")
+    public String postSetRoles(User user, RedirectAttributes attributes) {
+        User oldUser = userService.getUserById(user.getId());
+        UpdateUtil.copyNullProperties(user, oldUser);
+        oldUser.setUpdateTime(new Date());
+        User user2 = userService.updateUserInfo(oldUser);
+        if (user2 != null) {
+            attributes.addFlashAttribute("message", "修改成功");
+        } else {
+            attributes.addFlashAttribute("errormessage", "修改信息失败");
+        }
+        return "redirect:/admin/setroles/"+user.getId()+"/input";
     }
 
     @GetMapping("/roles/input")

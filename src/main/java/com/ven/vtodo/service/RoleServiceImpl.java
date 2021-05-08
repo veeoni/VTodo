@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -48,6 +50,10 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findAll(pageable);
     }
 
+    @Override
+    public List<Role> listRole() {
+        return roleRepository.findAll();
+    }
 
     @Transactional
     @Override
