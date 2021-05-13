@@ -103,7 +103,7 @@
                 <td th:text="${u.username}">veeoni</td>
                 <td th:text="${u.nickname}">王友宁</td>
                 <td th:text="${u.email}">王友宁</td>
-                <td th:text="${u.role.name}">管理员</td>
+                <td th:text="${u.role==null}?'未分配角色':${u.role.name}">管理员</td>
                 <td>
                     <a th:href="@{/admin/setroles/{id}/input(id=${u.id})}" class="ui mini teal basic button">编辑</a>
                     <button th:onclick="|isDelete(${u.id})|" class="ui mini red basic button">删除</button>

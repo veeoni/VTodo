@@ -118,7 +118,7 @@
                                 <div class="ui fluid selection dropdown">
                                     <input type="hidden" id="roleId" name="role.id" th:value="*{role}!=null ? *{role.id} : null ">
                                     <i class="dropdown icon"></i>
-                                    <div class="default text">分类</div>
+                                    <div class="default text">角色</div>
                                     <div class="menu">
                                         <div th:each="role : ${roles}" class="item" data-value="1" th:data-value="${role.id}" th:text="${role.name}">错误日志</div>
                                     </div>
