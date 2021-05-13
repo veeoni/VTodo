@@ -73,8 +73,8 @@ public class TagController {
                            @PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
         User user = (User) session.getAttribute("user");
         Tag tag1 = tagService.getTagByNameAndUser(tag.getName(), user);
-        if (tag1 != null) {
-            result.rejectValue("name", "nameError", "不能添加重复的标签");
+        if (!tag1.getId().equals(id)) {
+            result.rejectValue("name", "nameError", "标签名重复");
         }
         if (result.hasErrors()) {
             return "admin/tags-input";

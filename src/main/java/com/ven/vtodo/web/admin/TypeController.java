@@ -73,8 +73,8 @@ public class TypeController {
                            @PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
         User user = (User) session.getAttribute("user");
         Type type1 = typeService.getTypeByNameAndUser(type.getName(), user);
-        if (type1 != null) {
-            result.rejectValue("name", "nameError", "不能添加重复的分类");
+        if (!type1.getId().equals(id)) {
+            result.rejectValue("name", "nameError", "分类名重复");
         }
         if (result.hasErrors()) {
             return "admin/types-input";

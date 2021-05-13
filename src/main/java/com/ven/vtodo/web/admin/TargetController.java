@@ -56,6 +56,8 @@ public class TargetController {
         target.setUser(user);
         if (target1 != null) {
             result.rejectValue("name", "nameError", "已有同名目标");
+        }
+        if (result.hasErrors()) {
             return "admin/targets-input";
         }
         Target t = targetService.saveTarget(target);
@@ -72,6 +74,13 @@ public class TargetController {
     public String editPost(@Valid Target target, BindingResult result,/*BindingResult前面一定要是Target，否则就没有效果了*/
                            @PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
         User user = (User) session.getAttribute("user");
+        Target target1 = targetService.getTargetByNameAndUser(target.getName(), user);
+        if (!target1.getId().equals(id)) {
+            result.rejectValue("name", "nameError", "目标名重复");
+        }
+        if (result.hasErrors()) {
+            return "admin/targets-input";
+        }
         target.setUser(user);
         Target t = targetService.updateTarget(id, target);
         if (t == null) {

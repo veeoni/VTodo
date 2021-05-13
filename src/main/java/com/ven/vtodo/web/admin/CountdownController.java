@@ -47,7 +47,7 @@ public class CountdownController {
         return "admin/countdowns-input";
     }
 
-    //后端消息传到页面
+    //添加
     @PostMapping("/countdowns")
     public String post(@Valid Countdown countdown, BindingResult result, HttpSession session, RedirectAttributes attributes) {
         User user = (User) session.getAttribute("user");
@@ -56,6 +56,8 @@ public class CountdownController {
         countdown.setUser(user);
         if (countdown1 != null) {
             result.rejectValue("name", "nameError", "已有同名倒计时");
+        }
+        if (result.hasErrors()) {
             return "admin/countdowns-input";
         }
         Countdown t = countdownService.saveCountdown(countdown);
@@ -67,11 +69,18 @@ public class CountdownController {
         return "redirect:/admin/countdowns";
     }
 
-    //后端消息传到页面
+    //更新
     @PostMapping("/countdowns/{id}")
     public String editPost(@Valid Countdown countdown, BindingResult result,/*BindingResult前面一定要是Countdown，否则就没有效果了*/
                            @PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
         User user = (User) session.getAttribute("user");
+        Countdown countdown1 = countdownService.getCountdownByNameAndUser(countdown.getName(), user);
+        if (!countdown1.getId().equals(id)) {
+            result.rejectValue("name", "nameError", "已有同名倒计时");
+        }
+        if (result.hasErrors()) {
+            return "admin/countdowns-input";
+        }
         countdown.setUser(user);
         Countdown t = countdownService.updateCountdown(id, countdown);
         if (t == null) {
