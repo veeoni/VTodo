@@ -12,7 +12,7 @@
 <div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
     <div class="ui container">
         <div class="ui middle aligned center aligned segment">
-            <h2 class="ui error message">发现好强的AT Field，进不去呢！<br>3秒后返回主页</h2>
+            <div class="ui error message"><h1>无访问权限</h1><br>发现好强的AT Field，进不去呢！<br>3秒后返回主页</div>
         </div>
     </div>
 </div>
@@ -31,7 +31,7 @@
     });
     //自动刷新页面上的时间
     function after(){
-        $(".error.message").empty().append("发现好强的AT Field，进不去呢！<br>"+i+"秒后返回主页");
+        $(".error.message").empty().append("<h1>无访问权限</h1><br>发现好强的AT Field，进不去呢！<br>"+i+"秒后返回主页");
         i=i-1;
         setTimeout(function(){
             after();
